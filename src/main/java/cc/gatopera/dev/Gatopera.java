@@ -12,6 +12,9 @@ public final class Gatopera implements ModInitializer {
 
     @Override
     public void onInitialize() {
+        {
+            System.setProperty("java.awt.headless", "true");
+        }
         load();
     }
 

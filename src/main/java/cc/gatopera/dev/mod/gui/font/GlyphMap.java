@@ -20,9 +20,10 @@ import java.util.List;
 
 import static cc.gatopera.dev.api.utils.Wrapper.mc;
 
+
+
 class GlyphMap {
     private static final int PADDING = 5;
-    private static boolean awtFailed = false;
     final char fromIncl;
     final char toExcl;
     final Font[] font;
@@ -71,21 +72,6 @@ class GlyphMap {
         if (generated) {
             return;
         }
-
-        if (!awtFailed) {
-            try {
-                generateWithAWT();
-                return;
-            } catch (Throwable e) {
-                awtFailed = true;
-                e.printStackTrace();
-            }
-        }
-
-        generateFallback();
-    }
-
-    private void generateWithAWT() {
         int range = toExcl - fromIncl - 1;
         int charsVert = (int) (Math.ceil(Math.sqrt(range)) * 1.5);
         glyphs.clear();
@@ -138,52 +124,6 @@ class GlyphMap {
             glyphs.put(glyph.value(), glyph);
         }
         registerBufferedImageTexture(bindToTexture, bi);
-        generated = true;
-    }
-
-    private void generateFallback() {
-        int range = toExcl - fromIncl - 1;
-        int defaultWidth = 8;
-        int defaultHeight = 12;
-        int charsPerRow = (int) Math.ceil(Math.sqrt(range));
-        int rows = (int) Math.ceil((double) range / charsPerRow);
-
-        width = charsPerRow * (defaultWidth + PADDING) + PADDING;
-        height = rows * (defaultHeight + PADDING) + PADDING;
-
-        glyphs.clear();
-        int generatedChars = 0;
-
-        for (int row = 0; row < rows && generatedChars <= range; row++) {
-            for (int col = 0; col < charsPerRow && generatedChars <= range; col++) {
-                char currentChar = (char) (fromIncl + generatedChars);
-                int x = col * (defaultWidth + PADDING) + PADDING;
-                int y = row * (defaultHeight + PADDING) + PADDING;
-
-                glyphs.put(currentChar, new Glyph(x, y, defaultWidth, defaultHeight, currentChar, this));
-                generatedChars++;
-            }
-        }
-
-        try {
-            BufferedImage bi = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
-            Graphics2D g2d = bi.createGraphics();
-            g2d.setColor(new Color(0, 0, 0, 0));
-            g2d.fillRect(0, 0, width, height);
-            g2d.dispose();
-
-            registerBufferedImageTexture(bindToTexture, bi);
-        } catch (Throwable e) {
-            e.printStackTrace();
-            width = 64;
-            height = 64;
-            try {
-                BufferedImage bi = new BufferedImage(64, 64, BufferedImage.TYPE_INT_ARGB);
-                registerBufferedImageTexture(bindToTexture, bi);
-            } catch (Throwable e2) {
-                e2.printStackTrace();
-            }
-        }
         generated = true;
     }
 
