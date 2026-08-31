@@ -33,6 +33,8 @@ public class DialogScreen extends Screen implements Wrapper {
 
     @Override
     public void render(@NotNull DrawContext context, int mouseX, int mouseY, float delta) {
+        context.fill(0, 0, width, height, 0xFF0A0A0F);
+
         float halfOfWidth = mc.getWindow().getScaledWidth() / 2f;
         float halfOfHeight = mc.getWindow().getScaledHeight() / 2f;
         float mainX = halfOfWidth - 120f;
@@ -45,6 +47,9 @@ public class DialogScreen extends Screen implements Wrapper {
         if (FontRenderers.ui != null) {
             FontRenderers.ui.drawCenteredString(context.getMatrices(), header, mainX + mainWidth / 2f, mainY + 10, -1);
             FontRenderers.ui.drawCenteredString(context.getMatrices(), description, mainX + mainWidth / 2f, mainY + 28, new Color(0xABFFFFFF, true).getRGB());
+        } else {
+            context.drawCenteredTextWithShadow(textRenderer, Text.of(header), (int) (mainX + mainWidth / 2f), (int) (mainY + 10), 0xFFFFFF);
+            context.drawCenteredTextWithShadow(textRenderer, Text.of(description), (int) (mainX + mainWidth / 2f), (int) (mainY + 28), 0xABFFFFFF);
         }
 
         boolean yesH = yesHovered(mouseX, mouseY);
@@ -58,6 +63,9 @@ public class DialogScreen extends Screen implements Wrapper {
         if (FontRenderers.ui != null) {
             FontRenderers.ui.drawCenteredString(context.getMatrices(), yesText, mainX + 60, mainY + 112, yesH ? -1 : new Color(0xABFFFFFF, true).getRGB());
             FontRenderers.ui.drawCenteredString(context.getMatrices(), noText, mainX + 180f, mainY + 112, noH ? -1 : new Color(0xABFFFFFF, true).getRGB());
+        } else {
+            context.drawCenteredTextWithShadow(textRenderer, Text.of(yesText), (int) (mainX + 60), (int) (mainY + 112), yesH ? 0xFFFFFF : 0xABFFFFFF);
+            context.drawCenteredTextWithShadow(textRenderer, Text.of(noText), (int) (mainX + 180), (int) (mainY + 112), noH ? 0xFFFFFF : 0xABFFFFFF);
         }
 
         if (pic != null) {
@@ -83,16 +91,25 @@ public class DialogScreen extends Screen implements Wrapper {
 
     @Override
     public boolean mouseClicked(double mouseX, double mouseY, int button) {
-        if (yesHovered((int) mouseX, (int) mouseY)) {
-            yesAction.run();
-        } else if (noHovered((int) mouseX, (int) mouseY)) {
-            noAction.run();
+        if (button == 0) {
+            if (yesHovered((int) mouseX, (int) mouseY)) {
+                yesAction.run();
+                return true;
+            } else if (noHovered((int) mouseX, (int) mouseY)) {
+                noAction.run();
+                return true;
+            }
         }
         return super.mouseClicked(mouseX, mouseY, button);
     }
 
     @Override
     public boolean shouldPause() {
+        return false;
+    }
+
+    @Override
+    public boolean shouldCloseOnEsc() {
         return false;
     }
 }
