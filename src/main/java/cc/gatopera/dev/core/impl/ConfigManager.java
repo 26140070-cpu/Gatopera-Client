@@ -46,6 +46,9 @@ public class ConfigManager extends Manager {
 
 			printwriter.println("prefix:" + Gatopera.PREFIX);
 
+			printwriter.println("language:" + cc.gatopera.dev.api.i18n.I18n.getLanguage().getCode());
+			printwriter.println("welcome_shown:" + getBoolean("welcome_shown", false));
+
 			for (ClickGuiTab tab : Gatopera.GUI.tabs) {
 				printwriter.println(tab.getTitle() + "_x:" + tab.getX());
 				printwriter.println(tab.getTitle() + "_y:" + tab.getY());
@@ -102,6 +105,10 @@ public class ConfigManager extends Manager {
 		} catch (Exception exception) {
 			System.out.println("[" + Gatopera.NAME + "] Failed to load settings");
 		}
+	}
+
+	public void settingsPut(String key, String value) {
+		settings.put(key, value);
 	}
 
 	public static boolean isInteger(final String str) {

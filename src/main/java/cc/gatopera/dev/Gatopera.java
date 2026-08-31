@@ -47,7 +47,7 @@ public final class Gatopera implements ModInitializer {
     public static void load() {
         EVENT_BUS.registerLambdaFactory((lookupInMethod, klass) -> (MethodHandles.Lookup) lookupInMethod.invoke(null, klass, MethodHandles.lookup()));
         CONFIG = new ConfigManager();
-
+        cc.gatopera.dev.api.i18n.I18n.loadFromConfig();
         PREFIX = Gatopera.CONFIG.getString("prefix", ";");
         THREAD = new ThreadManager();
         HOLE = new HoleManager();

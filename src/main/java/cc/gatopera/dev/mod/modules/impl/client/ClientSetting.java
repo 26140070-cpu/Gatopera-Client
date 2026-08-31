@@ -60,6 +60,15 @@ public class ClientSetting extends Module {
     public final BooleanSetting inputBoxAnim = add(new BooleanSetting("InputBoxAnim", true, () -> page.getValue() == Page.ChatHud));
     public final BooleanSetting hideIndicator = add(new BooleanSetting("HideIndicator", true, () -> page.getValue() == Page.ChatHud));
 
+    public final EnumSetting<cc.gatopera.dev.api.i18n.Language> language =
+            add(new EnumSetting<>("Language", cc.gatopera.dev.api.i18n.Language.EN_US, () -> page.is(Page.Gui)));
+    public final BooleanSetting guiBlur =
+            add(new BooleanSetting("GuiBlur", true, () -> page.is(Page.Gui)));
+    public final BooleanSetting guiRounded =
+            add(new BooleanSetting("GuiRounded", true, () -> page.is(Page.Gui)));
+    public final SliderSetting guiRadius =
+            add(new SliderSetting("CornerRadius", 12, 0, 30, 1, () -> page.is(Page.Gui) && guiRounded.getValue()));
+
     public ClientSetting() {
         super("ClientSetting", Category.Client);
         setChinese("客户端设置");
@@ -74,6 +83,9 @@ public class ClientSetting extends Module {
         inventoryFade.setLength(inventoryTime.getValueInt());
         if (mc.currentScreen == null && inventoryAnim.getValue()) {
             inventoryFade.reset();
+        }
+        if (language.getValue() != cc.gatopera.dev.api.i18n.I18n.getLanguage()) {
+            cc.gatopera.dev.api.i18n.I18n.setLanguage(language.getValue());
         }
     }
 
