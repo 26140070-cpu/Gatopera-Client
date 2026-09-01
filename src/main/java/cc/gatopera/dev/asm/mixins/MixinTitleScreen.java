@@ -28,17 +28,15 @@ public abstract class MixinTitleScreen extends Screen {
         super(title);
     }
 
-    @Inject(method = "render", at = @At("HEAD"))
-    private void onRender(CallbackInfo ci) {
+    @Inject(method = "tick", at = @At("HEAD"))
+    private void gatopera$onTick(CallbackInfo ci) {
         if (gatopera$welcomeChecked) return;
         if (client == null || client.getOverlay() != null) return;
         if (Gatopera.CONFIG == null) return;
-
         gatopera$welcomeChecked = true;
-
         if (Gatopera.CONFIG.getBoolean("welcome_shown", false)) return;
 
-        DialogScreen languageDialog = new DialogScreen(
+        client.setScreen(new DialogScreen(
                 null,
                 I18n.t("dialog.language.header"),
                 I18n.t("dialog.language.description"),
@@ -58,8 +56,7 @@ public abstract class MixinTitleScreen extends Screen {
                     }
                     client.setScreen(buildWelcome());
                 }
-        );
-        client.setScreen(languageDialog);
+        ));
     }
 
     @Unique

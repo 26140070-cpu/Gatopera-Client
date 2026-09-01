@@ -9,6 +9,8 @@ import cc.gatopera.dev.mod.modules.impl.player.InteractTweaks;
 import cc.gatopera.dev.mod.modules.impl.player.freelook.CameraState;
 import cc.gatopera.dev.mod.modules.impl.player.freelook.FreeLook;
 import cc.gatopera.dev.mod.modules.impl.render.*;
+import cc.gatopera.dev.api.utils.render.GuiShaders;
+import net.minecraft.resource.ResourceFactory;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.Camera;
 import net.minecraft.client.render.CameraSubmersionType;
@@ -247,5 +249,10 @@ public class MixinGameRenderer {
             cameraEntity.setYaw(originalYaw);
             cameraEntity.setPitch(originalPitch);
         }
+    }
+
+    @Inject(method = "loadPrograms", at = @At("RETURN"))
+    private void gatopera$loadGuiShaders(ResourceFactory factory, CallbackInfo ci) {
+        GuiShaders.load(factory);
     }
 }

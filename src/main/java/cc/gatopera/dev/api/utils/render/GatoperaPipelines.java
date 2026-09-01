@@ -5,27 +5,20 @@ import cc.gatopera.dev.mod.modules.impl.client.ClientSetting;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gl.Framebuffer;
+import net.minecraft.client.gl.ShaderProgram;
 import net.minecraft.client.gl.SimpleFramebuffer;
 import net.minecraft.client.render.*;
 import net.minecraft.client.util.math.MatrixStack;
 import org.joml.Matrix4f;
+import org.lwjgl.opengl.GL30;
 
 import java.awt.*;
 
 public final class GatoperaPipelines implements Wrapper {
-    private static SimpleFramebuffer blurBuffer;
-    private static boolean prepared;
+    private static SimpleFramebuffer capture;
+    private static SimpleFramebuffer blurTemp;
 
     private GatoperaPipelines() {
-    }
-
-    public static void prepareFrame() {
-        Framebuffer main = MinecraftClient.getInstance().getFramebuffer();
-        if (blurBuffer == null || blurBuffer.textureWidth != main.textureWidth || blurBuffer.textureHeight != main.textureHeight) {
-            if (blurBuffer != null) blurBuffer.delete();
-            blurBuffer = new SimpleFramebuffer(main.textureWidth, main.textureHeight, false, MinecraftClient.IS_SYSTEM_MAC);
-        }
-        prepared = true;
     }
 
     public static boolean isBlurEnabled() {
@@ -41,20 +34,32 @@ public final class GatoperaPipelines implements Wrapper {
         return ClientSetting.INSTANCE.guiRadius.getValueFloat();
     }
 
+    private static void ensureBuffers() {
+        Framebuffer main = MinecraftClient.getInstance().getFramebuffer();
+        if (capture == null || capture.textureWidth != main.textureWidth || capture.textureHeight != main.textureHeight) {
+            if (capture != null) capture.delete();
+            if (blurTemp != null) blurTemp.delete();
+            capture = new SimpleFramebuffer(main.textureWidth, main.textureHeight, false, MinecraftClient.IS_SYSTEM_MAC);
+            blurTemp = new SimpleFramebuffer(main.textureWidth, main.textureHeight, false, MinecraftClient.IS_SYSTEM_MAC);
+        }
+    }
+
     public static void drawWindowBackground(MatrixStack matrices, float x, float y, float width, float height, Color color) {
         try {
-            prepareFrame();
             float radius = isRoundedEnabled() ? getRadius() : 0f;
-            if (isBlurEnabled()) {
+
+            if (isBlurEnabled() && GuiShaders.available()) {
                 try {
-                    drawBlurredRegion(x, y, width, height, 6f);
+                    drawBlurredRegion(matrices, x, y, width, height, Math.max(2f, radius * 0.35f));
                 } catch (Throwable ignored) {
                 }
             }
+
+            Color panel = new Color(color.getRed(), color.getGreen(), color.getBlue(), Math.min(210, color.getAlpha()));
             if (radius > 0.5f) {
-                Render2DUtil.drawRound(matrices, x, y, width, height, radius, color);
+                Render2DUtil.drawRound(matrices, x, y, width, height, radius, panel);
             } else {
-                Render2DUtil.drawRect(matrices, x, y, width, height, color);
+                Render2DUtil.drawRect(matrices, x, y, width, height, panel);
             }
         } catch (Throwable ignored) {
         }
@@ -73,22 +78,25 @@ public final class GatoperaPipelines implements Wrapper {
 
     public static void drawButton(MatrixStack matrices, float x, float y, float width, float height, boolean hovered, Color base, Color hover) {
         float radius = isRoundedEnabled() ? Math.min(getRadius(), Math.min(width, height) / 2f) : 0f;
-        Color c = hovered ? hover : base;
-        drawPanel(matrices, x, y, width, height, radius, c);
+        drawPanel(matrices, x, y, width, height, radius, hovered ? hover : base);
     }
 
-    private static void drawBlurredRegion(float x, float y, float width, float height, float strength) {
-        if (blurBuffer == null) return;
-        Framebuffer main = MinecraftClient.getInstance().getFramebuffer();
-        blurBuffer.beginWrite(false);
-        main.draw(blurBuffer.textureWidth, blurBuffer.textureHeight, false);
-        blurBuffer.endWrite();
+    private static void drawBlurredRegion(MatrixStack matrices, float x, float y, float width, float height, float radius) {
+        MinecraftClient mc = MinecraftClient.getInstance();
+        Framebuffer main = mc.getFramebuffer();
+        ensureBuffers();
+
+        capture.beginWrite(false);
+        GL30.glBindFramebuffer(GL30.GL_READ_FRAMEBUFFER, main.fbo);
+        GL30.glBlitFramebuffer(
+                0, 0, main.textureWidth, main.textureHeight,
+                0, 0, main.textureWidth, main.textureHeight,
+                GL30.GL_COLOR_BUFFER_BIT, GL30.GL_LINEAR
+        );
         main.beginWrite(false);
 
-        RenderSystem.enableBlend();
-        RenderSystem.defaultBlendFunc();
-        RenderSystem.setShaderTexture(0, blurBuffer.getColorAttachment());
-        RenderSystem.setShader(GameRenderer::getPositionTexProgram);
+        runBlurPass(capture, blurTemp, radius, 1f, 0f);
+        runBlurPass(blurTemp, capture, radius, 0f, 1f);
 
         float sw = mc.getWindow().getScaledWidth();
         float sh = mc.getWindow().getScaledHeight();
@@ -97,7 +105,13 @@ public final class GatoperaPipelines implements Wrapper {
         float u1 = (x + width) / sw;
         float v1 = 1f - y / sh;
 
-        Matrix4f matrix = new Matrix4f().ortho(0, sw, sh, 0, 1000, 3000);
+        RenderSystem.enableBlend();
+        RenderSystem.defaultBlendFunc();
+        RenderSystem.setShader(GameRenderer::getPositionTexProgram);
+        RenderSystem.setShaderTexture(0, capture.getColorAttachment());
+        RenderSystem.setShaderColor(1f, 1f, 1f, 1f);
+
+        Matrix4f matrix = matrices.peek().getPositionMatrix();
         BufferBuilder buffer = Tessellator.getInstance().getBuffer();
         buffer.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_TEXTURE);
         buffer.vertex(matrix, x, y + height, 0).texture(u0, v0).next();
@@ -106,5 +120,34 @@ public final class GatoperaPipelines implements Wrapper {
         buffer.vertex(matrix, x, y, 0).texture(u0, v1).next();
         BufferRenderer.drawWithGlobalProgram(buffer.end());
         RenderSystem.disableBlend();
+    }
+
+    private static void runBlurPass(Framebuffer src, Framebuffer dst, float radius, float dirX, float dirY) {
+        ShaderProgram shader = GuiShaders.BLUR;
+        if (shader == null) return;
+
+        dst.beginWrite(true);
+        RenderSystem.setShader(() -> shader);
+        RenderSystem.setShaderTexture(0, src.getColorAttachment());
+        if (shader.getUniform("OutSize") != null) {
+            shader.getUniform("OutSize").set((float) dst.textureWidth, (float) dst.textureHeight);
+        }
+        if (shader.getUniform("Radius") != null) {
+            shader.getUniform("Radius").set(radius);
+        }
+        if (shader.getUniform("Direction") != null) {
+            shader.getUniform("Direction").set(dirX, dirY);
+        }
+
+        Matrix4f identity = new Matrix4f();
+        BufferBuilder buffer = Tessellator.getInstance().getBuffer();
+        buffer.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_TEXTURE);
+        buffer.vertex(identity, -1, -1, 0).texture(0, 0).next();
+        buffer.vertex(identity, 1, -1, 0).texture(1, 0).next();
+        buffer.vertex(identity, 1, 1, 0).texture(1, 1).next();
+        buffer.vertex(identity, -1, 1, 0).texture(0, 1).next();
+        BufferRenderer.drawWithGlobalProgram(buffer.end());
+        dst.endWrite();
+        MinecraftClient.getInstance().getFramebuffer().beginWrite(false);
     }
 }
