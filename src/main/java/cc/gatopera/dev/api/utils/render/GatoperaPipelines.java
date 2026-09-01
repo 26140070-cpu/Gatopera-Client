@@ -28,11 +28,11 @@ public final class GatoperaPipelines implements Wrapper {
     }
 
     private static final Identifier BLANK_TEXTURE =
-            new Identifier("minecraft", "textures/blank.png");
+            new Identifier("minecraft", "textures/misc/white.png");
 
     public static boolean isBlurEnabled() {
-        return ClientSetting.INSTANCE != null
-                && ClientSetting.INSTANCE.guiBlur.getValue();
+        return ClientSetting.INSTANCE == null
+                || ClientSetting.INSTANCE.guiBlur.getValue();
     }
 
     public static boolean isRoundedEnabled() {
@@ -44,7 +44,6 @@ public final class GatoperaPipelines implements Wrapper {
         if (ClientSetting.INSTANCE == null) {
             return 12f;
         }
-
         return ClientSetting.INSTANCE.guiRadius.getValueFloat();
     }
 
@@ -59,7 +58,6 @@ public final class GatoperaPipelines implements Wrapper {
             if (capture != null) {
                 capture.delete();
             }
-
             if (blurTemp != null) {
                 blurTemp.delete();
             }
@@ -92,51 +90,26 @@ public final class GatoperaPipelines implements Wrapper {
             float radius = isRoundedEnabled() ? getRadius() : 0f;
 
             if (isBlurEnabled() && GuiShaders.available()) {
-                drawBlurredRegion(
-                        matrices,
-                        x,
-                        y,
-                        width,
-                        height,
-                        Math.max(2f, radius * 0.35f)
-                );
+                drawBlurredRegion(matrices, x, y, width, height, Math.max(4f, radius * 0.5f));
             }
 
             Color panel = new Color(
                     color.getRed(),
                     color.getGreen(),
                     color.getBlue(),
-                    Math.min(210, color.getAlpha())
+                    Math.min(160, color.getAlpha())
             );
 
             if (radius > 0.5f) {
-                Render2DUtil.drawRound(
-                        matrices,
-                        x,
-                        y,
-                        width,
-                        height,
-                        radius,
-                        panel
-                );
+                Render2DUtil.drawRound(matrices, x, y, width, height, radius, panel);
             } else {
-                Render2DUtil.drawRect(
-                        matrices,
-                        x,
-                        y,
-                        width,
-                        height,
-                        panel
-                );
+                Render2DUtil.drawRect(matrices, x, y, width, height, panel);
             }
         } catch (Throwable ignored) {
         }
     }
 
-    public static void drawBlurredFullscreen(
-            MatrixStack matrices,
-            float radius
-    ) {
+    public static void drawBlurredFullscreen(MatrixStack matrices, float radius) {
         if (!isBlurEnabled() || !GuiShaders.available()) {
             return;
         }
@@ -144,103 +117,39 @@ public final class GatoperaPipelines implements Wrapper {
         try {
             MinecraftClient mc = MinecraftClient.getInstance();
             Framebuffer main = mc.getFramebuffer();
-
             ensureBuffers();
 
             GL30.glBindFramebuffer(GL30.GL_READ_FRAMEBUFFER, main.fbo);
             GL30.glBindFramebuffer(GL30.GL_DRAW_FRAMEBUFFER, capture.fbo);
-
             GL30.glBlitFramebuffer(
-                    0,
-                    0,
-                    main.textureWidth,
-                    main.textureHeight,
-                    0,
-                    0,
-                    capture.textureWidth,
-                    capture.textureHeight,
-                    GL30.GL_COLOR_BUFFER_BIT,
-                    GL30.GL_LINEAR
+                    0, 0, main.textureWidth, main.textureHeight,
+                    0, 0, capture.textureWidth, capture.textureHeight,
+                    GL30.GL_COLOR_BUFFER_BIT, GL30.GL_LINEAR
             );
-
             main.beginWrite(false);
 
-            runBlurPass(
-                    capture,
-                    blurTemp,
-                    Math.max(2f, radius),
-                    1f,
-                    0f
-            );
+            runBlurPass(capture, blurTemp, Math.max(2f, radius), 1f, 0f);
+            runBlurPass(blurTemp, capture, Math.max(2f, radius), 0f, 1f);
 
-            runBlurPass(
-                    blurTemp,
-                    capture,
-                    Math.max(2f, radius),
-                    0f,
-                    1f
-            );
-
-            float width = mc.getWindow().getScaledWidth();
-            float height = mc.getWindow().getScaledHeight();
+            float w = mc.getWindow().getScaledWidth();
+            float h = mc.getWindow().getScaledHeight();
 
             RenderSystem.enableBlend();
             RenderSystem.defaultBlendFunc();
             RenderSystem.setShader(GameRenderer::getPositionTexProgram);
-            RenderSystem.setShaderTexture(
-                    0,
-                    capture.getColorAttachment()
-            );
-            RenderSystem.setShaderColor(
-                    1f,
-                    1f,
-                    1f,
-                    1f
-            );
+            RenderSystem.setShaderTexture(0, capture.getColorAttachment());
+            RenderSystem.setShaderColor(1f, 1f, 1f, 1f);
 
-            Matrix4f matrix =
-                    matrices.peek().getPositionMatrix();
+            Matrix4f matrix = matrices.peek().getPositionMatrix();
+            BufferBuilder buffer = Tessellator.getInstance().getBuffer();
+            buffer.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_TEXTURE);
+            buffer.vertex(matrix, 0, h, 0).texture(0f, 0f).next();
+            buffer.vertex(matrix, w, h, 0).texture(1f, 0f).next();
+            buffer.vertex(matrix, w, 0, 0).texture(1f, 1f).next();
+            buffer.vertex(matrix, 0, 0, 0).texture(0f, 1f).next();
+            BufferRenderer.drawWithGlobalProgram(buffer.end());
 
-            BufferBuilder buffer =
-                    Tessellator.getInstance().getBuffer();
-
-            buffer.begin(
-                    VertexFormat.DrawMode.QUADS,
-                    VertexFormats.POSITION_TEXTURE
-            );
-
-            buffer.vertex(
-                    matrix,
-                    0,
-                    height,
-                    0
-            ).texture(0, 0).next();
-
-            buffer.vertex(
-                    matrix,
-                    width,
-                    height,
-                    0
-            ).texture(1, 0).next();
-
-            buffer.vertex(
-                    matrix,
-                    width,
-                    0,
-                    0
-            ).texture(1, 1).next();
-
-            buffer.vertex(
-                    matrix,
-                    0,
-                    0,
-                    0
-            ).texture(0, 1).next();
-
-            BufferRenderer.drawWithGlobalProgram(
-                    buffer.end()
-            );
-
+            RenderSystem.setShaderColor(1f, 1f, 1f, 1f);
             RenderSystem.disableBlend();
         } catch (Throwable ignored) {
         }
@@ -257,26 +166,10 @@ public final class GatoperaPipelines implements Wrapper {
     ) {
         try {
             if (radius <= 0.5f || !isRoundedEnabled()) {
-                Render2DUtil.drawRect(
-                        matrices,
-                        x,
-                        y,
-                        width,
-                        height,
-                        color
-                );
+                Render2DUtil.drawRect(matrices, x, y, width, height, color);
                 return;
             }
-
-            Render2DUtil.drawRound(
-                    matrices,
-                    x,
-                    y,
-                    width,
-                    height,
-                    radius,
-                    color
-            );
+            Render2DUtil.drawRound(matrices, x, y, width, height, radius, color);
         } catch (Throwable ignored) {
         }
     }
@@ -292,42 +185,17 @@ public final class GatoperaPipelines implements Wrapper {
             Color hover
     ) {
         float radius = isRoundedEnabled()
-                ? Math.min(
-                getRadius(),
-                Math.min(width, height) / 2f
-        )
+                ? Math.min(getRadius(), Math.min(width, height) / 2f)
                 : 0f;
 
         if (isBlurEnabled() && GuiShaders.available()) {
-            drawBlurredRegion(
-                    matrices,
-                    x,
-                    y,
-                    width,
-                    height,
-                    Math.max(2f, radius * 0.4f)
-            );
+            drawBlurredRegion(matrices, x, y, width, height, Math.max(2f, radius * 0.4f));
         }
 
         if (radius > 0.5f) {
-            Render2DUtil.drawRound(
-                    matrices,
-                    x,
-                    y,
-                    width,
-                    height,
-                    radius,
-                    hovered ? hover : base
-            );
+            Render2DUtil.drawRound(matrices, x, y, width, height, radius, hovered ? hover : base);
         } else {
-            Render2DUtil.drawRect(
-                    matrices,
-                    x,
-                    y,
-                    width,
-                    height,
-                    hovered ? hover : base
-            );
+            Render2DUtil.drawRect(matrices, x, y, width, height, hovered ? hover : base);
         }
     }
 
@@ -344,160 +212,49 @@ public final class GatoperaPipelines implements Wrapper {
 
         ensureBuffers();
 
-        GL30.glBindFramebuffer(
-                GL30.GL_READ_FRAMEBUFFER,
-                main.fbo
-        );
-
-        GL30.glBindFramebuffer(
-                GL30.GL_DRAW_FRAMEBUFFER,
-                capture.fbo
-        );
-
+        GL30.glBindFramebuffer(GL30.GL_READ_FRAMEBUFFER, main.fbo);
+        GL30.glBindFramebuffer(GL30.GL_DRAW_FRAMEBUFFER, capture.fbo);
         GL30.glBlitFramebuffer(
-                0,
-                0,
-                main.textureWidth,
-                main.textureHeight,
-                0,
-                0,
-                capture.textureWidth,
-                capture.textureHeight,
-                GL30.GL_COLOR_BUFFER_BIT,
-                GL30.GL_LINEAR
+                0, 0, main.textureWidth, main.textureHeight,
+                0, 0, capture.textureWidth, capture.textureHeight,
+                GL30.GL_COLOR_BUFFER_BIT, GL30.GL_LINEAR
         );
-
         main.beginWrite(false);
 
-        runBlurPass(
-                capture,
-                blurTemp,
-                radius,
-                1f,
-                0f
-        );
+        runBlurPass(capture, blurTemp, radius, 1f, 0f);
+        runBlurPass(blurTemp, capture, radius, 0f, 1f);
 
-        runBlurPass(
-                blurTemp,
-                capture,
-                radius,
-                0f,
-                1f
-        );
+        float fbW = (float) capture.textureWidth;
+        float fbH = (float) capture.textureHeight;
+        float scale = (float) mc.getWindow().getScaleFactor();
 
-        ShaderProgram shader = GuiShaders.ROUNDED;
+        float px0 = x * scale;
+        float py0 = y * scale;
+        float px1 = (x + width) * scale;
+        float py1 = (y + height) * scale;
 
-        if (shader == null) {
-            return;
-        }
+        float u0 = px0 / fbW;
+        float u1 = px1 / fbW;
+        float v0 = 1.0f - (py1 / fbH);
+        float v1 = 1.0f - (py0 / fbH);
 
         RenderSystem.enableBlend();
         RenderSystem.defaultBlendFunc();
+        RenderSystem.setShader(GameRenderer::getPositionTexProgram);
+        RenderSystem.setShaderTexture(0, capture.getColorAttachment());
+        RenderSystem.setShaderColor(1f, 1f, 1f, 1f);
 
-        RenderSystem.setShader(
-                () -> shader
-        );
+        Matrix4f matrix = matrices.peek().getPositionMatrix();
+        BufferBuilder buffer = Tessellator.getInstance().getBuffer();
 
-        RenderSystem.setShaderTexture(
-                0,
-                capture.getColorAttachment()
-        );
+        buffer.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_TEXTURE);
+        buffer.vertex(matrix, x, y + height, 0).texture(u0, v0).next();
+        buffer.vertex(matrix, x + width, y + height, 0).texture(u1, v0).next();
+        buffer.vertex(matrix, x + width, y, 0).texture(u1, v1).next();
+        buffer.vertex(matrix, x, y, 0).texture(u0, v1).next();
+        BufferRenderer.drawWithGlobalProgram(buffer.end());
 
-        RenderSystem.setShaderTexture(
-                1,
-                BLANK_TEXTURE
-        );
-
-        RenderSystem.setShaderColor(
-                1f,
-                1f,
-                1f,
-                1f
-        );
-
-        if (shader.getUniform("Size") != null) {
-            shader.getUniform("Size").set(
-                    width,
-                    height
-            );
-        }
-
-        if (shader.getUniform("Radius") != null) {
-            shader.getUniform("Radius").set(
-                    radius
-            );
-        }
-
-        if (shader.getUniform("Smoothness") != null) {
-            shader.getUniform("Smoothness").set(
-                    1f
-            );
-        }
-
-        if (shader.getUniform("ColorModulator") != null) {
-            shader.getUniform("ColorModulator").set(
-                    1f,
-                    1f,
-                    1f,
-                    1f
-            );
-        }
-
-        Matrix4f matrix =
-                matrices.peek().getPositionMatrix();
-
-        BufferBuilder buffer =
-                Tessellator.getInstance().getBuffer();
-
-        buffer.begin(
-                VertexFormat.DrawMode.QUADS,
-                VertexFormats.POSITION_TEXTURE
-        );
-
-        buffer.vertex(
-                matrix,
-                x,
-                y + height,
-                0
-        ).texture(
-                0f,
-                1f
-        ).next();
-
-        buffer.vertex(
-                matrix,
-                x + width,
-                y + height,
-                0
-        ).texture(
-                1f,
-                1f
-        ).next();
-
-        buffer.vertex(
-                matrix,
-                x + width,
-                y,
-                0
-        ).texture(
-                1f,
-                0f
-        ).next();
-
-        buffer.vertex(
-                matrix,
-                x,
-                y,
-                0
-        ).texture(
-                0f,
-                0f
-        ).next();
-
-        BufferRenderer.drawWithGlobalProgram(
-                buffer.end()
-        );
-
+        RenderSystem.setShaderColor(1f, 1f, 1f, 1f);
         RenderSystem.disableBlend();
     }
 
@@ -509,7 +266,6 @@ public final class GatoperaPipelines implements Wrapper {
             float dirY
     ) {
         ShaderProgram shader = GuiShaders.BLUR;
-
         if (shader == null) {
             return;
         }
@@ -517,10 +273,8 @@ public final class GatoperaPipelines implements Wrapper {
         dst.beginWrite(true);
 
         RenderSystem.setShader(() -> shader);
-        RenderSystem.setShaderTexture(
-                0,
-                src.getColorAttachment()
-        );
+        RenderSystem.setShaderTexture(0, src.getColorAttachment());
+        RenderSystem.setShaderColor(1f, 1f, 1f, 1f);
 
         if (shader.getUniform("OutSize") != null) {
             shader.getUniform("OutSize").set(
@@ -528,65 +282,24 @@ public final class GatoperaPipelines implements Wrapper {
                     (float) dst.textureHeight
             );
         }
-
         if (shader.getUniform("Radius") != null) {
             shader.getUniform("Radius").set(radius);
         }
-
         if (shader.getUniform("Direction") != null) {
-            shader.getUniform("Direction").set(
-                    dirX,
-                    dirY
-            );
+            shader.getUniform("Direction").set(dirX, dirY);
         }
 
-        Matrix4f identity = new Matrix4f();
+        Matrix4f identity = new Matrix4f().identity();
+        BufferBuilder buffer = Tessellator.getInstance().getBuffer();
 
-        BufferBuilder buffer =
-                Tessellator.getInstance().getBuffer();
-
-        buffer.begin(
-                VertexFormat.DrawMode.QUADS,
-                VertexFormats.POSITION_TEXTURE
-        );
-
-        buffer.vertex(
-                identity,
-                -1,
-                -1,
-                0
-        ).texture(0, 0).next();
-
-        buffer.vertex(
-                identity,
-                1,
-                -1,
-                0
-        ).texture(1, 0).next();
-
-        buffer.vertex(
-                identity,
-                1,
-                1,
-                0
-        ).texture(1, 1).next();
-
-        buffer.vertex(
-                identity,
-                -1,
-                1,
-                0
-        ).texture(0, 1).next();
-
-        BufferRenderer.drawWithGlobalProgram(
-                buffer.end()
-        );
+        buffer.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_TEXTURE);
+        buffer.vertex(identity, -1, -1, 0).texture(0, 0).next();
+        buffer.vertex(identity, 1, -1, 0).texture(1, 0).next();
+        buffer.vertex(identity, 1, 1, 0).texture(1, 1).next();
+        buffer.vertex(identity, -1, 1, 0).texture(0, 1).next();
+        BufferRenderer.drawWithGlobalProgram(buffer.end());
 
         dst.endWrite();
-
-        MinecraftClient
-                .getInstance()
-                .getFramebuffer()
-                .beginWrite(false);
+        MinecraftClient.getInstance().getFramebuffer().beginWrite(false);
     }
 }

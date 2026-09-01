@@ -2,6 +2,7 @@ package cc.gatopera.dev.mod.gui.misc;
 
 import cc.gatopera.dev.api.utils.Wrapper;
 import cc.gatopera.dev.api.utils.render.GatoperaPipelines;
+import cc.gatopera.dev.api.utils.render.Render2DUtil;
 import cc.gatopera.dev.mod.gui.font.FontRenderers;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
@@ -46,13 +47,7 @@ public class DialogScreen extends Screen implements Wrapper {
             int mouseY,
             float delta
     ) {
-        context.fill(
-                0,
-                0,
-                this.width,
-                this.height,
-                0x660A0A0F
-        );
+        context.fill(0, 0, this.width, this.height, 0xCC0A0A0F);
 
         float mainX = this.width / 2f - 120f;
         float mainY = this.height / 2f - 80f;
@@ -65,41 +60,17 @@ public class DialogScreen extends Screen implements Wrapper {
                 mainY,
                 mainWidth,
                 mainHeight,
-                new Color(18, 18, 24, 210)
+                new Color(18, 18, 24, 140)
         );
 
-        drawText(
-                context,
-                header,
-                mainX + mainWidth / 2f,
-                mainY + 12,
-                0xFFFFFFFF
-        );
-
-        drawText(
-                context,
-                description,
-                mainX + mainWidth / 2f,
-                mainY + 32,
-                0xFFAAAAAA
-        );
+        drawText(context, header, mainX + mainWidth / 2f, mainY + 12, 0xFFFFFFFF);
+        drawText(context, description, mainX + mainWidth / 2f, mainY + 32, 0xFFAAAAAA);
 
         boolean yesHovered = yesHovered(mouseX, mouseY);
         boolean noHovered = noHovered(mouseX, mouseY);
 
-        Color base = new Color(
-                32,
-                32,
-                40,
-                220
-        );
-
-        Color hover = new Color(
-                55,
-                55,
-                70,
-                240
-        );
+        Color base = new Color(32, 32, 40, 220);
+        Color hover = new Color(55, 55, 70, 240);
 
         GatoperaPipelines.drawButton(
                 context.getMatrices(),
@@ -154,20 +125,9 @@ public class DialogScreen extends Screen implements Wrapper {
         }
     }
 
-    private void drawText(
-            DrawContext context,
-            String text,
-            float x,
-            float y,
-            int color
-    ) {
-        boolean useCustom =
-                FontRenderers.customFontsAvailable
-                        && FontRenderers.ui != null
-                        && FontRenderers.ui
-                        .getClass()
-                        .getSimpleName()
-                        .equals("StbFontAdapter");
+    private void drawText(DrawContext context, String text, float x, float y, int color) {
+        boolean useCustom = FontRenderers.ui != null
+                && FontRenderers.ui.getClass().getSimpleName().equals("StbFontAdapter");
 
         if (useCustom) {
             try {
@@ -192,77 +152,38 @@ public class DialogScreen extends Screen implements Wrapper {
         );
     }
 
-    private boolean isHovered(
-            int mouseX,
-            int mouseY,
-            int x,
-            int y,
-            int width,
-            int height
-    ) {
+    private boolean isHovered(int mouseX, int mouseY, int x, int y, int width, int height) {
         return mouseX >= x
                 && mouseX <= x + width
                 && mouseY >= y
                 && mouseY <= y + height;
     }
 
-    private boolean yesHovered(
-            int mouseX,
-            int mouseY
-    ) {
+    private boolean yesHovered(int mouseX, int mouseY) {
         float mainX = this.width / 2f - 120f;
         float mainY = this.height / 2f - 80f;
-
-        return isHovered(
-                mouseX,
-                mouseY,
-                (int) mainX + 5,
-                (int) mainY + 95,
-                110,
-                40
-        );
+        return isHovered(mouseX, mouseY, (int) mainX + 5, (int) mainY + 95, 110, 40);
     }
 
-    private boolean noHovered(
-            int mouseX,
-            int mouseY
-    ) {
+    private boolean noHovered(int mouseX, int mouseY) {
         float mainX = this.width / 2f - 120f;
         float mainY = this.height / 2f - 80f;
-
-        return isHovered(
-                mouseX,
-                mouseY,
-                (int) mainX + 125,
-                (int) mainY + 95,
-                110,
-                40
-        );
+        return isHovered(mouseX, mouseY, (int) mainX + 125, (int) mainY + 95, 110, 40);
     }
 
     @Override
-    public boolean mouseClicked(
-            double mouseX,
-            double mouseY,
-            int button
-    ) {
+    public boolean mouseClicked(double mouseX, double mouseY, int button) {
         if (button == 0) {
             if (yesHovered((int) mouseX, (int) mouseY)) {
                 yesAction.run();
                 return true;
             }
-
             if (noHovered((int) mouseX, (int) mouseY)) {
                 noAction.run();
                 return true;
             }
         }
-
-        return super.mouseClicked(
-                mouseX,
-                mouseY,
-                button
-        );
+        return super.mouseClicked(mouseX, mouseY, button);
     }
 
     @Override

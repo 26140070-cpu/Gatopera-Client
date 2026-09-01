@@ -7,12 +7,41 @@
   "vertex": "gatopera_pos_tex",
   "fragment": "gatopera_blur",
   "attributes": ["Position", "UV0"],
-  "samplers": [{ "name": "DiffuseSampler" }],
+  "samplers": [
+    {
+      "name": "DiffuseSampler"
+    }
+  ],
   "uniforms": [
-    { "name": "ModelViewMat", "type": "matrix4x4", "count": 16, "values": [1,0,0,0, 0,1,0,0, 0,0,1,0, 0,0,0,1] },
-    { "name": "ProjMat", "type": "matrix4x4", "count": 16, "values": [1,0,0,0, 0,1,0,0, 0,0,1,0, 0,0,0,1] },
-    { "name": "OutSize", "type": "float", "count": 2, "values": [1.0, 1.0] },
-    { "name": "Radius", "type": "float", "count": 1, "values": [4.0] },
-    { "name": "Direction", "type": "float", "count": 2, "values": [1.0, 0.0] }
+    {
+      "name": "ModelViewMat",
+      "type": "matrix4x4",
+      "count": 16,
+      "values": [1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0]
+    },
+    {
+      "name": "ProjMat",
+      "type": "matrix4x4",
+      "count": 16,
+      "values": [1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0]
+    },
+    {
+      "name": "OutSize",
+      "type": "float",
+      "count": 2,
+      "values": [1.0, 1.0]
+    },
+    {
+      "name": "Radius",
+      "type": "float",
+      "count": 1,
+      "values": [4.0]
+    },
+    {
+      "name": "Direction",
+      "type": "float",
+      "count": 2,
+      "values": [1.0, 0.0]
+    }
   ]
 }
