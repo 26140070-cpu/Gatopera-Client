@@ -29,7 +29,7 @@ public final class GatoperaPipelines implements Wrapper {
     }
 
     public static boolean isBlurEnabled() {
-        return ClientSetting.INSTANCE == null || ClientSetting.INSTANCE.guiBlur.getValue();
+        return ClientSetting.INSTANCE != null && ClientSetting.INSTANCE.guiBlur.getValue();
     }
 
     public static boolean isRoundedEnabled() {
@@ -42,24 +42,33 @@ public final class GatoperaPipelines implements Wrapper {
     }
 
     public static void drawWindowBackground(MatrixStack matrices, float x, float y, float width, float height, Color color) {
-        prepareFrame();
-        float radius = isRoundedEnabled() ? getRadius() : 0f;
-        if (isBlurEnabled()) {
-            drawBlurredRegion(x, y, width, height, 6f);
-        }
-        if (radius > 0.5f) {
-            Render2DUtil.drawRound(matrices, x, y, width, height, radius, color);
-        } else {
-            Render2DUtil.drawRect(matrices, x, y, width, height, color);
+        try {
+            prepareFrame();
+            float radius = isRoundedEnabled() ? getRadius() : 0f;
+            if (isBlurEnabled()) {
+                try {
+                    drawBlurredRegion(x, y, width, height, 6f);
+                } catch (Throwable ignored) {
+                }
+            }
+            if (radius > 0.5f) {
+                Render2DUtil.drawRound(matrices, x, y, width, height, radius, color);
+            } else {
+                Render2DUtil.drawRect(matrices, x, y, width, height, color);
+            }
+        } catch (Throwable ignored) {
         }
     }
 
     public static void drawPanel(MatrixStack matrices, float x, float y, float width, float height, float radius, Color color) {
-        if (radius <= 0.5f || !isRoundedEnabled()) {
-            Render2DUtil.drawRect(matrices, x, y, width, height, color);
-            return;
+        try {
+            if (radius <= 0.5f || !isRoundedEnabled()) {
+                Render2DUtil.drawRect(matrices, x, y, width, height, color);
+                return;
+            }
+            Render2DUtil.drawRound(matrices, x, y, width, height, radius, color);
+        } catch (Throwable ignored) {
         }
-        Render2DUtil.drawRound(matrices, x, y, width, height, radius, color);
     }
 
     public static void drawButton(MatrixStack matrices, float x, float y, float width, float height, boolean hovered, Color base, Color hover) {

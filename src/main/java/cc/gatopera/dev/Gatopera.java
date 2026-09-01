@@ -12,9 +12,6 @@ public final class Gatopera implements ModInitializer {
 
     @Override
     public void onInitialize() {
-        {
-            System.setProperty("java.awt.headless", "true");
-        }
         load();
     }
 
@@ -46,8 +43,8 @@ public final class Gatopera implements ModInitializer {
 
     public static void load() {
         EVENT_BUS.registerLambdaFactory((lookupInMethod, klass) -> (MethodHandles.Lookup) lookupInMethod.invoke(null, klass, MethodHandles.lookup()));
-        CONFIG = new ConfigManager();
         cc.gatopera.dev.api.i18n.I18n.loadFromConfig();
+        CONFIG = new ConfigManager();
         PREFIX = Gatopera.CONFIG.getString("prefix", ";");
         THREAD = new ThreadManager();
         HOLE = new HoleManager();

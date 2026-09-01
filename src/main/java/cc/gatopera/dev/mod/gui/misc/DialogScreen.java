@@ -2,6 +2,7 @@ package cc.gatopera.dev.mod.gui.misc;
 
 import cc.gatopera.dev.api.utils.Wrapper;
 import cc.gatopera.dev.api.utils.render.GatoperaPipelines;
+import cc.gatopera.dev.api.utils.render.Render2DUtil;
 import cc.gatopera.dev.mod.gui.font.FontRenderers;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
@@ -33,23 +34,34 @@ public class DialogScreen extends Screen implements Wrapper {
 
     @Override
     public void render(@NotNull DrawContext context, int mouseX, int mouseY, float delta) {
-        context.fill(0, 0, width, height, 0xFF0A0A0F);
+        context.fill(0, 0, this.width, this.height, 0xFF0A0A0F);
 
-        float halfOfWidth = mc.getWindow().getScaledWidth() / 2f;
-        float halfOfHeight = mc.getWindow().getScaledHeight() / 2f;
-        float mainX = halfOfWidth - 120f;
-        float mainY = halfOfHeight - 80f;
+        float mainX = this.width / 2f - 120f;
+        float mainY = this.height / 2f - 80f;
         float mainWidth = 240f;
         float mainHeight = 140f;
 
-        GatoperaPipelines.drawWindowBackground(context.getMatrices(), mainX, mainY, mainWidth, mainHeight, new Color(18, 18, 24, 230));
+        try {
+            GatoperaPipelines.drawWindowBackground(context.getMatrices(), mainX, mainY, mainWidth, mainHeight, new Color(18, 18, 24, 230));
+        } catch (Throwable t) {
+            context.fill((int) mainX, (int) mainY, (int) (mainX + mainWidth), (int) (mainY + mainHeight), 0xE6121218);
+        }
 
-        if (FontRenderers.ui != null) {
-            FontRenderers.ui.drawCenteredString(context.getMatrices(), header, mainX + mainWidth / 2f, mainY + 10, -1);
-            FontRenderers.ui.drawCenteredString(context.getMatrices(), description, mainX + mainWidth / 2f, mainY + 28, new Color(0xABFFFFFF, true).getRGB());
-        } else {
-            context.drawCenteredTextWithShadow(textRenderer, Text.of(header), (int) (mainX + mainWidth / 2f), (int) (mainY + 10), 0xFFFFFF);
-            context.drawCenteredTextWithShadow(textRenderer, Text.of(description), (int) (mainX + mainWidth / 2f), (int) (mainY + 28), 0xABFFFFFF);
+        boolean useCustom = FontRenderers.customFontsAvailable
+                && FontRenderers.ui != null
+                && FontRenderers.ui.getClass().getSimpleName().equals("StbFontAdapter");
+
+        if (useCustom) {
+            try {
+                FontRenderers.ui.drawCenteredString(context.getMatrices(), header, mainX + mainWidth / 2f, mainY + 12, -1);
+                FontRenderers.ui.drawCenteredString(context.getMatrices(), description, mainX + mainWidth / 2f, mainY + 32, 0xFFAAAAAA);
+            } catch (Throwable t) {
+                useCustom = false;
+            }
+        }
+        if (!useCustom) {
+            context.drawCenteredTextWithShadow(this.textRenderer, Text.of(header), (int) (mainX + mainWidth / 2f), (int) (mainY + 12), 0xFFFFFF);
+            context.drawCenteredTextWithShadow(this.textRenderer, Text.of(description), (int) (mainX + mainWidth / 2f), (int) (mainY + 32), 0xAAAAAA);
         }
 
         boolean yesH = yesHovered(mouseX, mouseY);
@@ -57,36 +69,44 @@ public class DialogScreen extends Screen implements Wrapper {
         Color base = new Color(32, 32, 40, 220);
         Color hover = new Color(55, 55, 70, 240);
 
-        GatoperaPipelines.drawButton(context.getMatrices(), mainX + 5, mainY + 95, 110, 40, yesH, base, hover);
-        GatoperaPipelines.drawButton(context.getMatrices(), mainX + 125, mainY + 95, 110, 40, noH, base, hover);
+        try {
+            GatoperaPipelines.drawButton(context.getMatrices(), mainX + 5, mainY + 95, 110, 40, yesH, base, hover);
+            GatoperaPipelines.drawButton(context.getMatrices(), mainX + 125, mainY + 95, 110, 40, noH, base, hover);
+        } catch (Throwable t) {
+            context.fill((int) mainX + 5, (int) mainY + 95, (int) mainX + 115, (int) mainY + 135, yesH ? 0xF0373746 : 0xDC202028);
+            context.fill((int) mainX + 125, (int) mainY + 95, (int) mainX + 235, (int) mainY + 135, noH ? 0xF0373746 : 0xDC202028);
+        }
 
-        if (FontRenderers.ui != null) {
-            FontRenderers.ui.drawCenteredString(context.getMatrices(), yesText, mainX + 60, mainY + 112, yesH ? -1 : new Color(0xABFFFFFF, true).getRGB());
-            FontRenderers.ui.drawCenteredString(context.getMatrices(), noText, mainX + 180f, mainY + 112, noH ? -1 : new Color(0xABFFFFFF, true).getRGB());
+        if (useCustom) {
+            try {
+                FontRenderers.ui.drawCenteredString(context.getMatrices(), yesText, mainX + 60, mainY + 110, yesH ? -1 : 0xFFCCCCCC);
+                FontRenderers.ui.drawCenteredString(context.getMatrices(), noText, mainX + 180, mainY + 110, noH ? -1 : 0xFFCCCCCC);
+            } catch (Throwable t) {
+                context.drawCenteredTextWithShadow(this.textRenderer, Text.of(yesText), (int) (mainX + 60), (int) (mainY + 110), 0xFFFFFF);
+                context.drawCenteredTextWithShadow(this.textRenderer, Text.of(noText), (int) (mainX + 180), (int) (mainY + 110), 0xFFFFFF);
+            }
         } else {
-            context.drawCenteredTextWithShadow(textRenderer, Text.of(yesText), (int) (mainX + 60), (int) (mainY + 112), yesH ? 0xFFFFFF : 0xABFFFFFF);
-            context.drawCenteredTextWithShadow(textRenderer, Text.of(noText), (int) (mainX + 180), (int) (mainY + 112), noH ? 0xFFFFFF : 0xABFFFFFF);
+            context.drawCenteredTextWithShadow(this.textRenderer, Text.of(yesText), (int) (mainX + 60), (int) (mainY + 110), 0xFFFFFF);
+            context.drawCenteredTextWithShadow(this.textRenderer, Text.of(noText), (int) (mainX + 180), (int) (mainY + 110), 0xFFFFFF);
         }
-
-        if (pic != null) {
-            context.drawTexture(pic, (int) (mainX + mainWidth / 2f - 35), (int) mainY + 42, 0, 0, 70, 45, 70, 45);
-        }
-    }
-
-    private boolean isHovered(int mouseX, int mouseY, int x, int y, int width, int height) {
-        return mouseX > x && mouseX < x + width && mouseY > y && mouseY < y + height;
     }
 
     private boolean yesHovered(int mX, int mY) {
-        float mainX = (mc.getWindow().getScaledWidth() / 2f) - 120f;
-        float mainY = (mc.getWindow().getScaledHeight() / 2f) - 80f;
-        return isHovered(mX, mY, (int) mainX + 5, (int) mainY + 95, 110, 40);
+        int boxW = 240;
+        int boxH = 140;
+        int boxX = (this.width - boxW) / 2;
+        int boxY = (this.height - boxH) / 2;
+        int btnY = boxY + 95;
+        return mX >= boxX + 10 && mX <= boxX + 110 && mY >= btnY && mY <= btnY + 30;
     }
 
     private boolean noHovered(int mX, int mY) {
-        float mainX = (mc.getWindow().getScaledWidth() / 2f) - 120f;
-        float mainY = (mc.getWindow().getScaledHeight() / 2f) - 80f;
-        return isHovered(mX, mY, (int) mainX + 125, (int) mainY + 95, 110, 40);
+        int boxW = 240;
+        int boxH = 140;
+        int boxX = (this.width - boxW) / 2;
+        int boxY = (this.height - boxH) / 2;
+        int btnY = boxY + 95;
+        return mX >= boxX + 130 && mX <= boxX + 230 && mY >= btnY && mY <= btnY + 30;
     }
 
     @Override

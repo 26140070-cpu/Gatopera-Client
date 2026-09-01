@@ -35,17 +35,19 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import java.awt.*;
-
 @Mixin(MinecraftClient.class)
 public abstract class MixinMinecraftClient extends ReentrantThreadExecutor<Runnable> {
 	@Inject(method = "<init>", at = @At("TAIL"))
 	void postWindowInit(RunArgs args, CallbackInfo ci) {
 		try {
-			FontRenderers.createDefault(8f);
-			FontRenderers.Calibri = FontRenderers.create("calibri", Font.BOLD, 11f);
-		} catch (Exception e) {
+			FontRenderers.createDefault(18f);
+			if (FontRenderers.ui != null) {
+				FontRenderers.Calibri = FontRenderers.ui;
+			}
+		} catch (Throwable e) {
 			e.printStackTrace();
+			FontRenderers.customFontsAvailable = false;
+			FontRenderers.ui = null;
 		}
 	}
 

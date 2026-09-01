@@ -12,6 +12,7 @@ import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.text.Text;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -20,13 +21,21 @@ import ru.vidtu.ias.screen.AccountScreen;
 @Mixin(TitleScreen.class)
 public abstract class MixinTitleScreen extends Screen {
 
+    @Unique
+    private boolean gatopera$welcomeChecked = false;
+
     public MixinTitleScreen(Text title) {
         super(title);
     }
 
-    @Inject(method = "init", at = @At("RETURN"))
-    private void onInit(CallbackInfo ci) {
+    @Inject(method = "render", at = @At("HEAD"))
+    private void onRender(CallbackInfo ci) {
+        if (gatopera$welcomeChecked) return;
+        if (client == null || client.getOverlay() != null) return;
         if (Gatopera.CONFIG == null) return;
+
+        gatopera$welcomeChecked = true;
+
         if (Gatopera.CONFIG.getBoolean("welcome_shown", false)) return;
 
         DialogScreen languageDialog = new DialogScreen(
@@ -53,6 +62,7 @@ public abstract class MixinTitleScreen extends Screen {
         client.setScreen(languageDialog);
     }
 
+    @Unique
     private DialogScreen buildWelcome() {
         return new DialogScreen(
                 null,
