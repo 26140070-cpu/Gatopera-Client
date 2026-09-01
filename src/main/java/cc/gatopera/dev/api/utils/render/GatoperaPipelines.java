@@ -14,6 +14,7 @@ import net.minecraft.client.render.Tessellator;
 import net.minecraft.client.render.VertexFormat;
 import net.minecraft.client.render.VertexFormats;
 import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.util.Identifier;
 import org.joml.Matrix4f;
 import org.lwjgl.opengl.GL30;
 
@@ -25,6 +26,9 @@ public final class GatoperaPipelines implements Wrapper {
 
     private GatoperaPipelines() {
     }
+
+    private static final Identifier BLANK_TEXTURE =
+            new Identifier("minecraft", "textures/blank.png");
 
     public static boolean isBlurEnabled() {
         return ClientSetting.INSTANCE != null
@@ -294,15 +298,37 @@ public final class GatoperaPipelines implements Wrapper {
         )
                 : 0f;
 
-        drawPanel(
-                matrices,
-                x,
-                y,
-                width,
-                height,
-                radius,
-                hovered ? hover : base
-        );
+        if (isBlurEnabled() && GuiShaders.available()) {
+            drawBlurredRegion(
+                    matrices,
+                    x,
+                    y,
+                    width,
+                    height,
+                    Math.max(2f, radius * 0.4f)
+            );
+        }
+
+        if (radius > 0.5f) {
+            Render2DUtil.drawRound(
+                    matrices,
+                    x,
+                    y,
+                    width,
+                    height,
+                    radius,
+                    hovered ? hover : base
+            );
+        } else {
+            Render2DUtil.drawRect(
+                    matrices,
+                    x,
+                    y,
+                    width,
+                    height,
+                    hovered ? hover : base
+            );
+        }
     }
 
     private static void drawBlurredRegion(
@@ -359,32 +385,63 @@ public final class GatoperaPipelines implements Wrapper {
                 1f
         );
 
-        float sw =
-                mc.getWindow().getScaledWidth();
+        ShaderProgram shader = GuiShaders.ROUNDED;
 
-        float sh =
-                mc.getWindow().getScaledHeight();
-
-        float u0 = x / sw;
-        float v0 = 1f - (y + height) / sh;
-        float u1 = (x + width) / sw;
-        float v1 = 1f - y / sh;
+        if (shader == null) {
+            return;
+        }
 
         RenderSystem.enableBlend();
         RenderSystem.defaultBlendFunc();
+
         RenderSystem.setShader(
-                GameRenderer::getPositionTexProgram
+                () -> shader
         );
+
         RenderSystem.setShaderTexture(
                 0,
                 capture.getColorAttachment()
         );
+
+        RenderSystem.setShaderTexture(
+                1,
+                BLANK_TEXTURE
+        );
+
         RenderSystem.setShaderColor(
                 1f,
                 1f,
                 1f,
                 1f
         );
+
+        if (shader.getUniform("Size") != null) {
+            shader.getUniform("Size").set(
+                    width,
+                    height
+            );
+        }
+
+        if (shader.getUniform("Radius") != null) {
+            shader.getUniform("Radius").set(
+                    radius
+            );
+        }
+
+        if (shader.getUniform("Smoothness") != null) {
+            shader.getUniform("Smoothness").set(
+                    1f
+            );
+        }
+
+        if (shader.getUniform("ColorModulator") != null) {
+            shader.getUniform("ColorModulator").set(
+                    1f,
+                    1f,
+                    1f,
+                    1f
+            );
+        }
 
         Matrix4f matrix =
                 matrices.peek().getPositionMatrix();
@@ -402,28 +459,40 @@ public final class GatoperaPipelines implements Wrapper {
                 x,
                 y + height,
                 0
-        ).texture(u0, v0).next();
+        ).texture(
+                0f,
+                1f
+        ).next();
 
         buffer.vertex(
                 matrix,
                 x + width,
                 y + height,
                 0
-        ).texture(u1, v0).next();
+        ).texture(
+                1f,
+                1f
+        ).next();
 
         buffer.vertex(
                 matrix,
                 x + width,
                 y,
                 0
-        ).texture(u1, v1).next();
+        ).texture(
+                1f,
+                0f
+        ).next();
 
         buffer.vertex(
                 matrix,
                 x,
                 y,
                 0
-        ).texture(u0, v1).next();
+        ).texture(
+                0f,
+                0f
+        ).next();
 
         BufferRenderer.drawWithGlobalProgram(
                 buffer.end()

@@ -1,5 +1,7 @@
 #version 150
 
+uniform sampler2D DiffuseSampler;
+uniform sampler2D MaskSampler;
 uniform vec2 Size;
 uniform float Radius;
 uniform float Smoothness;
@@ -14,6 +16,9 @@ float roundedBoxSDF(vec2 position, vec2 halfSize, float radius) {
 }
 
 void main() {
+    vec4 source = texture(DiffuseSampler, texCoord);
+    vec4 mask = texture(MaskSampler, texCoord);
+
     vec2 position = (texCoord - 0.5) * Size;
     vec2 halfSize = Size * 0.5;
 
@@ -29,14 +34,12 @@ void main() {
             distance
     );
 
+    alpha *= mask.a;
+
     if (alpha <= 0.0) {
         discard;
     }
 
-    fragColor = ColorModulator * vec4(
-            1.0,
-            1.0,
-            1.0,
-            alpha
-    );
+    fragColor = source * ColorModulator;
+    fragColor.a *= alpha;
 }
