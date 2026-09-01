@@ -10,6 +10,7 @@ import cc.gatopera.dev.core.impl.GuiManager;
 import cc.gatopera.dev.api.utils.render.Render2DUtil;
 import cc.gatopera.dev.api.utils.render.TextUtil;
 import cc.gatopera.dev.mod.gui.clickgui.ClickGuiScreen;
+import cc.gatopera.dev.api.i18n.I18n;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.util.math.MatrixStack;
@@ -158,6 +159,12 @@ public class ClickGuiTab extends Tab {
 			}
 		}
 		//TextUtil.drawString(drawContext, this.title, x + width / 2d - TextUtil.getWidth(title) / 2, y + 3, new Color(255, 255, 255));
-		TextUtil.drawString(drawContext, this.title, x + 4, y + 3, new Color(255, 255, 255));
+		TextUtil.drawString(
+				drawContext,
+				I18n.category(this.title),
+				x + 4,
+				y + 3,
+				new Color(255, 255, 255)
+		);
 	}
 }

@@ -55,15 +55,11 @@ public abstract class Module extends Mod {
 		}
 	}
 
-
 	public void setChinese(String chinese) {
 		this.chinese = chinese;
 	}
 
 	public String getDisplayName() {
-		if (ClickGui.INSTANCE.chinese.getValue() && chinese != null) {
-			return chinese;
-		}
 		return getName();
 	}
 
