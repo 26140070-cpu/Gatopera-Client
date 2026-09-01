@@ -53,7 +53,25 @@
       ]
     },
     {
-      "name": "Size",
+      "name": "ScreenSize",
+      "type": "float",
+      "count": 2,
+      "values": [
+        1920.0,
+        1080.0
+      ]
+    },
+    {
+      "name": "RectPos",
+      "type": "float",
+      "count": 2,
+      "values": [
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "name": "RectSize",
       "type": "float",
       "count": 2,
       "values": [
@@ -66,7 +84,7 @@
       "type": "float",
       "count": 1,
       "values": [
-        10.0
+        12.0
       ]
     },
     {
