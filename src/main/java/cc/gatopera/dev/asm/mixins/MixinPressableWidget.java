@@ -22,7 +22,9 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import java.awt.Color;
 
 @Mixin(PressableWidget.class)
-public abstract class MixinPressableWidget extends ClickableWidget {
+public abstract class MixinPressableWidget
+        extends ClickableWidget {
+
     public MixinPressableWidget(
             int x,
             int y,
@@ -30,11 +32,18 @@ public abstract class MixinPressableWidget extends ClickableWidget {
             int height,
             Text message
     ) {
-        super(x, y, width, height, message);
+        super(
+                x,
+                y,
+                width,
+                height,
+                message
+        );
     }
 
     @Unique
-    private Animation animation = new Animation();
+    private Animation animation =
+            new Animation();
 
     @Unique
     private double progress = 0;

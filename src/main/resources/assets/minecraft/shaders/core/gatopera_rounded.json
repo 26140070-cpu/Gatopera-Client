@@ -6,7 +6,10 @@
   },
   "vertex": "gatopera_pos_tex",
   "fragment": "gatopera_rounded",
-  "attributes": ["Position", "UV0"],
+  "attributes": [
+    "Position",
+    "UV0"
+  ],
   "samplers": [
     {
       "name": "DiffuseSampler"
@@ -17,49 +20,77 @@
       "name": "ModelViewMat",
       "type": "matrix4x4",
       "count": 16,
-      "values": [1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0]
+      "values": [
+        1.0, 0.0, 0.0, 0.0,
+        0.0, 1.0, 0.0, 0.0,
+        0.0, 0.0, 1.0, 0.0,
+        0.0, 0.0, 0.0, 1.0
+      ]
     },
     {
       "name": "ProjMat",
       "type": "matrix4x4",
       "count": 16,
-      "values": [1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0]
+      "values": [
+        1.0, 0.0, 0.0, 0.0,
+        0.0, 1.0, 0.0, 0.0,
+        0.0, 0.0, 1.0, 0.0,
+        0.0, 0.0, 0.0, 1.0
+      ]
     },
     {
       "name": "ColorModulator",
       "type": "float",
       "count": 4,
-      "values": [1.0, 1.0, 1.0, 1.0]
+      "values": [
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ]
     },
     {
       "name": "ScreenSize",
       "type": "float",
       "count": 2,
-      "values": [1920.0, 1080.0]
+      "values": [
+        1920.0,
+        1080.0
+      ]
     },
     {
       "name": "RectPos",
       "type": "float",
       "count": 2,
-      "values": [0.0, 0.0]
+      "values": [
+        0.0,
+        0.0
+      ]
     },
     {
       "name": "RectSize",
       "type": "float",
       "count": 2,
-      "values": [100.0, 100.0]
+      "values": [
+        100.0,
+        100.0
+      ]
     },
     {
       "name": "Radius",
       "type": "float",
       "count": 1,
-      "values": [12.0]
+      "values": [
+        12.0
+      ]
     },
     {
       "name": "Smoothness",
       "type": "float",
       "count": 1,
-      "values": [1.0]
+      "values": [
+        0.75
+      ]
     }
   ]
 }

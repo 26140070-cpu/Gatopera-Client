@@ -30,70 +30,175 @@ public abstract class MixinTitleScreen extends Screen {
 
     @Inject(method = "tick", at = @At("HEAD"))
     private void gatopera$onTick(CallbackInfo ci) {
-        if (gatopera$welcomeChecked) return;
-        if (client == null || client.getOverlay() != null) return;
-        if (Gatopera.CONFIG == null) return;
-        gatopera$welcomeChecked = true;
-        if (Gatopera.CONFIG.getBoolean("welcome_shown", false)) return;
+        if (gatopera$welcomeChecked) {
+            return;
+        }
 
-        client.setScreen(new DialogScreen(
-                null,
-                I18n.t("dialog.language.header"),
-                I18n.t("dialog.language.description"),
-                I18n.t("dialog.language.yes"),
-                I18n.t("dialog.language.no"),
-                () -> {
-                    I18n.setLanguage(Language.EN_US);
-                    if (ClientSetting.INSTANCE != null) {
-                        ClientSetting.INSTANCE.language.setEnumValue("EN_US");
-                    }
-                    client.setScreen(buildWelcome());
-                },
-                () -> {
-                    I18n.setLanguage(Language.ES_MX);
-                    if (ClientSetting.INSTANCE != null) {
-                        ClientSetting.INSTANCE.language.setEnumValue("ES_MX");
-                    }
-                    client.setScreen(buildWelcome());
-                }
-        ));
+        if (client == null || client.getOverlay() != null) {
+            return;
+        }
+
+        if (Gatopera.CONFIG == null) {
+            return;
+        }
+
+        gatopera$welcomeChecked = true;
+
+        if (Gatopera.CONFIG.getBoolean(
+                "welcome_shown",
+                false
+        )) {
+            return;
+        }
+
+        client.setScreen(
+                new DialogScreen(
+                        null,
+                        I18n.t(
+                                "dialog.language.header"
+                        ),
+                        I18n.t(
+                                "dialog.language.description"
+                        ),
+                        I18n.t(
+                                "dialog.language.yes"
+                        ),
+                        I18n.t(
+                                "dialog.language.no"
+                        ),
+                        () -> {
+                            I18n.setLanguage(
+                                    Language.EN_US
+                            );
+
+                            if (ClientSetting.INSTANCE != null) {
+                                ClientSetting.INSTANCE.language
+                                        .setEnumValue("EN_US");
+                            }
+
+                            client.setScreen(
+                                    buildWelcome()
+                            );
+                        },
+                        () -> {
+                            I18n.setLanguage(
+                                    Language.ES_MX
+                            );
+
+                            if (ClientSetting.INSTANCE != null) {
+                                ClientSetting.INSTANCE.language
+                                        .setEnumValue("ES_MX");
+                            }
+
+                            client.setScreen(
+                                    buildWelcome()
+                            );
+                        },
+                        false
+                )
+        );
     }
 
     @Unique
     private DialogScreen buildWelcome() {
         return new DialogScreen(
                 null,
-                I18n.t("dialog.welcome.header"),
-                I18n.t("dialog.welcome.description"),
-                I18n.t("dialog.welcome.yes"),
-                I18n.t("dialog.welcome.no"),
+                I18n.t(
+                        "dialog.welcome.header"
+                ),
+                I18n.t(
+                        "dialog.welcome.description"
+                ),
+                I18n.t(
+                        "dialog.welcome.yes"
+                ),
+                I18n.t(
+                        "dialog.welcome.no"
+                ),
                 () -> {
-                    Gatopera.CONFIG.settingsPut("welcome_shown", "true");
+                    Gatopera.CONFIG.settingsPut(
+                            "welcome_shown",
+                            "true"
+                    );
+
                     Gatopera.save();
                     client.setScreen(this);
                 },
                 () -> {
-                    Gatopera.CONFIG.settingsPut("welcome_shown", "true");
+                    Gatopera.CONFIG.settingsPut(
+                            "welcome_shown",
+                            "true"
+                    );
+
                     Gatopera.save();
                     client.stop();
-                }
+                },
+                false
         );
     }
 
-    @Inject(method = "initWidgetsNormal", at = @At(
-            target = "Lnet/minecraft/client/gui/screen/TitleScreen;addDrawableChild(Lnet/minecraft/client/gui/Element;)Lnet/minecraft/client/gui/Element;",
-            value = "INVOKE", shift = At.Shift.AFTER, ordinal = 1), cancellable = true)
-    public void hookInit(int y, int spacingY, CallbackInfo ci) {
+    @Inject(
+            method = "initWidgetsNormal",
+            at = @At(
+                    target = "Lnet/minecraft/client/gui/screen/TitleScreen;addDrawableChild(Lnet/minecraft/client/gui/Element;)Lnet/minecraft/client/gui/Element;",
+                    value = "INVOKE",
+                    shift = At.Shift.AFTER,
+                    ordinal = 1
+            ),
+            cancellable = true
+    )
+    public void hookInit(
+            int y,
+            int spacingY,
+            CallbackInfo ci
+    ) {
         ci.cancel();
-        final ButtonWidget widget = ButtonWidget.builder(Text.of(I18n.t("gui.account_manager")), (action) -> client.setScreen(new AccountScreen(this)))
-                .dimensions(this.width / 2 + 2, y + spacingY * 2, 98, 20)
-                .tooltip(Tooltip.of(Text.of(I18n.t("gui.account_manager.tooltip"))))
-                .build();
+
+        final ButtonWidget widget =
+                ButtonWidget.builder(
+                                Text.of(
+                                        I18n.t(
+                                                "gui.account_manager"
+                                        )
+                                ),
+                                action ->
+                                        client.setScreen(
+                                                new AccountScreen(this)
+                                        )
+                        )
+                        .dimensions(
+                                this.width / 2 + 2,
+                                y + spacingY * 2,
+                                98,
+                                20
+                        )
+                        .tooltip(
+                                Tooltip.of(
+                                        Text.of(
+                                                I18n.t(
+                                                        "gui.account_manager.tooltip"
+                                                )
+                                        )
+                                )
+                        )
+                        .build();
+
         widget.active = true;
+
         addDrawableChild(widget);
+
         this.addDrawableChild(
-                ButtonWidget.builder(Text.translatable("menu.online"), button -> this.switchToRealms())
-                        .dimensions(this.width / 2 - 100, y + spacingY * 2, 98, 20)
+                ButtonWidget.builder(
+                                Text.translatable("menu.online"),
+                                button ->
+                                        this.switchToRealms()
+                        )
+                        .dimensions(
+                                this.width / 2 - 100,
+                                y + spacingY * 2,
+                                98,
+                                20
+                        )
                         .build()
         ).active = true;
     }

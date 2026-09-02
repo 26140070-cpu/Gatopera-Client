@@ -19,6 +19,7 @@ public class DialogScreen extends Screen implements Wrapper {
     private final String noText;
     private final Runnable yesAction;
     private final Runnable noAction;
+    private final boolean blurBackground;
 
     public DialogScreen(
             Identifier pic,
@@ -29,7 +30,30 @@ public class DialogScreen extends Screen implements Wrapper {
             Runnable yesAction,
             Runnable noAction
     ) {
+        this(
+                pic,
+                header,
+                description,
+                yesText,
+                noText,
+                yesAction,
+                noAction,
+                true
+        );
+    }
+
+    public DialogScreen(
+            Identifier pic,
+            String header,
+            String description,
+            String yesText,
+            String noText,
+            Runnable yesAction,
+            Runnable noAction,
+            boolean blurBackground
+    ) {
         super(Text.of("Dialog"));
+
         this.pic = pic;
         this.header = header;
         this.description = description;
@@ -37,6 +61,7 @@ public class DialogScreen extends Screen implements Wrapper {
         this.noText = noText;
         this.yesAction = yesAction;
         this.noAction = noAction;
+        this.blurBackground = blurBackground;
     }
 
     @Override
@@ -46,12 +71,25 @@ public class DialogScreen extends Screen implements Wrapper {
             int mouseY,
             float delta
     ) {
-        GatoperaPipelines.beginFrameBlur(6f);
-        try {
-            context.fill(0, 0, this.width, this.height, 0x990A0A0F);
+        if (blurBackground) {
+            GatoperaPipelines.beginFrameBlur(6f);
+        }
 
-            float mainX = this.width / 2f - 120f;
-            float mainY = this.height / 2f - 80f;
+        try {
+            context.fill(
+                    0,
+                    0,
+                    this.width,
+                    this.height,
+                    0x990A0A0F
+            );
+
+            float mainX =
+                    this.width / 2f - 120f;
+
+            float mainY =
+                    this.height / 2f - 80f;
+
             float mainWidth = 240f;
             float mainHeight = 140f;
 
@@ -61,17 +99,52 @@ public class DialogScreen extends Screen implements Wrapper {
                     mainY,
                     mainWidth,
                     mainHeight,
-                    new Color(18, 18, 24, 140)
+                    new Color(
+                            18,
+                            18,
+                            24,
+                            140
+                    ),
+                    blurBackground
             );
 
-            drawText(context, header, mainX + mainWidth / 2f, mainY + 12, 0xFFFFFFFF);
-            drawText(context, description, mainX + mainWidth / 2f, mainY + 32, 0xFFAAAAAA);
+            drawText(
+                    context,
+                    header,
+                    mainX + mainWidth / 2f,
+                    mainY + 12,
+                    0xFFFFFFFF
+            );
 
-            boolean yesHovered = yesHovered(mouseX, mouseY);
-            boolean noHovered = noHovered(mouseX, mouseY);
+            drawText(
+                    context,
+                    description,
+                    mainX + mainWidth / 2f,
+                    mainY + 32,
+                    0xFFAAAAAA
+            );
 
-            Color base = new Color(32, 32, 40, 220);
-            Color hover = new Color(55, 55, 70, 240);
+            boolean yesHovered =
+                    yesHovered(mouseX, mouseY);
+
+            boolean noHovered =
+                    noHovered(mouseX, mouseY);
+
+            Color base =
+                    new Color(
+                            32,
+                            32,
+                            40,
+                            220
+                    );
+
+            Color hover =
+                    new Color(
+                            55,
+                            55,
+                            70,
+                            240
+                    );
 
             GatoperaPipelines.drawButton(
                     context.getMatrices(),
@@ -100,7 +173,9 @@ public class DialogScreen extends Screen implements Wrapper {
                     yesText,
                     mainX + 60,
                     mainY + 110,
-                    yesHovered ? 0xFFFFFFFF : 0xFFCCCCCC
+                    yesHovered
+                            ? 0xFFFFFFFF
+                            : 0xFFCCCCCC
             );
 
             drawText(
@@ -108,13 +183,19 @@ public class DialogScreen extends Screen implements Wrapper {
                     noText,
                     mainX + 180,
                     mainY + 110,
-                    noHovered ? 0xFFFFFFFF : 0xFFCCCCCC
+                    noHovered
+                            ? 0xFFFFFFFF
+                            : 0xFFCCCCCC
             );
 
             if (pic != null) {
                 context.drawTexture(
                         pic,
-                        (int) (mainX + mainWidth / 2f - 35f),
+                        (int) (
+                                mainX
+                                        + mainWidth / 2f
+                                        - 35f
+                        ),
                         (int) mainY + 42,
                         0,
                         0,
@@ -125,13 +206,25 @@ public class DialogScreen extends Screen implements Wrapper {
                 );
             }
         } finally {
-            GatoperaPipelines.endFrameBlur();
+            if (blurBackground) {
+                GatoperaPipelines.endFrameBlur();
+            }
         }
     }
 
-    private void drawText(DrawContext context, String text, float x, float y, int color) {
-        boolean useCustom = FontRenderers.ui != null
-                && FontRenderers.ui.getClass().getSimpleName().equals("StbFontAdapter");
+    private void drawText(
+            DrawContext context,
+            String text,
+            float x,
+            float y,
+            int color
+    ) {
+        boolean useCustom =
+                FontRenderers.ui != null
+                        && FontRenderers.ui
+                        .getClass()
+                        .getSimpleName()
+                        .equals("StbFontAdapter");
 
         if (useCustom) {
             try {
@@ -142,6 +235,7 @@ public class DialogScreen extends Screen implements Wrapper {
                         y,
                         color
                 );
+
                 return;
             } catch (Throwable ignored) {
             }
@@ -156,38 +250,89 @@ public class DialogScreen extends Screen implements Wrapper {
         );
     }
 
-    private boolean isHovered(int mouseX, int mouseY, int x, int y, int width, int height) {
+    private boolean isHovered(
+            int mouseX,
+            int mouseY,
+            int x,
+            int y,
+            int width,
+            int height
+    ) {
         return mouseX >= x
                 && mouseX <= x + width
                 && mouseY >= y
                 && mouseY <= y + height;
     }
 
-    private boolean yesHovered(int mouseX, int mouseY) {
-        float mainX = this.width / 2f - 120f;
-        float mainY = this.height / 2f - 80f;
-        return isHovered(mouseX, mouseY, (int) mainX + 5, (int) mainY + 95, 110, 40);
+    private boolean yesHovered(
+            int mouseX,
+            int mouseY
+    ) {
+        float mainX =
+                this.width / 2f - 120f;
+
+        float mainY =
+                this.height / 2f - 80f;
+
+        return isHovered(
+                mouseX,
+                mouseY,
+                (int) mainX + 5,
+                (int) mainY + 95,
+                110,
+                40
+        );
     }
 
-    private boolean noHovered(int mouseX, int mouseY) {
-        float mainX = this.width / 2f - 120f;
-        float mainY = this.height / 2f - 80f;
-        return isHovered(mouseX, mouseY, (int) mainX + 125, (int) mainY + 95, 110, 40);
+    private boolean noHovered(
+            int mouseX,
+            int mouseY
+    ) {
+        float mainX =
+                this.width / 2f - 120f;
+
+        float mainY =
+                this.height / 2f - 80f;
+
+        return isHovered(
+                mouseX,
+                mouseY,
+                (int) mainX + 125,
+                (int) mainY + 95,
+                110,
+                40
+        );
     }
 
     @Override
-    public boolean mouseClicked(double mouseX, double mouseY, int button) {
+    public boolean mouseClicked(
+            double mouseX,
+            double mouseY,
+            int button
+    ) {
         if (button == 0) {
-            if (yesHovered((int) mouseX, (int) mouseY)) {
+            if (yesHovered(
+                    (int) mouseX,
+                    (int) mouseY
+            )) {
                 yesAction.run();
                 return true;
             }
-            if (noHovered((int) mouseX, (int) mouseY)) {
+
+            if (noHovered(
+                    (int) mouseX,
+                    (int) mouseY
+            )) {
                 noAction.run();
                 return true;
             }
         }
-        return super.mouseClicked(mouseX, mouseY, button);
+
+        return super.mouseClicked(
+                mouseX,
+                mouseY,
+                button
+        );
     }
 
     @Override
