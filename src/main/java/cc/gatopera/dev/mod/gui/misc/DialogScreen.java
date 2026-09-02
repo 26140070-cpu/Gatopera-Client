@@ -2,7 +2,6 @@ package cc.gatopera.dev.mod.gui.misc;
 
 import cc.gatopera.dev.api.utils.Wrapper;
 import cc.gatopera.dev.api.utils.render.GatoperaPipelines;
-import cc.gatopera.dev.api.utils.render.Render2DUtil;
 import cc.gatopera.dev.mod.gui.font.FontRenderers;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
@@ -47,81 +46,86 @@ public class DialogScreen extends Screen implements Wrapper {
             int mouseY,
             float delta
     ) {
-        context.fill(0, 0, this.width, this.height, 0xCC0A0A0F);
+        GatoperaPipelines.beginFrameBlur(6f);
+        try {
+            context.fill(0, 0, this.width, this.height, 0x990A0A0F);
 
-        float mainX = this.width / 2f - 120f;
-        float mainY = this.height / 2f - 80f;
-        float mainWidth = 240f;
-        float mainHeight = 140f;
+            float mainX = this.width / 2f - 120f;
+            float mainY = this.height / 2f - 80f;
+            float mainWidth = 240f;
+            float mainHeight = 140f;
 
-        GatoperaPipelines.drawWindowBackground(
-                context.getMatrices(),
-                mainX,
-                mainY,
-                mainWidth,
-                mainHeight,
-                new Color(18, 18, 24, 140)
-        );
-
-        drawText(context, header, mainX + mainWidth / 2f, mainY + 12, 0xFFFFFFFF);
-        drawText(context, description, mainX + mainWidth / 2f, mainY + 32, 0xFFAAAAAA);
-
-        boolean yesHovered = yesHovered(mouseX, mouseY);
-        boolean noHovered = noHovered(mouseX, mouseY);
-
-        Color base = new Color(32, 32, 40, 220);
-        Color hover = new Color(55, 55, 70, 240);
-
-        GatoperaPipelines.drawButton(
-                context.getMatrices(),
-                mainX + 5,
-                mainY + 95,
-                110,
-                40,
-                yesHovered,
-                base,
-                hover
-        );
-
-        GatoperaPipelines.drawButton(
-                context.getMatrices(),
-                mainX + 125,
-                mainY + 95,
-                110,
-                40,
-                noHovered,
-                base,
-                hover
-        );
-
-        drawText(
-                context,
-                yesText,
-                mainX + 60,
-                mainY + 110,
-                yesHovered ? 0xFFFFFFFF : 0xFFCCCCCC
-        );
-
-        drawText(
-                context,
-                noText,
-                mainX + 180,
-                mainY + 110,
-                noHovered ? 0xFFFFFFFF : 0xFFCCCCCC
-        );
-
-        if (pic != null) {
-            context.drawTexture(
-                    pic,
-                    (int) (mainX + mainWidth / 2f - 35f),
-                    (int) mainY + 42,
-                    0,
-                    0,
-                    70,
-                    45,
-                    70,
-                    45
+            GatoperaPipelines.drawWindowBackground(
+                    context.getMatrices(),
+                    mainX,
+                    mainY,
+                    mainWidth,
+                    mainHeight,
+                    new Color(18, 18, 24, 140)
             );
+
+            drawText(context, header, mainX + mainWidth / 2f, mainY + 12, 0xFFFFFFFF);
+            drawText(context, description, mainX + mainWidth / 2f, mainY + 32, 0xFFAAAAAA);
+
+            boolean yesHovered = yesHovered(mouseX, mouseY);
+            boolean noHovered = noHovered(mouseX, mouseY);
+
+            Color base = new Color(32, 32, 40, 220);
+            Color hover = new Color(55, 55, 70, 240);
+
+            GatoperaPipelines.drawButton(
+                    context.getMatrices(),
+                    mainX + 5,
+                    mainY + 95,
+                    110,
+                    40,
+                    yesHovered,
+                    base,
+                    hover
+            );
+
+            GatoperaPipelines.drawButton(
+                    context.getMatrices(),
+                    mainX + 125,
+                    mainY + 95,
+                    110,
+                    40,
+                    noHovered,
+                    base,
+                    hover
+            );
+
+            drawText(
+                    context,
+                    yesText,
+                    mainX + 60,
+                    mainY + 110,
+                    yesHovered ? 0xFFFFFFFF : 0xFFCCCCCC
+            );
+
+            drawText(
+                    context,
+                    noText,
+                    mainX + 180,
+                    mainY + 110,
+                    noHovered ? 0xFFFFFFFF : 0xFFCCCCCC
+            );
+
+            if (pic != null) {
+                context.drawTexture(
+                        pic,
+                        (int) (mainX + mainWidth / 2f - 35f),
+                        (int) mainY + 42,
+                        0,
+                        0,
+                        70,
+                        45,
+                        70,
+                        45
+                );
+            }
+        } finally {
+            GatoperaPipelines.endFrameBlur();
         }
     }
 
