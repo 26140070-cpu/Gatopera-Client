@@ -9,8 +9,6 @@ import cc.gatopera.dev.mod.modules.impl.player.InteractTweaks;
 import cc.gatopera.dev.mod.modules.impl.player.freelook.CameraState;
 import cc.gatopera.dev.mod.modules.impl.player.freelook.FreeLook;
 import cc.gatopera.dev.mod.modules.impl.render.*;
-import cc.gatopera.dev.api.utils.render.GuiShaders;
-import net.minecraft.resource.ResourceFactory;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.Camera;
 import net.minecraft.client.render.CameraSubmersionType;
@@ -56,6 +54,7 @@ public class MixinGameRenderer {
     private float zoomY;
     @Shadow
     private float viewDistance;
+
     @Inject(method = "showFloatingItem", at = @At("HEAD"), cancellable = true)
     private void onShowFloatingItem(ItemStack floatingItem, CallbackInfo info) {
         if (floatingItem.getItem() == Items.TOTEM_OF_UNDYING && NoRender.INSTANCE.isOn() && NoRender.INSTANCE.totem.getValue()) {
@@ -75,6 +74,7 @@ public class MixinGameRenderer {
             ci.cancel();
         }
     }
+
     @Inject(method = "shouldRenderBlockOutline", at = @At("HEAD"), cancellable = true)
     public void hookOutline(CallbackInfoReturnable<Boolean> cir) {
         if (HighLight.INSTANCE.isOn()) {
@@ -118,8 +118,8 @@ public class MixinGameRenderer {
                 }
             }
 
-            if (camera.getFocusedEntity() instanceof LivingEntity && ((LivingEntity)camera.getFocusedEntity()).isDead()) {
-                float f = Math.min((float)((LivingEntity)camera.getFocusedEntity()).deathTime + tickDelta, 20.0F);
+            if (camera.getFocusedEntity() instanceof LivingEntity && ((LivingEntity) camera.getFocusedEntity()).isDead()) {
+                float f = Math.min((float) ((LivingEntity) camera.getFocusedEntity()).deathTime + tickDelta, 20.0F);
                 d /= (1.0F - 500.0F / (f + 500.0F)) * 2.0F + 1.0F;
             }
 
@@ -137,16 +137,16 @@ public class MixinGameRenderer {
         Gatopera.SHADER.renderShaders();
     }
 
-    @Inject(method = "getBasicProjectionMatrix",at = @At("TAIL"), cancellable = true)
+    @Inject(method = "getBasicProjectionMatrix", at = @At("TAIL"), cancellable = true)
     public void getBasicProjectionMatrixHook(double fov, CallbackInfoReturnable<Matrix4f> cir) {
-        if(AspectRatio.INSTANCE.isOn()) {
+        if (AspectRatio.INSTANCE.isOn()) {
             MatrixStack matrixStack = new MatrixStack();
             matrixStack.peek().getPositionMatrix().identity();
             if (zoom != 1.0f) {
                 matrixStack.translate(zoomX, -zoomY, 0.0f);
                 matrixStack.scale(zoom, zoom, 1.0f);
             }
-            matrixStack.peek().getPositionMatrix().mul(new Matrix4f().setPerspective((float)(fov * 0.01745329238474369), AspectRatio.INSTANCE.ratio.getValueFloat(), 0.05f, viewDistance * 4.0f));
+            matrixStack.peek().getPositionMatrix().mul(new Matrix4f().setPerspective((float) (fov * 0.01745329238474369), AspectRatio.INSTANCE.ratio.getValueFloat(), 0.05f, viewDistance * 4.0f));
             cir.setReturnValue(matrixStack.peek().getPositionMatrix());
         }
     }
@@ -251,8 +251,4 @@ public class MixinGameRenderer {
         }
     }
 
-    @Inject(method = "loadPrograms", at = @At("RETURN"))
-    private void gatopera$loadGuiShaders(ResourceFactory factory, CallbackInfo ci) {
-        GuiShaders.load(factory);
-    }
 }

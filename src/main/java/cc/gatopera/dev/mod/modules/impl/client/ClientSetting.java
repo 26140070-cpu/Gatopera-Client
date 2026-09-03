@@ -62,8 +62,6 @@ public class ClientSetting extends Module {
 
     public final EnumSetting<cc.gatopera.dev.api.i18n.Language> language =
             add(new EnumSetting<>("Language", cc.gatopera.dev.api.i18n.Language.EN_US, () -> page.is(Page.Gui)));
-    public final BooleanSetting guiBlur =
-            add(new BooleanSetting("GuiBlur", true, () -> page.is(Page.Gui)));
     public final BooleanSetting guiRounded =
             add(new BooleanSetting("GuiRounded", true, () -> page.is(Page.Gui)));
     public final SliderSetting guiRadius =

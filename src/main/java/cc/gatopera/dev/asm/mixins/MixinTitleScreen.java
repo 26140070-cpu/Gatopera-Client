@@ -93,8 +93,7 @@ public abstract class MixinTitleScreen extends Screen {
                             client.setScreen(
                                     buildWelcome()
                             );
-                        },
-                        false
+                        }
                 )
         );
     }
@@ -132,8 +131,7 @@ public abstract class MixinTitleScreen extends Screen {
 
                     Gatopera.save();
                     client.stop();
-                },
-                false
+                }
         );
     }
 

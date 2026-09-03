@@ -144,7 +144,6 @@ public final class I18n {
             boolean spanish
     ) {
         table.put("setting.Language", spanish ? "Idioma" : "Language");
-        table.put("setting.GuiBlur", spanish ? "Desenfoque de GUI" : "GUI Blur");
         table.put("setting.GuiRounded", spanish ? "Bordes redondeados" : "Rounded Corners");
         table.put("setting.CornerRadius", spanish ? "Radio de esquinas" : "Corner Radius");
         table.put("setting.Page", spanish ? "Página" : "Page");

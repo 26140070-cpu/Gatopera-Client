@@ -19,7 +19,6 @@ public class DialogScreen extends Screen implements Wrapper {
     private final String noText;
     private final Runnable yesAction;
     private final Runnable noAction;
-    private final boolean blurBackground;
 
     public DialogScreen(
             Identifier pic,
@@ -30,28 +29,6 @@ public class DialogScreen extends Screen implements Wrapper {
             Runnable yesAction,
             Runnable noAction
     ) {
-        this(
-                pic,
-                header,
-                description,
-                yesText,
-                noText,
-                yesAction,
-                noAction,
-                true
-        );
-    }
-
-    public DialogScreen(
-            Identifier pic,
-            String header,
-            String description,
-            String yesText,
-            String noText,
-            Runnable yesAction,
-            Runnable noAction,
-            boolean blurBackground
-    ) {
         super(Text.of("Dialog"));
 
         this.pic = pic;
@@ -61,7 +38,6 @@ public class DialogScreen extends Screen implements Wrapper {
         this.noText = noText;
         this.yesAction = yesAction;
         this.noAction = noAction;
-        this.blurBackground = blurBackground;
     }
 
     @Override
@@ -71,144 +47,133 @@ public class DialogScreen extends Screen implements Wrapper {
             int mouseY,
             float delta
     ) {
-        if (blurBackground) {
-            GatoperaPipelines.beginFrameBlur(6f);
-        }
+        context.fill(
+                0,
+                0,
+                this.width,
+                this.height,
+                0x990A0A0F
+        );
 
-        try {
-            context.fill(
-                    0,
-                    0,
-                    this.width,
-                    this.height,
-                    0x990A0A0F
-            );
+        float mainX =
+                this.width / 2f - 120f;
 
-            float mainX =
-                    this.width / 2f - 120f;
+        float mainY =
+                this.height / 2f - 80f;
 
-            float mainY =
-                    this.height / 2f - 80f;
+        float mainWidth = 240f;
+        float mainHeight = 140f;
 
-            float mainWidth = 240f;
-            float mainHeight = 140f;
+        GatoperaPipelines.drawWindowBackground(
+                context.getMatrices(),
+                mainX,
+                mainY,
+                mainWidth,
+                mainHeight,
+                new Color(
+                        18,
+                        18,
+                        24,
+                        140
+                )
+        );
 
-            GatoperaPipelines.drawWindowBackground(
-                    context.getMatrices(),
-                    mainX,
-                    mainY,
-                    mainWidth,
-                    mainHeight,
-                    new Color(
-                            18,
-                            18,
-                            24,
-                            140
-                    ),
-                    blurBackground
-            );
+        drawText(
+                context,
+                header,
+                mainX + mainWidth / 2f,
+                mainY + 12,
+                0xFFFFFFFF
+        );
 
-            drawText(
-                    context,
-                    header,
-                    mainX + mainWidth / 2f,
-                    mainY + 12,
-                    0xFFFFFFFF
-            );
+        drawText(
+                context,
+                description,
+                mainX + mainWidth / 2f,
+                mainY + 32,
+                0xFFAAAAAA
+        );
 
-            drawText(
-                    context,
-                    description,
-                    mainX + mainWidth / 2f,
-                    mainY + 32,
-                    0xFFAAAAAA
-            );
+        boolean yesHovered =
+                yesHovered(mouseX, mouseY);
 
-            boolean yesHovered =
-                    yesHovered(mouseX, mouseY);
+        boolean noHovered =
+                noHovered(mouseX, mouseY);
 
-            boolean noHovered =
-                    noHovered(mouseX, mouseY);
-
-            Color base =
-                    new Color(
-                            32,
-                            32,
-                            40,
-                            220
-                    );
-
-            Color hover =
-                    new Color(
-                            55,
-                            55,
-                            70,
-                            240
-                    );
-
-            GatoperaPipelines.drawButton(
-                    context.getMatrices(),
-                    mainX + 5,
-                    mainY + 95,
-                    110,
-                    40,
-                    yesHovered,
-                    base,
-                    hover
-            );
-
-            GatoperaPipelines.drawButton(
-                    context.getMatrices(),
-                    mainX + 125,
-                    mainY + 95,
-                    110,
-                    40,
-                    noHovered,
-                    base,
-                    hover
-            );
-
-            drawText(
-                    context,
-                    yesText,
-                    mainX + 60,
-                    mainY + 110,
-                    yesHovered
-                            ? 0xFFFFFFFF
-                            : 0xFFCCCCCC
-            );
-
-            drawText(
-                    context,
-                    noText,
-                    mainX + 180,
-                    mainY + 110,
-                    noHovered
-                            ? 0xFFFFFFFF
-                            : 0xFFCCCCCC
-            );
-
-            if (pic != null) {
-                context.drawTexture(
-                        pic,
-                        (int) (
-                                mainX
-                                        + mainWidth / 2f
-                                        - 35f
-                        ),
-                        (int) mainY + 42,
-                        0,
-                        0,
-                        70,
-                        45,
-                        70,
-                        45
+        Color base =
+                new Color(
+                        32,
+                        32,
+                        40,
+                        220
                 );
-            }
-        } finally {
-            if (blurBackground) {
-                GatoperaPipelines.endFrameBlur();
-            }
+
+        Color hover =
+                new Color(
+                        55,
+                        55,
+                        70,
+                        240
+                );
+
+        GatoperaPipelines.drawButton(
+                context.getMatrices(),
+                mainX + 5,
+                mainY + 95,
+                110,
+                40,
+                yesHovered,
+                base,
+                hover
+        );
+
+        GatoperaPipelines.drawButton(
+                context.getMatrices(),
+                mainX + 125,
+                mainY + 95,
+                110,
+                40,
+                noHovered,
+                base,
+                hover
+        );
+
+        drawText(
+                context,
+                yesText,
+                mainX + 60,
+                mainY + 110,
+                yesHovered
+                        ? 0xFFFFFFFF
+                        : 0xFFCCCCCC
+        );
+
+        drawText(
+                context,
+                noText,
+                mainX + 180,
+                mainY + 110,
+                noHovered
+                        ? 0xFFFFFFFF
+                        : 0xFFCCCCCC
+        );
+
+        if (pic != null) {
+            context.drawTexture(
+                    pic,
+                    (int) (
+                            mainX
+                                    + mainWidth / 2f
+                                    - 35f
+                    ),
+                    (int) mainY + 42,
+                    0,
+                    0,
+                    70,
+                    45,
+                    70,
+                    45
+            );
         }
     }
 
