@@ -4,13 +4,12 @@ import cc.gatopera.dev.mod.modules.impl.client.ClickGui;
 import cc.gatopera.dev.mod.modules.settings.impl.StringSetting;
 import cc.gatopera.dev.core.impl.GuiManager;
 import cc.gatopera.dev.api.utils.math.Timer;
-import cc.gatopera.dev.api.utils.render.Render2DUtil;
-import cc.gatopera.dev.api.utils.render.TextUtil;
+import cc.gatopera.dev.api.utils.render.skia.SkiaRender2DUtil;
+import cc.gatopera.dev.api.utils.render.skia.SkiaTextUtil;
 import cc.gatopera.dev.mod.gui.clickgui.ClickGuiScreen;
 import cc.gatopera.dev.mod.gui.clickgui.components.Component;
 import cc.gatopera.dev.mod.gui.clickgui.tabs.ClickGuiTab;
-import net.minecraft.client.gui.DrawContext;
-import net.minecraft.client.util.math.MatrixStack;
+import io.github.humbleui.skija.Canvas;
 
 import java.awt.*;
 
@@ -31,7 +30,6 @@ public class StringComponent extends Component {
 	}
 
 	boolean hover = false;
-
 
 	public void update(int offset, double mouseX, double mouseY) {
 		if (GuiManager.currentGrabbed == null && isVisible()) {
@@ -64,8 +62,7 @@ public class StringComponent extends Component {
 	boolean b;
 
 	@Override
-
-	public boolean draw(int offset, DrawContext drawContext, float partialTicks, Color color, boolean back) {
+	public boolean draw(int offset, Canvas canvas, float partialTicks, Color color, boolean back) {
 		if (timer.passed(1000)) {
 			b = !b;
 			timer.reset();
@@ -77,17 +74,16 @@ public class StringComponent extends Component {
 		int parentY = this.parent.getY();
 		int y = parent.getY() + offset - 2;
 		int width = parent.getWidth();
-		MatrixStack matrixStack = drawContext.getMatrices();
 		String text = setting.getValue();
 		if (setting.isListening() && b) {
 			text = text + "_";
 		}
-		String name = setting.isListening() ? "[E]" : setting.getDisplayName();
+		String name = setting.isListening() ? "[E]" : setting.getName();
 		if (hover)
-			Render2DUtil.drawRect(matrixStack, (float) parentX + 1, (float) y + 1, (float) width - 3, (float) defaultHeight - (ClickGui.INSTANCE.maxFill.getValue() ? 0 : 1), ClickGui.INSTANCE.settingHover.getValue());
-		TextUtil.drawString(drawContext, text, parentX + 4 + TextUtil.getWidth(name) / 2,
+			SkiaRender2DUtil.drawRect(canvas, (float) parentX + 1, (float) y + 1, (float) width - 3, (float) defaultHeight - (ClickGui.INSTANCE.maxFill.getValue() ? 0 : 1), ClickGui.INSTANCE.settingHover.getValue());
+		SkiaTextUtil.drawString(canvas, text, parentX + 4 + SkiaTextUtil.getWidth(name) / 2,
 				(float) (parentY + getTextOffsetY() + offset) - 2, 0xFFFFFF);
-		TextUtil.drawStringWithScale(drawContext, name, (float) (parentX + 4),
+		SkiaTextUtil.drawStringWithScale(canvas, name, (float) (parentX + 4),
 				(float) (parentY + getTextOffsetY() + offset - 2), -1, 0.5f);
 		return true;
 	}

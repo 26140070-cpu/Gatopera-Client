@@ -7,6 +7,8 @@ import cc.gatopera.dev.api.utils.math.FadeUtils;
 import cc.gatopera.dev.api.utils.render.Snow;
 import cc.gatopera.dev.api.utils.render.Render2DUtil;
 import cc.gatopera.dev.api.utils.render.TextUtil;
+import cc.gatopera.dev.api.utils.render.skia.SkiaRender2DUtil;
+import cc.gatopera.dev.api.utils.render.skia.SkiaTextUtil;
 import cc.gatopera.dev.mod.gui.clickgui.ClickGuiScreen;
 import cc.gatopera.dev.mod.gui.clickgui.components.impl.ModuleComponent;
 import cc.gatopera.dev.mod.gui.clickgui.tabs.ClickGuiTab;
@@ -14,6 +16,7 @@ import cc.gatopera.dev.mod.gui.clickgui.tabs.Tab;
 import cc.gatopera.dev.mod.gui.elements.ArmorHUD;
 import cc.gatopera.dev.mod.modules.Module;
 import cc.gatopera.dev.mod.modules.impl.client.ClickGui;
+import io.github.humbleui.skija.Canvas;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.util.math.MatrixStack;
 
@@ -58,10 +61,10 @@ public class GuiManager implements Wrapper {
 
 	public void onUpdate() {
 		if (isClickGuiOpen()) {
-			for (ClickGuiTab tab : tabs) {
-				if (tab.getCategory() == selectedCategory) {
-					tab.update(mouseX, mouseY);
-				}
+			ClickGuiTab selectedTab = getSelectedTab();
+			if (selectedTab != null) {
+				layoutContentTab(selectedTab);
+				selectedTab.update(mouseX, mouseY);
 			}
 			armorHud.update(mouseX, mouseY);
 		}
@@ -92,8 +95,21 @@ public class GuiManager implements Wrapper {
 		return null;
 	}
 
-	public void draw(int x, int y, DrawContext drawContext, float tickDelta) {
-		MatrixStack matrixStack = drawContext.getMatrices();
+	private static final int PANEL_MARGIN = 12;
+	private static final int SIDEBAR_WIDTH = 164;
+	private static final int CONTENT_PADDING = 12;
+	private static final int CONTENT_TOP_PADDING = 40;
+
+	private void layoutContentTab(ClickGuiTab tab) {
+		int panelX = PANEL_MARGIN;
+		int panelY = PANEL_MARGIN;
+		int panelWidth = mc.getWindow().getScaledWidth() - PANEL_MARGIN * 2;
+		tab.setX(panelX + SIDEBAR_WIDTH + CONTENT_PADDING);
+		tab.setY(panelY + CONTENT_TOP_PADDING);
+		tab.setWidth(panelWidth - SIDEBAR_WIDTH - CONTENT_PADDING * 2);
+	}
+
+	private void trackMouseAndDrag(int x, int y) {
 		boolean mouseClicked = ClickGuiScreen.clicked;
 		mouseX = x;
 		mouseY = y;
@@ -105,6 +121,11 @@ public class GuiManager implements Wrapper {
 		}
 		this.lastMouseX = mouseX;
 		this.lastMouseY = mouseY;
+	}
+
+	public void draw(int x, int y, DrawContext drawContext, float tickDelta) {
+		MatrixStack matrixStack = drawContext.getMatrices();
+		trackMouseAndDrag(x, y);
 		RenderSystem.enableCull();
 		matrixStack.push();
 
@@ -146,6 +167,50 @@ public class GuiManager implements Wrapper {
 			selectedTab.draw(drawContext, tickDelta, getColor());
 		}
 		matrixStack.pop();
+	}
+
+	public void drawSkia(Canvas canvas, int x, int y, float tickDelta) {
+		trackMouseAndDrag(x, y);
+		canvas.save();
+
+		int panelX = PANEL_MARGIN;
+		int panelY = PANEL_MARGIN;
+		int panelWidth = mc.getWindow().getScaledWidth() - PANEL_MARGIN * 2;
+		int panelHeight = mc.getWindow().getScaledHeight() - PANEL_MARGIN * 2;
+		SkiaRender2DUtil.drawRound(canvas, panelX, panelY, panelWidth, panelHeight, 14,
+				new Color(12, 14, 20, 238));
+		SkiaRender2DUtil.drawRound(canvas, panelX, panelY, SIDEBAR_WIDTH, panelHeight, 14,
+				new Color(20, 23, 31, 245));
+		SkiaTextUtil.drawString(canvas, "Gatopera", 28, 28, Color.WHITE);
+		SkiaTextUtil.drawString(canvas, "MODULES", 28, 48, new Color(150, 155, 170));
+
+		int categoryY = 62;
+		for (Module.Category category : Module.Category.values()) {
+			boolean selected = category == selectedCategory;
+			if (selected) {
+				SkiaRender2DUtil.drawRound(canvas, 20, categoryY, 140, 30, 8, getColor());
+			}
+			SkiaTextUtil.drawString(canvas, category.name(), 32, categoryY + 9,
+					selected ? Color.WHITE : new Color(190, 195, 205));
+			categoryY += 36;
+		}
+
+		double quad = ClickGui.fade.ease(FadeUtils.Ease.In2);
+		if (quad < 1) {
+			switch (ClickGui.INSTANCE.mode.getValue()) {
+				case Pull -> {
+					quad = 1 - quad;
+					canvas.translate(0, (float) (-100 * quad));
+				}
+				case Scale -> canvas.scale((float) quad, (float) quad);
+			}
+		}
+		ClickGuiTab selectedTab = getSelectedTab();
+		if (selectedTab != null) {
+			layoutContentTab(selectedTab);
+			selectedTab.drawSkia(canvas, tickDelta, getColor());
+		}
+		canvas.restore();
 	}
 
 	public boolean isClickGuiOpen() {

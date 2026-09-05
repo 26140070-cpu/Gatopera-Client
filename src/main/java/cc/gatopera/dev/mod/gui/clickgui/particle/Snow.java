@@ -1,8 +1,8 @@
 package cc.gatopera.dev.mod.gui.clickgui.particle;
 
-import cc.gatopera.dev.api.utils.render.Render2DUtil;
+import cc.gatopera.dev.api.utils.render.skia.SkiaRender2DUtil;
+import io.github.humbleui.skija.Canvas;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.DrawContext;
 
 import java.util.Random;
 
@@ -35,8 +35,8 @@ public class Snow {
         this.y = _y;
     }
 
-    public void drawSnow(DrawContext drawContext) {
-        Render2DUtil.drawRect(drawContext.getMatrices(), this.getX(), this.getY(), this.size, this.size, -1714829883);
+    public void drawSnow(Canvas canvas) {
+        SkiaRender2DUtil.drawRect(canvas, this.getX(), this.getY(), this.size, this.size, -1714829883);
         this.setY(this.getY() + this.fallingSpeed);
         if (this.getY() > MinecraftClient.getInstance().getWindow().getScaledHeight() + 10 || this.getY() < -10) {
             this.setY(-10);
@@ -46,4 +46,3 @@ public class Snow {
         }
     }
 }
-

@@ -3,15 +3,14 @@ package cc.gatopera.dev.mod.gui.clickgui.components.impl;
 import cc.gatopera.dev.mod.modules.impl.client.ClickGui;
 import cc.gatopera.dev.mod.modules.settings.impl.BooleanSetting;
 import cc.gatopera.dev.core.impl.GuiManager;
-import cc.gatopera.dev.api.utils.render.Render2DUtil;
-import cc.gatopera.dev.api.utils.render.TextUtil;
+import cc.gatopera.dev.api.utils.render.skia.SkiaRender2DUtil;
+import cc.gatopera.dev.api.utils.render.skia.SkiaTextUtil;
 import cc.gatopera.dev.mod.gui.clickgui.components.Component;
 import cc.gatopera.dev.mod.gui.clickgui.ClickGuiScreen;
 import cc.gatopera.dev.mod.gui.clickgui.tabs.ClickGuiTab;
-import net.minecraft.client.gui.DrawContext;
-import net.minecraft.client.util.math.MatrixStack;
+import io.github.humbleui.skija.Canvas;
 
-import java.awt.*;
+import java.awt.Color;
 
 public class BooleanComponent extends Component {
 
@@ -34,8 +33,8 @@ public class BooleanComponent extends Component {
     boolean hover = false;
 
     @Override
-
     public void update(int offset, double mouseX, double mouseY) {
+        // Sin cambios: la lógica de input no depende del backend de render.
         int parentX = parent.getX();
         int parentY = parent.getY();
         int parentWidth = parent.getWidth();
@@ -59,33 +58,33 @@ public class BooleanComponent extends Component {
     public double currentWidth = 0;
 
     @Override
-
-    public boolean draw(int offset, DrawContext drawContext, float partialTicks, Color color, boolean back) {
+    public boolean draw(int offset, Canvas canvas, float partialTicks, Color color, boolean back) {
         int x = parent.getX();
         int y = parent.getY() + offset - 2;
         int width = parent.getWidth();
-        MatrixStack matrixStack = drawContext.getMatrices();
 
-        Render2DUtil.drawRect(matrixStack, (float) x + 1, (float) y + 1, (float) width - 2, (float) defaultHeight - (ClickGui.INSTANCE.maxFill.getValue() ? 0 : 1), hover ? ClickGui.INSTANCE.settingHover.getValue() : ClickGui.INSTANCE.setting.getValue());
+        SkiaRender2DUtil.drawRect(canvas, x + 1, y + 1, width - 2, defaultHeight - (ClickGui.INSTANCE.maxFill.getValue() ? 0 : 1),
+                hover ? ClickGui.INSTANCE.settingHover.getValue() : ClickGui.INSTANCE.setting.getValue());
 
         currentWidth = animation.get(setting.getValue() ? (width - 2D) : 0D);
         switch (ClickGui.INSTANCE.uiType.getValue()) {
-            case New -> {
-                TextUtil.drawString(drawContext, setting.getDisplayName(), x + 4, y + getTextOffsetY(), setting.getValue() ? ClickGui.INSTANCE.enableTextS.getValue() : ClickGui.INSTANCE.disableText.getValue());
-            }
+            case New -> SkiaTextUtil.drawString(canvas, setting.getName(), x + 4, y + getTextOffsetY(),
+                    setting.getValue() ? ClickGui.INSTANCE.enableTextS.getValue() : ClickGui.INSTANCE.disableText.getValue());
             case Old -> {
                 if (ClickGui.INSTANCE.mainEnd.booleanValue) {
-                    Render2DUtil.drawRectHorizontal(matrixStack, (float) x + 1, (float) y + 1, (float) currentWidth, (float) defaultHeight - (ClickGui.INSTANCE.maxFill.getValue() ? 0 : 1), hover ? ClickGui.INSTANCE.mainHover.getValue() : color, ClickGui.INSTANCE.mainEnd.getValue());
+                    SkiaRender2DUtil.drawRectHorizontal(canvas, x + 1, y + 1, (float) currentWidth, defaultHeight - (ClickGui.INSTANCE.maxFill.getValue() ? 0 : 1),
+                            hover ? ClickGui.INSTANCE.mainHover.getValue() : color, ClickGui.INSTANCE.mainEnd.getValue());
                 } else {
-                    Render2DUtil.drawRect(matrixStack, (float) x + 1, (float) y + 1, (float) currentWidth, (float) defaultHeight - (ClickGui.INSTANCE.maxFill.getValue() ? 0 : 1), hover ? ClickGui.INSTANCE.mainHover.getValue() : color);
+                    SkiaRender2DUtil.drawRect(canvas, x + 1, y + 1, (float) currentWidth, defaultHeight - (ClickGui.INSTANCE.maxFill.getValue() ? 0 : 1),
+                            hover ? ClickGui.INSTANCE.mainHover.getValue() : color);
                 }
-                TextUtil.drawString(drawContext, setting.getDisplayName(), x + 4, y + getTextOffsetY(), new Color(-1).getRGB());
+                SkiaTextUtil.drawString(canvas, setting.getName(), x + 4, y + getTextOffsetY(), new Color(-1).getRGB());
             }
         }
 
         if (setting.parent) {
-            TextUtil.drawString(drawContext, setting.popped ? "-" : "+", x + width - 11,
-                    y + getTextOffsetY(), new Color(255, 255, 255).getRGB());
+            SkiaTextUtil.drawString(canvas, setting.popped ? "-" : "+", x + width - 11,
+                    (float) (y + getTextOffsetY()), new Color(255, 255, 255).getRGB());
         }
         return true;
     }

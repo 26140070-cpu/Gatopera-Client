@@ -7,14 +7,13 @@ import cc.gatopera.dev.core.impl.GuiManager;
 import cc.gatopera.dev.api.utils.math.Timer;
 import cc.gatopera.dev.api.utils.render.ColorUtil;
 import cc.gatopera.dev.api.utils.math.MathUtil;
-import cc.gatopera.dev.api.utils.render.Render2DUtil;
-import cc.gatopera.dev.api.utils.render.TextUtil;
+import cc.gatopera.dev.api.utils.render.skia.SkiaRender2DUtil;
+import cc.gatopera.dev.api.utils.render.skia.SkiaTextUtil;
 import cc.gatopera.dev.mod.gui.clickgui.components.Component;
 import cc.gatopera.dev.mod.gui.clickgui.ClickGuiScreen;
 import cc.gatopera.dev.mod.gui.clickgui.tabs.ClickGuiTab;
-import net.minecraft.client.gui.DrawContext;
+import io.github.humbleui.skija.Canvas;
 import net.minecraft.client.util.InputUtil;
-import net.minecraft.client.util.math.MatrixStack;
 import org.lwjgl.glfw.GLFW;
 
 import java.awt.*;
@@ -84,7 +83,6 @@ public class ColorComponents extends Component {
     }
 
     @Override
-
     public void update(int offset, double mouseX, double mouseY) {
         int x = parent.getX();
         int y = (parent.getY() + offset) - 2;
@@ -93,7 +91,7 @@ public class ColorComponents extends Component {
         double cy = y + defaultHeight;
         double cw = width - 19;
         double ch = getHeight() - 17;
-        hover = Render2DUtil.isHovered(mouseX, mouseY, (float) x + 1, (float) y + 1, (float) width - 2, (float) defaultHeight - 1);
+        hover = SkiaRender2DUtil.isHovered(mouseX, mouseY, (float) x + 1, (float) y + 1, (float) width - 2, (float) defaultHeight - 1);
         boolean copyOrPaste = hover && InputUtil.isKeyPressed(mc.getWindow().getHandle(), GLFW.GLFW_KEY_LEFT_SHIFT);
         if (copyOrPaste) {
             if (GuiManager.currentGrabbed == null && isVisible()) {
@@ -128,12 +126,12 @@ public class ColorComponents extends Component {
         }
         if ((ClickGuiScreen.clicked || ClickGuiScreen.hoverClicked) && isVisible()) {
             if (!clicked) {
-                if (Render2DUtil.isHovered(mouseX, mouseY, cx + cw + 9, cy, 4, ch)) {
+                if (SkiaRender2DUtil.isHovered(mouseX, mouseY, cx + cw + 9, cy, 4, ch)) {
                     afocused = true;
                     ClickGuiScreen.hoverClicked = true;
                     ClickGuiScreen.clicked = false;
                 }
-                if (Render2DUtil.isHovered(mouseX, mouseY, cx + cw + 4, cy, 4, ch)) {
+                if (SkiaRender2DUtil.isHovered(mouseX, mouseY, cx + cw + 4, cy, 4, ch)) {
                     hfocused = true;
                     ClickGuiScreen.hoverClicked = true;
                     ClickGuiScreen.clicked = false;
@@ -150,7 +148,7 @@ public class ColorComponents extends Component {
                         lastMouseY = mouseY;
                     }
                 }
-                if (Render2DUtil.isHovered(mouseX, mouseY, cx, cy, cw, ch)) {
+                if (SkiaRender2DUtil.isHovered(mouseX, mouseY, cx, cy, cw, ch)) {
                     sbfocused = true;
                     ClickGuiScreen.hoverClicked = true;
                     ClickGuiScreen.clicked = false;
@@ -196,8 +194,7 @@ public class ColorComponents extends Component {
     public double currentWidth = 0;
 
     @Override
-
-    public boolean draw(int offset, DrawContext drawContext, float partialTicks, Color color, boolean back) {
+    public boolean draw(int offset, Canvas canvas, float partialTicks, Color color, boolean back) {
         if (popped) {
             pickerHeight = animation3.get(45);
             setHeight(defaultHeight + 45);
@@ -208,9 +205,8 @@ public class ColorComponents extends Component {
         int x = parent.getX();
         int y = parent.getY() + offset - 2;
         int width = parent.getWidth();
-        MatrixStack matrixStack = drawContext.getMatrices();
 
-        Render2DUtil.drawRect(matrixStack, (float) x + 1, (float) y + 1, (float) width - 2, (float) defaultHeight - (ClickGui.INSTANCE.maxFill.getValue() ? 0 : 1), hover ? ClickGui.INSTANCE.settingHover.getValue() : ClickGui.INSTANCE.setting.getValue());
+        SkiaRender2DUtil.drawRect(canvas, (float) x + 1, (float) y + 1, (float) width - 2, (float) defaultHeight - (ClickGui.INSTANCE.maxFill.getValue() ? 0 : 1), hover ? ClickGui.INSTANCE.settingHover.getValue() : ClickGui.INSTANCE.setting.getValue());
 
         boolean unShift = !hover || !InputUtil.isKeyPressed(mc.getWindow().getHandle(), GLFW.GLFW_KEY_LEFT_SHIFT);
         if (colorSetting.injectBoolean) {
@@ -218,27 +214,27 @@ public class ColorComponents extends Component {
             switch (ClickGui.INSTANCE.uiType.getValue()) {
                 case Old -> {
                     if (ClickGui.INSTANCE.mainEnd.booleanValue) {
-                        Render2DUtil.drawRectHorizontal(matrixStack, (float) x + 1, (float) y + 1, (float) currentWidth, (float) defaultHeight - (ClickGui.INSTANCE.maxFill.getValue() ? 0 : 1), hover ? ClickGui.INSTANCE.mainHover.getValue() : color, ClickGui.INSTANCE.mainEnd.getValue());
+                        SkiaRender2DUtil.drawRectHorizontal(canvas, (float) x + 1, (float) y + 1, (float) currentWidth, (float) defaultHeight - (ClickGui.INSTANCE.maxFill.getValue() ? 0 : 1), hover ? ClickGui.INSTANCE.mainHover.getValue() : color, ClickGui.INSTANCE.mainEnd.getValue());
                     } else {
-                        Render2DUtil.drawRect(matrixStack, (float) x + 1, (float) y + 1, (float) currentWidth, (float) defaultHeight - (ClickGui.INSTANCE.maxFill.getValue() ? 0 : 1), hover ? ClickGui.INSTANCE.mainHover.getValue() : color);
+                        SkiaRender2DUtil.drawRect(canvas, (float) x + 1, (float) y + 1, (float) currentWidth, (float) defaultHeight - (ClickGui.INSTANCE.maxFill.getValue() ? 0 : 1), hover ? ClickGui.INSTANCE.mainHover.getValue() : color);
                     }
                     if (unShift) {
-                        TextUtil.drawString(drawContext, colorSetting.getDisplayName(), x + 4, y + getTextOffsetY(), -1);
+                        SkiaTextUtil.drawString(canvas, colorSetting.getName(), x + 4, y + getTextOffsetY(), -1);
                     }
                 }
                 case New -> {
                     if (unShift) {
-                        TextUtil.drawString(drawContext, colorSetting.getDisplayName(), x + 4, y + getTextOffsetY(), colorSetting.booleanValue ? ClickGui.INSTANCE.enableTextS.getValue() : ClickGui.INSTANCE.disableText.getValue());
+                        SkiaTextUtil.drawString(canvas, colorSetting.getName(), x + 4, y + getTextOffsetY(), colorSetting.booleanValue ? ClickGui.INSTANCE.enableTextS.getValue() : ClickGui.INSTANCE.disableText.getValue());
                     }
                 }
             }
         } else if (unShift) {
-            TextUtil.drawString(drawContext, colorSetting.getDisplayName(), x + 4, y + getTextOffsetY(), -1);
+            SkiaTextUtil.drawString(canvas, colorSetting.getName(), x + 4, y + getTextOffsetY(), -1);
         }
         if (!unShift) {
-            TextUtil.drawString(drawContext, "§aL-Copy §cR-Paste", x + 4, y + getTextOffsetY(), -1);
+            SkiaTextUtil.drawString(canvas, "§aL-Copy §cR-Paste", x + 4, y + getTextOffsetY(), -1);
         }
-        Render2DUtil.drawRound(matrixStack, (float) (x + width - 16), (float) (y + getTextOffsetY()), 12, 8, 1, ColorUtil.injectAlpha(getColorSetting().getValue(), 255));
+        SkiaRender2DUtil.drawRound(canvas, (float) (x + width - 16), (float) (y + getTextOffsetY()), 12, 8, 1, ColorUtil.injectAlpha(getColorSetting().getValue(), 255));
 
         if (pickerHeight <= 1) {
             return true;
@@ -268,19 +264,19 @@ public class ColorComponents extends Component {
         Color colorA = Color.getHSBColor(hue, 0.0F, 1.0F), colorB = Color.getHSBColor(hue, 1.0F, 1.0F);
         Color colorC = new Color(0, 0, 0, 0), colorD = new Color(0, 0, 0);
 
-        Render2DUtil.horizontalGradient(matrixStack, (float) (double) x + 2, (float) cy, (float) ((double) x + cw), (float) (cy + ch), colorA, colorB);
-        Render2DUtil.verticalGradient(matrixStack, (float) ((double) x + 2), (float) cy, (float) ((double) x + cw), (float) (cy + ch), colorC, colorD);
+        SkiaRender2DUtil.horizontalGradient(canvas, (float) (double) x + 2, (float) cy, (float) ((double) x + cw), (float) (cy + ch), colorA, colorB);
+        SkiaRender2DUtil.verticalGradient(canvas, (float) ((double) x + 2), (float) cy, (float) ((double) x + cw), (float) (cy + ch), colorC, colorD);
 
         for (float i = 1f; i < ch - 2f; i += 1f) {
             float curHue = (float) (1f / (ch / i));
-            Render2DUtil.drawRect(matrixStack, (float) ((double) x + cw + 4), (float) (cy + i), 4, 1, Color.getHSBColor(curHue, 1f, 1f));
+            SkiaRender2DUtil.drawRect(canvas, (float) ((double) x + cw + 4), (float) (cy + i), 4, 1, Color.getHSBColor(curHue, 1f, 1f));
         }
 
-        Render2DUtil.verticalGradient(matrixStack, (float) ((double) x + cw + 9), (float) (cy + 0.8f), (float) ((double) x + cw + 12.5), (float) (cy + ch - 2), new Color(getColorSetting().getValue().getRed(), getColorSetting().getValue().getGreen(), getColorSetting().getValue().getBlue(), 255), new Color(0, 0, 0, 0));
+        SkiaRender2DUtil.verticalGradient(canvas, (float) ((double) x + cw + 9), (float) (cy + 0.8f), (float) ((double) x + cw + 12.5), (float) (cy + ch - 2), new Color(getColorSetting().getValue().getRed(), getColorSetting().getValue().getGreen(), getColorSetting().getValue().getBlue(), 255), new Color(0, 0, 0, 0));
 
-        Render2DUtil.drawRect(matrixStack, (float) ((double) x + cw + 3), hpos + 0.5f, 5, 1, Color.WHITE);
-        Render2DUtil.drawRect(matrixStack, (float) ((double) x + cw + 8), apos + 0.5f, 5, 1, Color.WHITE);
-        Render2DUtil.drawRound(matrixStack, spos - 1.5f, bpos - 1.5f, 3, 3, 1.5f, new Color(-1));
+        SkiaRender2DUtil.drawRect(canvas, (float) ((double) x + cw + 3), hpos + 0.5f, 5, 1, Color.WHITE);
+        SkiaRender2DUtil.drawRect(canvas, (float) ((double) x + cw + 8), apos + 0.5f, 5, 1, Color.WHITE);
+        SkiaRender2DUtil.drawRound(canvas, spos - 1.5f, bpos - 1.5f, 3, 3, 1.5f, new Color(-1));
         return true;
     }
 }

@@ -1,11 +1,10 @@
 package cc.gatopera.dev.mod.gui.clickgui.components.impl;
 
-import cc.gatopera.dev.api.i18n.I18n;
 import cc.gatopera.dev.core.impl.GuiManager;
 import cc.gatopera.dev.api.utils.math.Animation;
 import cc.gatopera.dev.api.utils.math.FadeUtils;
-import cc.gatopera.dev.api.utils.render.Render2DUtil;
-import cc.gatopera.dev.api.utils.render.TextUtil;
+import cc.gatopera.dev.api.utils.render.skia.SkiaRender2DUtil;
+import cc.gatopera.dev.api.utils.render.skia.SkiaTextUtil;
 import cc.gatopera.dev.mod.gui.clickgui.ClickGuiScreen;
 import cc.gatopera.dev.mod.gui.clickgui.components.Component;
 import cc.gatopera.dev.mod.gui.clickgui.tabs.ClickGuiTab;
@@ -13,9 +12,10 @@ import cc.gatopera.dev.mod.modules.Module;
 import cc.gatopera.dev.mod.modules.impl.client.ClickGui;
 import cc.gatopera.dev.mod.modules.settings.Setting;
 import cc.gatopera.dev.mod.modules.settings.impl.*;
-import net.minecraft.client.gui.DrawContext;
+import io.github.humbleui.skija.Canvas;
+import io.github.humbleui.skija.ClipMode;
+import io.github.humbleui.types.Rect;
 import net.minecraft.client.util.InputUtil;
-import net.minecraft.client.util.math.MatrixStack;
 import org.lwjgl.glfw.GLFW;
 
 import java.awt.*;
@@ -66,7 +66,6 @@ public class ModuleComponent extends Component {
 
 	boolean hovered = false;
 
-
 	public void update(int offset, double mouseX, double mouseY) {
 		int parentX = parent.getX();
 		int parentY = parent.getY();
@@ -112,56 +111,52 @@ public class ModuleComponent extends Component {
 	public double currentPopHeight = 0;
 	public Animation popHeightAnimation = new Animation();
 	@Override
-
-	public boolean draw(int offset, DrawContext drawContext, float partialTicks, Color color, boolean back) {
+	public boolean draw(int offset, Canvas canvas, float partialTicks, Color color, boolean back) {
 		RecalculateExpandedHeight();
 		String text = module.getDisplayName();
 		int parentX = parent.getX();
 		int parentY = parent.getY();
 		int parentWidth = parent.getWidth();
-		MatrixStack matrixStack = drawContext.getMatrices();
 		currentOffset = offsetAnimation.get(offset);
 		boolean scissor = ClickGui.fade.ease(FadeUtils.Ease.Out) >= 1;
-		if (scissor) {
-			drawContext.enableScissor(parentX, (int) ((parentY + currentOffset + defaultHeight)), (parentX + parentWidth), mc.getWindow().getScaledHeight());
-		}
 		currentPopHeight = popHeightAnimation.get(popped ? (expandedHeight - defaultHeight) : 0);
 		if (currentPopHeight > 0) {
 			int i = (int) (currentOffset + defaultHeight + 1);
 			if (scissor) {
-				drawContext.enableScissor(parentX, (parentY + i - 1), (parentX + parentWidth), (int) ((parentY + currentOffset + defaultHeight + currentPopHeight)));
+				canvas.save();
+				canvas.clipRect(Rect.makeXYWH(parentX, (float) (parentY + currentOffset + defaultHeight), parentWidth, mc.getWindow().getScaledHeight() - (float) (parentY + currentOffset + defaultHeight)), ClipMode.INTERSECT);
+				canvas.save();
+				canvas.clipRect(Rect.makeXYWH(parentX, parentY + i - 1, parentWidth, (float) ((parentY + currentOffset + defaultHeight + currentPopHeight) - (parentY + i - 1))), ClipMode.INTERSECT);
 			}
 			for (Component children : this.settingsList) {
 				if (children.isVisible()) {
-					children.draw(i, drawContext, partialTicks, color, !popped);
+					children.draw(i, canvas, partialTicks, color, !popped);
 					i += children.getCurrentHeight();
 				}
 			}
 			if (scissor) {
-				drawContext.disableScissor();
+				canvas.restore();
+				canvas.restore();
 			}
-		}
-		if (scissor) {
-			drawContext.disableScissor();
 		}
 		currentWidth = animation.get(module.isOn() ? (parentWidth - 2D) : 0D);
 		if (ClickGui.INSTANCE.activeBox.getValue()) {
 			if (ClickGui.INSTANCE.mainEnd.booleanValue) {
-				Render2DUtil.drawRectHorizontal(matrixStack, parentX + 1, (int) (parentY + currentOffset), (float) currentWidth, defaultHeight - (ClickGui.INSTANCE.maxFill.getValue() ? 0 : 1), hovered ? ClickGui.INSTANCE.mainHover.getValue() : ClickGui.INSTANCE.color.getValue(), ClickGui.INSTANCE.mainEnd.getValue());
+				SkiaRender2DUtil.drawRectHorizontal(canvas, parentX + 1, (int) (parentY + currentOffset), (float) currentWidth, defaultHeight - (ClickGui.INSTANCE.maxFill.getValue() ? 0 : 1), hovered ? ClickGui.INSTANCE.mainHover.getValue() : ClickGui.INSTANCE.color.getValue(), ClickGui.INSTANCE.mainEnd.getValue());
 			} else {
-				Render2DUtil.drawRect(matrixStack, parentX + 1, (int) (parentY + currentOffset), (float) currentWidth, defaultHeight - (ClickGui.INSTANCE.maxFill.getValue() ? 0 : 1), hovered ? ClickGui.INSTANCE.mainHover.getValue() : ClickGui.INSTANCE.color.getValue());
+				SkiaRender2DUtil.drawRect(canvas, parentX + 1, (int) (parentY + currentOffset), (float) currentWidth, defaultHeight - (ClickGui.INSTANCE.maxFill.getValue() ? 0 : 1), hovered ? ClickGui.INSTANCE.mainHover.getValue() : ClickGui.INSTANCE.color.getValue());
 			}
 		}
 		if (module.isOff() || !ClickGui.INSTANCE.activeBox.getValue())
-			Render2DUtil.drawRect(matrixStack, parentX + 1, (int) (parentY + currentOffset), parentWidth - 2, defaultHeight - (ClickGui.INSTANCE.maxFill.getValue() ? 0 : 1), hovered ? ClickGui.INSTANCE.moduleHover.getValue() : ClickGui.INSTANCE.module.getValue());
+			SkiaRender2DUtil.drawRect(canvas, parentX + 1, (int) (parentY + currentOffset), parentWidth - 2, defaultHeight - (ClickGui.INSTANCE.maxFill.getValue() ? 0 : 1), hovered ? ClickGui.INSTANCE.moduleHover.getValue() : ClickGui.INSTANCE.module.getValue());
 		if (hovered && InputUtil.isKeyPressed(mc.getWindow().getHandle(), GLFW.GLFW_KEY_LEFT_SHIFT)) {
-			TextUtil.drawString(drawContext, I18n.t("gui.drawn") + " " + (module.drawnSetting.getValue() ? "§a" + I18n.t("state.on") : "§c" + I18n.t("state.off")), (float) (parentX + 4), (float) (parentY + getTextOffsetY() + currentOffset) - 1, -1);
+			SkiaTextUtil.drawString(canvas, "Drawn " + (module.drawnSetting.getValue() ? "§aOn" : "§cOff"), (float) (parentX + 4), (float) (parentY + getTextOffsetY() + currentOffset) - 1, -1);
 		} else {
 			if (ClickGui.INSTANCE.center.getValue()) {
-				TextUtil.drawString(drawContext, text, parentX + parentWidth / 2f - TextUtil.getWidth(text) / 2, (float) (parentY + getTextOffsetY() + currentOffset) - 1,
+				SkiaTextUtil.drawString(canvas, text, parentX + parentWidth / 2f - SkiaTextUtil.getWidth(text) / 2, (float) (parentY + getTextOffsetY() + currentOffset) - 1,
 						module.isOn() ? ClickGui.INSTANCE.enableText.getValue().getRGB() : ClickGui.INSTANCE.disableText.getValue().getRGB());
 			} else {
-				TextUtil.drawString(drawContext, text, (float) (parentX + 4), (float) (parentY + getTextOffsetY() + currentOffset) - 1,
+				SkiaTextUtil.drawString(canvas, text, (float) (parentX + 4), (float) (parentY + getTextOffsetY() + currentOffset) - 1,
 						module.isOn() ? ClickGui.INSTANCE.enableText.getValue().getRGB() : ClickGui.INSTANCE.disableText.getValue().getRGB());
 			}
 		}
@@ -169,15 +164,15 @@ public class ModuleComponent extends Component {
 		if (ClickGui.INSTANCE.bind.booleanValue) {
 			if (module.getBind().getKey() != -1) {
 				String bindText = "[" + module.getBind().getBind() + "]";
-				TextUtil.drawStringWithScale(drawContext, bindText, (ClickGui.INSTANCE.center.getValue() ? (parentX + parentWidth / 2f - TextUtil.getWidth(text) / 2) : (parentX + 4)) + 1 + TextUtil.getWidth(text), (float) (parentY + getTextOffsetY() + currentOffset - TextUtil.getHeight() / 4), ClickGui.INSTANCE.bind.getValue(), 0.5f);
+				SkiaTextUtil.drawStringWithScale(canvas, bindText, (ClickGui.INSTANCE.center.getValue() ? (parentX + parentWidth / 2f - SkiaTextUtil.getWidth(text) / 2) : (parentX + 4)) + 1 + SkiaTextUtil.getWidth(text), (float) (parentY + getTextOffsetY() + currentOffset - SkiaTextUtil.getHeight() / 4), ClickGui.INSTANCE.bind.getValue(), 0.5f);
 			}
 		}
 		if (ClickGui.INSTANCE.gear.booleanValue) {
 			if (popped) {
-				TextUtil.drawString(drawContext, "-", parentX + parentWidth - 11,
+				SkiaTextUtil.drawString(canvas, "-", parentX + parentWidth - 11,
 						parentY + getTextOffsetY() + currentOffset - 1, ClickGui.INSTANCE.gear.getValue().getRGB());
 			} else {
-				TextUtil.drawString(drawContext, "+", parentX + parentWidth - 11,
+				SkiaTextUtil.drawString(canvas, "+", parentX + parentWidth - 11,
 						parentY + getTextOffsetY() + currentOffset - 1, ClickGui.INSTANCE.gear.getValue().getRGB());
 			}
 		}

@@ -1,20 +1,19 @@
 package cc.gatopera.dev.mod.gui.clickgui.components.impl;
 
 import cc.gatopera.dev.Gatopera;
-import cc.gatopera.dev.api.i18n.I18n;
 import cc.gatopera.dev.api.utils.math.Animation;
 import cc.gatopera.dev.mod.modules.impl.client.ClickGui;
 import cc.gatopera.dev.mod.modules.settings.impl.EnumSetting;
 import cc.gatopera.dev.core.impl.GuiManager;
-import cc.gatopera.dev.api.utils.render.Render2DUtil;
-import cc.gatopera.dev.api.utils.render.TextUtil;
+import cc.gatopera.dev.api.utils.render.skia.SkiaRender2DUtil;
+import cc.gatopera.dev.api.utils.render.skia.SkiaTextUtil;
 import cc.gatopera.dev.mod.gui.clickgui.components.Component;
 import cc.gatopera.dev.mod.gui.clickgui.ClickGuiScreen;
 import cc.gatopera.dev.mod.gui.clickgui.tabs.ClickGuiTab;
-import net.minecraft.client.gui.DrawContext;
-import net.minecraft.client.util.math.MatrixStack;
+import io.github.humbleui.skija.Canvas;
 
 import java.awt.*;
+
 public class EnumComponent extends Component {
 	private final EnumSetting<?> setting;
 	@Override
@@ -31,7 +30,6 @@ public class EnumComponent extends Component {
 	}
 
 	private boolean hover = false;
-
 
 	public void update(int offset, double mouseX, double mouseY) {
 		int parentX = parent.getX();
@@ -59,20 +57,20 @@ public class EnumComponent extends Component {
 			int cy = parentY + offset - 1 + (defaultHeight - 2) - 2;
 			if (setting.popped) {
 				for (Object o : setting.getValue().getDeclaringClass().getEnumConstants()) {
-					if (mouseX >= parentX && mouseX <= parentX + parentWidth && mouseY >= TextUtil.getHeight() / 2 + cy && mouseY < TextUtil.getHeight() + TextUtil.getHeight() / 2 + cy) {
+					if (mouseX >= parentX && mouseX <= parentX + parentWidth && mouseY >= SkiaTextUtil.getHeight() / 2 + cy && mouseY < SkiaTextUtil.getHeight() + SkiaTextUtil.getHeight() / 2 + cy) {
 						setting.setEnumValue(String.valueOf(o));
 						ClickGuiScreen.clicked = false;
 						sound();
 						break;
 					}
-					cy += (int) TextUtil.getHeight();
+					cy += (int) SkiaTextUtil.getHeight();
 				}
 			}
 		}
 		y = 0;
 		if (setting.popped) {
 			for (Object ignored : setting.getValue().getDeclaringClass().getEnumConstants()) {
-				y += (int) TextUtil.getHeight();
+				y += (int) SkiaTextUtil.getHeight();
 			}
 			setHeight(defaultHeight + y);
 		} else {
@@ -88,12 +86,11 @@ public class EnumComponent extends Component {
 	public double currentY = 0;
 	public Animation popHeightAnimation = new Animation();
 	@Override
-
-	public boolean draw(int offset, DrawContext drawContext, float partialTicks, Color color, boolean back) {
+	public boolean draw(int offset, Canvas canvas, float partialTicks, Color color, boolean back) {
 		y = 0;
 		if (setting.popped) {
 			for (Object ignored : setting.getValue().getDeclaringClass().getEnumConstants()) {
-				y += (int) TextUtil.getHeight();
+				y += (int) SkiaTextUtil.getHeight();
 			}
 			setHeight(defaultHeight + y);
 		} else {
@@ -102,15 +99,14 @@ public class EnumComponent extends Component {
 		int x = parent.getX();
 		int y = parent.getY() + offset - 2;
 		int width = parent.getWidth();
-		MatrixStack matrixStack = drawContext.getMatrices();
 
 		if (ClickGui.INSTANCE.mainEnd.booleanValue) {
-			Render2DUtil.drawRectHorizontal(matrixStack, (float) x + 1, (float) y + 1, (float) width - 2, (float) defaultHeight - (ClickGui.INSTANCE.maxFill.getValue() ? 0 : 1), hover ? ClickGui.INSTANCE.mainHover.getValue() : Gatopera.GUI.getColor(), ClickGui.INSTANCE.mainEnd.getValue());
+			SkiaRender2DUtil.drawRectHorizontal(canvas, (float) x + 1, (float) y + 1, (float) width - 2, (float) defaultHeight - (ClickGui.INSTANCE.maxFill.getValue() ? 0 : 1), hover ? ClickGui.INSTANCE.mainHover.getValue() : Gatopera.GUI.getColor(), ClickGui.INSTANCE.mainEnd.getValue());
 		} else {
-			Render2DUtil.drawRect(matrixStack, (float) x + 1, (float) y + 1, (float) width - 2, (float) defaultHeight - (ClickGui.INSTANCE.maxFill.getValue() ? 0 : 1), hover ? ClickGui.INSTANCE.mainHover.getValue() : Gatopera.GUI.getColor());
+			SkiaRender2DUtil.drawRect(canvas, (float) x + 1, (float) y + 1, (float) width - 2, (float) defaultHeight - (ClickGui.INSTANCE.maxFill.getValue() ? 0 : 1), hover ? ClickGui.INSTANCE.mainHover.getValue() : Gatopera.GUI.getColor());
 		}
-		TextUtil.drawString(drawContext, setting.getDisplayName() + ": " + I18n.value(setting.getValue().name()), x + 4, y + getTextOffsetY(), -1);
-		TextUtil.drawString(drawContext, setting.popped ? "-" : "+", x + width - 11, y + getTextOffsetY(), new Color(255, 255, 255).getRGB());
+		SkiaTextUtil.drawString(canvas, setting.getName() + ": " + setting.getValue().name(), x + 4, y + getTextOffsetY(), -1);
+		SkiaTextUtil.drawString(canvas, setting.popped ? "-" : "+", x + width - 11, y + getTextOffsetY(), new Color(255, 255, 255).getRGB());
 
 		if (setting.popped) {
 			currentY = animation.get(1);
@@ -121,11 +117,10 @@ public class EnumComponent extends Component {
 		if (currentY > 0.04) {
 			for (Object o : setting.getValue().getDeclaringClass().getEnumConstants()) {
 
-				String raw = o.toString();
-				String s = I18n.value(raw);
+				String s = o.toString();
 
-				TextUtil.drawString(drawContext, s, width / 2d - TextUtil.getWidth(s) / 2d + 2.0f + x, TextUtil.getHeight() / 2d + (cy), setting.getValue().name().equals(raw) ? new Color(255, 255, 255, (int) (currentY * 255)).getRGB() : new Color(120, 120, 120, (int) (currentY * 255)).getRGB());
-				cy += TextUtil.getHeight() * currentY;
+				SkiaTextUtil.drawString(canvas, s, (float) (width / 2d - SkiaTextUtil.getWidth(s) / 2d + 2.0f + x), (float) (SkiaTextUtil.getHeight() / 2d + (cy)), setting.getValue().name().equals(s) ? new Color(255, 255, 255, (int) (currentY * 255)).getRGB() : new Color(120, 120, 120, (int) (currentY * 255)).getRGB());
+				cy += SkiaTextUtil.getHeight() * currentY;
 			}
 		}
 		return true;
