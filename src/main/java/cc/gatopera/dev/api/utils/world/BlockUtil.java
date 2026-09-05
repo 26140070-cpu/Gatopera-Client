@@ -128,7 +128,6 @@ public class BlockUtil implements Wrapper {
         return false;
     }
 
-
     public static Direction getBestNeighboring(BlockPos pos, Direction facing) {
         for (Direction i : Direction.values()) {
             if (facing != null && pos.offset(i).equals(pos.offset(facing, -1)) || i == Direction.DOWN) continue;

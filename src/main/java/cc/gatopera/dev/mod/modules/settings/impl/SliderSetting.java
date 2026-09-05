@@ -40,7 +40,6 @@ public class SliderSetting extends Setting {
 		this(name, value, min, max, 1);
 	}
 
-
 	public SliderSetting(String name, double value, double min, double max, double increment, BooleanSupplier visibilityIn) {
 		super(name, ModuleManager.lastLoadMod.getName() + "_" + name, visibilityIn);
 		this.value = value;

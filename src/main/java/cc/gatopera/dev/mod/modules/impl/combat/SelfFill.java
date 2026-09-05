@@ -44,10 +44,9 @@ public class SelfFill extends Module {
         if (Blink.INSTANCE.isOn() && Blink.INSTANCE.pauseModule.getValue()) return;
 
         BlockPos playerPos = mc.player.getBlockPos();
-        // Check if player is in a hole
+
         if (onlyHole.getValue() && !isInHole()) return;
 
-        // Place obsidian around player
         for (Direction dir : Direction.HORIZONTAL) {
             BlockPos placePos = playerPos.offset(dir);
             if (BlockUtil.canPlace(placePos, 5.0)) {
@@ -55,7 +54,7 @@ public class SelfFill extends Module {
                     InventoryUtil.findBlockInventorySlot(Blocks.OBSIDIAN) :
                     InventoryUtil.findBlock(Blocks.OBSIDIAN);
                 if (slot != -1) {
-                    // Place block
+
                     timer.reset();
                     return;
                 }

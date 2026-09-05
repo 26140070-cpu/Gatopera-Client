@@ -21,8 +21,11 @@ public enum Language {
     }
 
     public static Language fromCode(String code) {
+        if (code == null || code.isEmpty()) {
+            return EN_US;
+        }
         for (Language language : values()) {
-            if (language.code.equalsIgnoreCase(code)) {
+            if (language.code.equalsIgnoreCase(code) || language.name().equalsIgnoreCase(code)) {
                 return language;
             }
         }

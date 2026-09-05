@@ -32,9 +32,7 @@ public class Debug extends Module {
 
     @Override
     public void onEnable() {
-        /*for (String s : IRCManager.onlineGatoperaUser) {
-            CommandManager.sendChatMessage(s);
-        }*/
+
         if (nullCheck()) return;
         BlockPos pos = EntityUtil.getPlayerPos(true).down();
         mc.getNetworkHandler().sendPacket(new PlayerActionC2SPacket(

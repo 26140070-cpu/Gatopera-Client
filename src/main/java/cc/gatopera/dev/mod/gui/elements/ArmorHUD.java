@@ -15,8 +15,6 @@ import net.minecraft.item.ItemStack;
 
 import java.awt.*;
 
-
-
 public class ArmorHUD extends Tab {
 
 	public ArmorHUD() {
@@ -60,12 +58,7 @@ public class ArmorHUD extends Tab {
                         (float) (x + width + 2 - xOff),
                         (float) (y + yOffset - mc.textRenderer.fontHeight / 4d),
 						ColorUtil.fadeColor(new Color(196, 0, 0), new Color(0, 227, 0), damage / 100f).getRGB(), 0.5F);
-/*				drawContext.drawText(mc.textRenderer,
-						String.valueOf(damage),
-						x + width + 8 - xOff - mc.textRenderer.getWidth(String.valueOf(damage)) / 2,
-						y + yOffset - mc.textRenderer.fontHeight - 2,
-						new Color((int) (255f * (1f - ((float) damage / 100f))), (int) (255f * ((float) damage / 100f)), 0).getRGB(),
-						true);*/
+
 				matrixStack.pop();
 			}
 		}

@@ -203,7 +203,6 @@ public class ModuleList extends Module {
         return color.getValue().getRGB();
     }
 
-
     private Color rainbow(int delay) {
         if (colorMode.getValue() == ColorMode.Pulse) {
             return ColorUtil.pulseColor(color.getValue(), endColor.getValue(), delay, pulseCounter.getValueInt(), pulseSpeed.getValue());
@@ -220,7 +219,7 @@ public class ModuleList extends Module {
         }
         return mc.textRenderer.getWidth(text);
     }
-    
+
     private int getFontHeight() {
         if (font.getValue()) {
             return (int) FontRenderers.ui.getFontHeight();

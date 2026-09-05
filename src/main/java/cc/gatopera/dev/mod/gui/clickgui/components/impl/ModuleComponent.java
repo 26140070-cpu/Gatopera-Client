@@ -1,5 +1,6 @@
 package cc.gatopera.dev.mod.gui.clickgui.components.impl;
 
+import cc.gatopera.dev.api.i18n.I18n;
 import cc.gatopera.dev.core.impl.GuiManager;
 import cc.gatopera.dev.api.utils.math.Animation;
 import cc.gatopera.dev.api.utils.math.FadeUtils;
@@ -65,8 +66,7 @@ public class ModuleComponent extends Component {
 
 	boolean hovered = false;
 
-	
-	
+
 	public void update(int offset, double mouseX, double mouseY) {
 		int parentX = parent.getX();
 		int parentY = parent.getY();
@@ -112,8 +112,7 @@ public class ModuleComponent extends Component {
 	public double currentPopHeight = 0;
 	public Animation popHeightAnimation = new Animation();
 	@Override
-	
-	
+
 	public boolean draw(int offset, DrawContext drawContext, float partialTicks, Color color, boolean back) {
 		RecalculateExpandedHeight();
 		String text = module.getDisplayName();
@@ -156,7 +155,7 @@ public class ModuleComponent extends Component {
 		if (module.isOff() || !ClickGui.INSTANCE.activeBox.getValue())
 			Render2DUtil.drawRect(matrixStack, parentX + 1, (int) (parentY + currentOffset), parentWidth - 2, defaultHeight - (ClickGui.INSTANCE.maxFill.getValue() ? 0 : 1), hovered ? ClickGui.INSTANCE.moduleHover.getValue() : ClickGui.INSTANCE.module.getValue());
 		if (hovered && InputUtil.isKeyPressed(mc.getWindow().getHandle(), GLFW.GLFW_KEY_LEFT_SHIFT)) {
-			TextUtil.drawString(drawContext, "Drawn " + (module.drawnSetting.getValue() ? "§aOn" : "§cOff"), (float) (parentX + 4), (float) (parentY + getTextOffsetY() + currentOffset) - 1, -1);
+			TextUtil.drawString(drawContext, I18n.t("gui.drawn") + " " + (module.drawnSetting.getValue() ? "§a" + I18n.t("state.on") : "§c" + I18n.t("state.off")), (float) (parentX + 4), (float) (parentY + getTextOffsetY() + currentOffset) - 1, -1);
 		} else {
 			if (ClickGui.INSTANCE.center.getValue()) {
 				TextUtil.drawString(drawContext, text, parentX + parentWidth / 2f - TextUtil.getWidth(text) / 2, (float) (parentY + getTextOffsetY() + currentOffset) - 1,

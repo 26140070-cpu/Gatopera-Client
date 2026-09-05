@@ -28,7 +28,6 @@ public class AutoGapple extends Module {
 
     public final EnumSetting<Page> page = add(new EnumSetting<>("Page", Page.General));
 
-    // General
     private final SliderSetting healthThreshold =
             add(new SliderSetting("Health", 12.0, 0.0, 20.0, 0.5, () -> page.getValue() == Page.General).setSuffix("hp"));
     private final SliderSetting absorptionThreshold =
@@ -42,7 +41,6 @@ public class AutoGapple extends Module {
     private final BooleanSetting onlyInCombat =
             add(new BooleanSetting("OnlyCombat", false, () -> page.getValue() == Page.General));
 
-    // Smart
     private final BooleanSetting smart =
             add(new BooleanSetting("Smart", true, () -> page.getValue() == Page.Smart).setParent());
     private final SliderSetting predictDamage =
@@ -50,7 +48,6 @@ public class AutoGapple extends Module {
     private final SliderSetting crystalRange =
             add(new SliderSetting("CrystalRange", 6.0, 1.0, 10.0, 0.5, () -> page.getValue() == Page.Smart && smart.getValue()).setSuffix("m"));
 
-    // Delay
     private final SliderSetting eatDelay =
             add(new SliderSetting("EatDelay", 0, 0, 500, 10, () -> page.getValue() == Page.General).setSuffix("ms"));
     private final Timer eatTimer = new Timer();

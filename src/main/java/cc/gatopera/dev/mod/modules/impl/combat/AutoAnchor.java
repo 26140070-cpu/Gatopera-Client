@@ -41,11 +41,10 @@ import java.util.UUID;
 
 import static cc.gatopera.dev.api.utils.world.BlockUtil.*;
 
-
 public class AutoAnchor extends Module {
 	public static AutoAnchor INSTANCE;
 	public final EnumSetting<Page> page = add(new EnumSetting<>("Page", Page.General));
-	//Assist
+
 	private final BooleanSetting assist =
 			add(new BooleanSetting("Assist", true, () -> page.getValue() == Page.Assist));
 	private final BooleanSetting checkMine =
@@ -57,7 +56,6 @@ public class AutoAnchor extends Module {
 	private final SliderSetting delay =
 			add(new SliderSetting("AssistDelay", 0.1, 0.0, 1, 0.01, () -> page.getValue() == Page.Assist).setSuffix("s"));
 
-	//
 	private final BooleanSetting thread =
 			add(new BooleanSetting("Thread", false, () -> page.getValue() == Page.General));
 	private final BooleanSetting light =
@@ -100,7 +98,6 @@ public class AutoAnchor extends Module {
 			add(new SliderSetting("Fov", 30, 0, 50, () -> rotate.isOpen() && yawStep.getValue() && checkFov.getValue() && page.getValue() == Page.Rotate));
 	private final SliderSetting priority =
 			add(new SliderSetting("Priority", 10, 0, 100, () -> rotate.isOpen() && yawStep.getValue() && page.getValue() == Page.Rotate));
-
 
 	private final BooleanSetting noSuicide =
 			add(new BooleanSetting("NoSuicide", true, () -> page.getValue() == Page.Calc));
@@ -391,13 +388,13 @@ public class AutoAnchor extends Module {
 	}
 	public void placeBlock(BlockPos pos, boolean rotate, int slot) {
 		if (airPlace()) {
-			//BlockUtil.placedPos.add(pos);
+
 			clickBlock(pos, Direction.DOWN, rotate, slot);
 			return;
 		}
 		Direction side = getPlaceSide(pos);
 		if (side == null) return;
-		//BlockUtil.placedPos.add(pos);
+
 		clickBlock(pos.offset(side), side.getOpposite(), rotate, slot);
 	}
 	public void clickBlock(BlockPos pos, Direction side, boolean rotate, int slot) {

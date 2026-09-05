@@ -80,8 +80,7 @@ public class AutoMine extends Module {
             }
             if (miningData.getState().isAir())
             {
-                // Once we broke the block that overrode that the auto city, we can allow the module
-                // to auto mine "city" blocks
+
                 if (instantConfig.getValue())
                 {
                     miningData.setInstantRemine();
@@ -109,7 +108,7 @@ public class AutoMine extends Module {
     @EventHandler
     public void onAttackBlock(final ClickBlockEvent event)
     {
-        // Do not try to break unbreakable blocks
+
         BlockState state = mc.world.getBlockState(event.getPos());
         if (state.getBlock().getHardness() == -1.0f || state.isAir() || mc.player.isCreative())
         {
@@ -200,15 +199,14 @@ public class AutoMine extends Module {
         }
         sendSequencedPacket(id -> new PlayerActionC2SPacket(
                 PlayerActionC2SPacket.Action.ABORT_DESTROY_BLOCK, data.getPos(), data.getDirection(), id));
-        //Managers.INVENTORY.syncToClient();
+
     }
 
     private void stopMining(MiningData data) {
         if (!data.isStarted() || data.getState().isAir()) {
             return;
         }
-        // https://github.com/GrimAnticheat/Grim/blob/2.0/src/main/java/ac/grim/grimac/checks/impl/misc/FastBreak.java#L76
-        // https://github.com/GrimAnticheat/Grim/blob/2.0/src/main/java/ac/grim/grimac/checks/impl/misc/FastBreak.java#L98
+
         boolean canSwap = data.getSlot() != -1;
         int slot = mc.player.getInventory().selectedSlot;
         if (canSwap) {

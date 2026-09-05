@@ -32,8 +32,7 @@ public class StringComponent extends Component {
 
 	boolean hover = false;
 
-	
-	
+
 	public void update(int offset, double mouseX, double mouseY) {
 		if (GuiManager.currentGrabbed == null && isVisible()) {
 			int parentX = parent.getX();
@@ -65,8 +64,7 @@ public class StringComponent extends Component {
 	boolean b;
 
 	@Override
-	
-	
+
 	public boolean draw(int offset, DrawContext drawContext, float partialTicks, Color color, boolean back) {
 		if (timer.passed(1000)) {
 			b = !b;
@@ -84,7 +82,7 @@ public class StringComponent extends Component {
 		if (setting.isListening() && b) {
 			text = text + "_";
 		}
-		String name = setting.isListening() ? "[E]" : setting.getName();
+		String name = setting.isListening() ? "[E]" : setting.getDisplayName();
 		if (hover)
 			Render2DUtil.drawRect(matrixStack, (float) parentX + 1, (float) y + 1, (float) width - 3, (float) defaultHeight - (ClickGui.INSTANCE.maxFill.getValue() ? 0 : 1), ClickGui.INSTANCE.settingHover.getValue());
 		TextUtil.drawString(drawContext, text, parentX + 4 + TextUtil.getWidth(name) / 2,

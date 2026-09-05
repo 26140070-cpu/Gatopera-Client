@@ -23,7 +23,6 @@ import net.minecraft.world.RaycastContext;
 import java.util.HashMap;
 import java.util.Map;
 
-
 public class FastFall extends Module {
 
     private final EnumSetting<Mode> mode =
@@ -141,7 +140,6 @@ public class FastFall extends Module {
                     RaycastContext.FluidHandling.NONE,
                     mc.player
             ));
-
 
             if (trace != null && trace.getType() == HitResult.Type.BLOCK) return retval;
 

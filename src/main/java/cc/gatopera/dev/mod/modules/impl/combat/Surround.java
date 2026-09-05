@@ -1,5 +1,6 @@
 package cc.gatopera.dev.mod.modules.impl.combat;
 
+import cc.gatopera.dev.api.i18n.I18n;
 import cc.gatopera.dev.Gatopera;
 import cc.gatopera.dev.api.events.eventbus.EventHandler;
 import cc.gatopera.dev.api.events.impl.LookAtEvent;
@@ -21,7 +22,6 @@ import net.minecraft.block.Blocks;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.*;
-
 
 public class Surround extends Module {
     public static Surround INSTANCE;
@@ -62,7 +62,6 @@ public class Surround extends Module {
             add(new SliderSetting("Fov", 5f, 0f, 30f, () -> checkFov.getValue() && page.getValue() == Page.Rotate));
     private final SliderSetting priority = add(new SliderSetting("Priority", 10,0 ,100, () ->page.getValue() == Page.Rotate));
 
-    
     private final BooleanSetting detectMining =
             add(new BooleanSetting("DetectMining", false, () -> page.is(Page.Check)));
     private final BooleanSetting usingPause =
@@ -78,7 +77,7 @@ public class Surround extends Module {
         Rotate,
         Check,
     }
-    
+
     double startX = 0;
     double startY = 0;
     double startZ = 0;
@@ -160,7 +159,7 @@ public class Surround extends Module {
         double distanceToStart = MathHelper.sqrt((float) mc.player.squaredDistanceTo(startX, startY, startZ));
 
         if (getBlock() == -1) {
-            CommandManager.sendChatMessageWidthId("§c§oObsidian" + (enderChest.getValue() ? "/EnderChest" : "") + "?", hashCode());
+            CommandManager.sendChatMessageWidthId("§c§o" + (enderChest.getValue() ? I18n.t("msg.missing_obsidian_echest") : I18n.t("msg.missing_obsidian")), hashCode());
             disable();
             return;
         }

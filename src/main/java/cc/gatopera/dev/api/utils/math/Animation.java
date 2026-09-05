@@ -12,14 +12,7 @@ public class Animation {
         long length = ClickGui.INSTANCE.animationTime.getValueInt();
         if (length == 0) return target;
         Easing ease = ClickGui.INSTANCE.ease.getValue();
-/*        if (!setup) {
-            setup = true;
-            from = target;
-            to = target;
-            fadeUtils.setLength(length);
-            fadeUtils.reset();
-            return target;
-        }*/
+
         if (target != to) {
             from = from + (to - from) * fadeUtils.ease(ease);
             to = target;
@@ -30,14 +23,7 @@ public class Animation {
     }
 
     public double get(double target, long length, Easing ease) {
-/*        if (!setup) {
-            setup = true;
-            from = target;
-            to = target;
-            fadeUtils.setLength(length);
-            fadeUtils.reset();
-            return target;
-        }*/
+
         if (target != to) {
             from = from + (to - from) * fadeUtils.ease(ease);
             to = target;

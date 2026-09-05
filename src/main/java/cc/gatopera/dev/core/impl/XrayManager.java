@@ -59,7 +59,7 @@ public class XrayManager extends Manager {
                 return;
             }
             List<String> list = IOUtils.readLines(new FileInputStream(friendFile), StandardCharsets.UTF_8);
-            
+
             for (String s : list) {
                 add(s);
             }
@@ -67,7 +67,7 @@ public class XrayManager extends Manager {
             exception.printStackTrace();
         }
     }
-    
+
     public void save() {
         try {
             File friendFile = getFile("xrays.txt");

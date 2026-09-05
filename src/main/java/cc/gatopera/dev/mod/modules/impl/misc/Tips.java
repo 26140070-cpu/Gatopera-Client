@@ -82,5 +82,4 @@ public class Tips extends Module {
         }
     }
 
-
 }

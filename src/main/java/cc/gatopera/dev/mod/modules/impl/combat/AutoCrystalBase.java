@@ -45,7 +45,6 @@ import java.util.UUID;
 
 import static cc.gatopera.dev.api.utils.world.BlockUtil.hasCrystal;
 
-
 public class AutoCrystalBase extends Module {
     public static AutoCrystalBase INSTANCE;
     public static BlockPos crystalPos;
@@ -53,7 +52,7 @@ public class AutoCrystalBase extends Module {
     private final Timer placeTimer = new Timer();
     private final Timer delayTimer = new Timer();
     private final EnumSetting<Page> page = add(new EnumSetting<>("Page", Page.General));
-    //General
+
     private final BooleanSetting inventory =
             add(new BooleanSetting("InventorySwap", true, () -> page.getValue() == Page.General));
     private final BooleanSetting detectMining =
@@ -63,7 +62,7 @@ public class AutoCrystalBase extends Module {
     private final SliderSetting targetRange = add(new SliderSetting("TargetRange", 12.0, 0.0, 20.0, () -> page.getValue() == Page.General).setSuffix("m"));
     private final SliderSetting updateDelay = add(new SliderSetting("UpdateDelay", 50, 0, 1000, () -> page.getValue() == Page.General).setSuffix("ms"));
     private final SliderSetting wallRange = add(new SliderSetting("WallRange", 6.0, 0.0, 6.0, () -> page.getValue() == Page.General).setSuffix("m"));
-    //Rotate
+
     private final BooleanSetting rotate =
             add(new BooleanSetting("Rotate", true, () -> page.getValue() == Page.Rotate));
     private final BooleanSetting yawStep =
@@ -75,7 +74,7 @@ public class AutoCrystalBase extends Module {
     private final SliderSetting fov =
             add(new SliderSetting("Fov", 5f, 0f, 30f, () -> checkFov.getValue() && page.getValue() == Page.Rotate));
     private final SliderSetting priority = add(new SliderSetting("Priority", 10,0 ,100, () ->page.getValue() == Page.Rotate));
-    //Place
+
     private final BooleanSetting auto = add(new BooleanSetting("Auto", true, () -> page.getValue() == Page.Interact));
     private final SliderSetting autoMinDamage = add(new SliderSetting("AMin", 5.0, 0.0, 36.0, () -> page.getValue() == Page.Interact && auto.getValue()).setSuffix("dmg"));
     private final SliderSetting minDamage = add(new SliderSetting("Min", 5.0, 0.0, 36.0, () -> page.getValue() == Page.Interact).setSuffix("dmg"));
@@ -87,13 +86,12 @@ public class AutoCrystalBase extends Module {
     private final BooleanSetting smart = add(new BooleanSetting("Smart", true, () -> page.getValue() == Page.Interact));
     private final SliderSetting placeDelay = add(new SliderSetting("PlaceDelay", 300, 0, 1000, () -> page.getValue() == Page.Interact).setSuffix("ms"));
 
-    //Calc
     private final BooleanSetting useThread = add(new BooleanSetting("UseThread", true, () -> page.getValue() == Page.Calc));
     private final BooleanSetting doCrystal = add(new BooleanSetting("CalcDoPlace", false, () -> page.getValue() == Page.Calc));
     private final BooleanSetting lite = add(new BooleanSetting("Lite", false, () -> page.getValue() == Page.Calc));
     private final SliderSetting predictTicks = add(new SliderSetting("Predict", 4, 0, 10, () -> page.getValue() == Page.Calc).setSuffix("ticks"));
     private final BooleanSetting terrainIgnore = add(new BooleanSetting("TerrainIgnore", true, () -> page.getValue() == Page.Calc));
-    //Misc
+
     private final BooleanSetting forcePlace = add(new BooleanSetting("ForcePlace", true, () -> page.getValue() == Page.Misc).setParent());
     private final SliderSetting forceMaxHealth = add(new SliderSetting("LowerThan", 7, 0, 36, () -> page.getValue() == Page.Misc && forcePlace.isOpen()).setSuffix("health"));
     private final SliderSetting forceMin = add(new SliderSetting("ForceMin", 1.5, 0.0, 36.0, () -> page.getValue() == Page.Misc && forcePlace.isOpen()).setSuffix("dmg"));
@@ -349,7 +347,6 @@ public class AutoCrystalBase extends Module {
         }
         return minDamage.getValue();
     }
-
 
     private void doPlace(BlockPos pos) {
         if (!placeTimer.passedMs((long) placeDelay.getValue())) return;

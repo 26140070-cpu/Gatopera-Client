@@ -1,5 +1,6 @@
 package cc.gatopera.dev.mod.gui.misc;
 
+import cc.gatopera.dev.api.i18n.I18n;
 import cc.gatopera.dev.api.utils.Wrapper;
 import cc.gatopera.dev.api.utils.render.GatoperaPipelines;
 import cc.gatopera.dev.mod.gui.font.FontRenderers;
@@ -29,7 +30,7 @@ public class DialogScreen extends Screen implements Wrapper {
             Runnable yesAction,
             Runnable noAction
     ) {
-        super(Text.of("Dialog"));
+        super(Text.of(I18n.t("dialog.title")));
 
         this.pic = pic;
         this.header = header;

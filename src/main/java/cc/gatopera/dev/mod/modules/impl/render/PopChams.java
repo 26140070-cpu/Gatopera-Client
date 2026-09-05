@@ -65,7 +65,6 @@ public final class PopChams extends Module {
         RenderSystem.depthMask(true);
     }
 
-
     @EventHandler
     private void onTotemPop(TotemEvent e) {
         if (e.getPlayer().equals(mc.player) || mc.world == null) return;

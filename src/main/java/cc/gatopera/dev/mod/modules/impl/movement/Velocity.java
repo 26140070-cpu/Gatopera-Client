@@ -134,7 +134,7 @@ public class Velocity extends Module {
 				Gatopera.ROTATION.snapBack();
 				mc.getNetworkHandler().sendPacket(new PlayerActionC2SPacket(PlayerActionC2SPacket.Action.STOP_DESTROY_BLOCK,
 						mc.player.isCrawling() ? mc.player.getBlockPos() : mc.player.getBlockPos().up(), Direction.DOWN));
-				//mc.getNetworkHandler().sendPacket(new PlayerActionC2SPacket(PlayerActionC2SPacket.Action.STOP_DESTROY_BLOCK, BlockPos.ofFloored(mc.player.getPos()), mc.player.getHorizontalFacing().getOpposite()));
+
 			}
 			flag = false;
 		}

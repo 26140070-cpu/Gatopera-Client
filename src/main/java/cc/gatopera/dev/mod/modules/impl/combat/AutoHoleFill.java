@@ -56,7 +56,6 @@ public class AutoHoleFill extends Module {
         INSTANCE = this;
     }
 
-
     @Override
     public void onUpdate() {
         if (!timer.passedMs((long) placeDelay.getValue())) return;

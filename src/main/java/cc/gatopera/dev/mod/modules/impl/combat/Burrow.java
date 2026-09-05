@@ -1,5 +1,6 @@
 package cc.gatopera.dev.mod.modules.impl.combat;
 
+import cc.gatopera.dev.api.i18n.I18n;
 import cc.gatopera.dev.Gatopera;
 import cc.gatopera.dev.core.impl.CommandManager;
 import cc.gatopera.dev.api.utils.combat.CombatUtil;
@@ -34,7 +35,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static cc.gatopera.dev.api.utils.world.BlockUtil.canReplace;
-
 
 public class Burrow extends Module {
     public static Burrow INSTANCE;
@@ -101,7 +101,7 @@ public class Burrow extends Module {
         int oldSlot = mc.player.getInventory().selectedSlot;
         int block;
         if ((block = getBlock()) == -1) {
-            CommandManager.sendChatMessageWidthId("§c§oObsidian" + (enderChest.getValue() ? "/EnderChest" : "") + "?", hashCode());
+            CommandManager.sendChatMessageWidthId("§c§o" + (enderChest.getValue() ? I18n.t("msg.missing_obsidian_echest") : I18n.t("msg.missing_obsidian")), hashCode());
             disable();
             return;
         }
@@ -281,7 +281,6 @@ public class Burrow extends Module {
         if (disable.getValue()) disable();
     }
 
-
     private void placeBlock(BlockPos pos, boolean rotate) {
         if (canPlace(pos) && !placePos.contains(pos) && progress < blocksPer.getValueInt()) {
             placePos.add(pos);
@@ -309,7 +308,7 @@ public class Burrow extends Module {
     }
 
     private void gotoPos(BlockPos offPos) {
-        //mc.getNetworkHandler().sendPacket(new PlayerMoveC2SPacket.PositionAndOnGround(mc.player.getX(), mc.player.getY() + 0.2, mc.player.getZ(), false));
+
         if (rotate.getValue() == RotateMode.None) {
             mc.getNetworkHandler().sendPacket(new PlayerMoveC2SPacket.PositionAndOnGround(offPos.getX() + 0.5, mc.player.getY() + 0.1, offPos.getZ() + 0.5, false));
         } else {

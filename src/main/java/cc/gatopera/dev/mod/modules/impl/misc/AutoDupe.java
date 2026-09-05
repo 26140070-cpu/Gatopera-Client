@@ -1,5 +1,6 @@
 package cc.gatopera.dev.mod.modules.impl.misc;
 
+import cc.gatopera.dev.api.i18n.I18n;
 import cc.gatopera.dev.Gatopera;
 import cc.gatopera.dev.api.events.eventbus.EventHandler;
 import cc.gatopera.dev.api.events.impl.RotateEvent;
@@ -53,7 +54,6 @@ public class AutoDupe extends Module {
     public final BooleanSetting healthCheck = add(new BooleanSetting("AutoEat", true));
     public final BooleanSetting rotate = add(new BooleanSetting("Rotate", true, () -> mode.is(Mode.NPlusOne)));
     public final BooleanSetting inventory = add(new BooleanSetting("Inventory", true, () -> mode.is(Mode.NPlusOne)));
-
 
     private void placeBlock(BlockPos pos) {
         int block;
@@ -147,7 +147,7 @@ public class AutoDupe extends Module {
     @Override
     public void onUpdate() {
         if (!PacketEat.INSTANCE.isOn()) {
-            CommandManager.sendChatMessage("§4AutoDupe require PacketEat, auto enabled.");
+            CommandManager.sendChatMessage("§4" + I18n.t("msg.auto_enabled", getDisplayName(), I18n.module("PacketEat")));
             PacketEat.INSTANCE.enable();
         }
         if (nullCheck()) {
@@ -174,7 +174,7 @@ public class AutoDupe extends Module {
         switch (mode.getValue()) {
             case Turtle -> {
                 if (BaritoneModule.isActive()) return;
-                //BaritoneAPI.getProvider().
+
             }
             case NPlusOne -> {
                 BlockPos placePos = PacketMine.getBreakPos();
@@ -208,7 +208,7 @@ public class AutoDupe extends Module {
                 }
                 if (shulkers > 18) {
                     if (mc.currentScreen != null) mc.currentScreen.close();
-                    //mc.setScreen(null);
+
                     for (int slot1 = 9; slot1 < 36; ++slot1) {
                         ItemStack stack = mc.player.getInventory().getStack(slot1);
                         if (stack.isEmpty()) continue;
@@ -313,7 +313,7 @@ public class AutoDupe extends Module {
                                     emptyBox.add(boxPos);
                                 }
                                 if (mc.currentScreen != null) mc.currentScreen.close();
-                                //mc.setScreen(null);
+
                                 stage = Stage.Summon;
                             } else {
                                 closeScreen.reset();
@@ -353,7 +353,6 @@ public class AutoDupe extends Module {
                             }
                         }
                         if (mc.currentScreen != null) mc.currentScreen.close();
-                        //mc.setScreen(null);
 
                         int slot = InventoryUtil.findItemInventorySlot(Items.EGG);
                         InventoryUtil.inventorySwap(slot, mc.player.getInventory().selectedSlot);
@@ -419,7 +418,6 @@ public class AutoDupe extends Module {
                             }
                             if (llama.isBaby()) {
                                 if (mc.currentScreen != null) mc.currentScreen.close();
-                                //mc.setScreen(null);
 
                                 int slot = InventoryUtil.findBlockInventorySlot(Blocks.HAY_BLOCK);
                                 InventoryUtil.inventorySwap(slot, mc.player.getInventory().selectedSlot);
@@ -448,7 +446,6 @@ public class AutoDupe extends Module {
                                         putTimer.reset();
                                         putIn = false;
                                         if (mc.currentScreen != null) mc.currentScreen.close();
-                                        //mc.setScreen(null);
 
                                         InventoryUtil.inventorySwap(chestSlot, mc.player.getInventory().selectedSlot);
                                         Gatopera.ROTATION.lookAt(llama.getPos());
@@ -457,7 +454,6 @@ public class AutoDupe extends Module {
                                     }
                                 } else {
                                     if (mc.currentScreen != null) mc.currentScreen.close();
-                                    //mc.setScreen(null);
 
                                     for (int i = 0; i < 9; ++i) {
                                         if (mc.player.getInventory().getStack(i).isEmpty()) {

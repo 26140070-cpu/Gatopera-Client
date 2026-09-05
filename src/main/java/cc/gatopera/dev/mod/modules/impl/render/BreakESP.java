@@ -47,7 +47,7 @@ public class BreakESP extends Module {
 			Render3DUtil.drawText3D(breakData.getEntity().getName().getString(), breakData.pos.toCenterPos().add(0, 0.15, 0), -1);
 			double breakTime = this.breakTime.getValue() * 1000;
 			Render3DUtil.drawText3D(Text.of(df.format(Math.min(1, breakData.timer.getPassedTimeMs() / breakTime) * 100)), breakData.pos.toCenterPos().add(0, -0.15, 0), 0, 0, 1, ColorUtil.fadeColor(new Color(255, 6, 6), new Color(0, 255, 12), breakData.timer.getPassedTimeMs() / breakTime));
-			//mc.world.isAir(breakData.pos) ? "Broken" : "Breaking"
+
 		}
 	}
 }

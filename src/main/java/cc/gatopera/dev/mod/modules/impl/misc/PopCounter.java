@@ -1,6 +1,7 @@
 package cc.gatopera.dev.mod.modules.impl.misc;
 
 import cc.gatopera.dev.Gatopera;
+import cc.gatopera.dev.api.i18n.I18n;
 import cc.gatopera.dev.mod.modules.impl.client.ClientSetting;
 import cc.gatopera.dev.mod.modules.settings.impl.BooleanSetting;
 import cc.gatopera.dev.api.events.eventbus.EventHandler;
@@ -17,7 +18,7 @@ public class PopCounter
     public final BooleanSetting unPop =
             add(new BooleanSetting("Dead", true));
     public PopCounter() {
-        super("PopCounter", "Counts players totem pops", Category.Misc);
+        super("PopCounter", Category.Misc);
         setChinese("图腾计数器");
         INSTANCE = this;
     }
@@ -29,22 +30,22 @@ public class PopCounter
             int l_Count = Gatopera.POP.popContainer.get(player.getName().getString());
             if (l_Count == 1) {
                 if (player.equals(mc.player)) {
-                    sendMessage("§fYou§r died after popping " + "§f" + l_Count + "§r totem.", player.getId());
+                    sendMessage("§f" + I18n.t("msg.pop.you_died_singular", "§f" + l_Count + "§r"), player.getId());
                 } else {
-                    sendMessage("§f" + player.getName().getString() + "§r died after popping " + "§f" + l_Count + "§r totem.", player.getId());
+                    sendMessage("§f" + I18n.t("msg.pop.player_died_singular", player.getName().getString(), "§f" + l_Count + "§r"), player.getId());
                 }
             } else {
                 if (player.equals(mc.player)) {
-                    sendMessage("§fYou§r died after popping " + "§f" + l_Count + "§r totems.", player.getId());
+                    sendMessage("§f" + I18n.t("msg.pop.you_died_plural", "§f" + l_Count + "§r"), player.getId());
                 } else {
-                    sendMessage("§f" + player.getName().getString() + "§r died after popping " + "§f" + l_Count + "§r totems.", player.getId());
+                    sendMessage("§f" + I18n.t("msg.pop.player_died_plural", player.getName().getString(), "§f" + l_Count + "§r"), player.getId());
                 }
             }
         } else if (unPop.getValue()) {
             if (player.equals(mc.player)) {
-                sendMessage("§fYou§r died.", player.getId());
+                sendMessage("§f" + I18n.t("msg.pop.you_died"), player.getId());
             } else {
-                sendMessage("§f" + player.getName().getString() + "§r died.", player.getId());
+                sendMessage("§f" + I18n.t("msg.pop.player_died", player.getName().getString()), player.getId());
             }
         }
     }
@@ -58,27 +59,26 @@ public class PopCounter
         }
         if (l_Count == 1) {
             if (player.equals(mc.player)) {
-                sendMessage("§fYou§r popped " + "§f" + l_Count + "§r totem.", player.getId());
+                sendMessage("§f" + I18n.t("msg.pop.you_popped_singular", "§f" + l_Count + "§r"), player.getId());
             } else {
-                sendMessage("§f" + player.getName().getString() + " §rpopped " + "§f" + l_Count + "§r totems.", player.getId());
+                sendMessage("§f" + I18n.t("msg.pop.player_popped", player.getName().getString(), "§f" + l_Count + "§r"), player.getId());
             }
         } else {
             if (player.equals(mc.player)) {
-                sendMessage("§fYou§r popped " + "§f" + l_Count + "§r totem.", player.getId());
+                sendMessage("§f" + I18n.t("msg.pop.you_popped_singular", "§f" + l_Count + "§r"), player.getId());
             } else {
-                sendMessage("§f" + player.getName().getString() + " §rhas popped " + "§f" + l_Count + "§r totems.", player.getId());
+                sendMessage("§f" + I18n.t("msg.pop.player_has_popped", player.getName().getString(), "§f" + l_Count + "§r"), player.getId());
             }
         }
     }
-    
+
     public void sendMessage(String message, int id) {
         if (!nullCheck()) {
             if (ClientSetting.INSTANCE.messageStyle.getValue() == ClientSetting.Style.Moon) {
-                CommandManager.sendChatMessageWidthId("§f[" + "§3" + getName() + "§f] " + message, id);
+                CommandManager.sendChatMessageWidthId("§f[" + "§3" + getDisplayName() + "§f] " + message, id);
                 return;
             }
-            CommandManager.sendChatMessageWidthId(message, id);//"§6[!] " + message, id);
+            CommandManager.sendChatMessageWidthId(message, id);
         }
     }
 }
-

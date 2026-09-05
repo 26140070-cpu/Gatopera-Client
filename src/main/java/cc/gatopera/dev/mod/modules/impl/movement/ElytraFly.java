@@ -168,7 +168,7 @@ public class ElytraFly extends Module {
 
                 if (checkConditions(mc.player)) {
                     if (!sprint.getValue()) {
-                        // Sprinting all the time (when not on ground) makes it rubberband on certain anticheats.
+
                         if (mc.player.isFallFlying()) mc.player.setSprinting(mc.player.isOnGround());
                         else mc.player.setSprinting(true);
                     }

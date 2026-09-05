@@ -1,6 +1,5 @@
 package cc.gatopera.dev.asm.mixins;
 
-
 import cc.gatopera.dev.mod.modules.impl.movement.Velocity;
 import net.minecraft.fluid.FlowableFluid;
 import net.minecraft.util.math.Direction;

@@ -1,5 +1,6 @@
 package cc.gatopera.dev.mod.modules.impl.movement;
 
+import cc.gatopera.dev.api.i18n.I18n;
 import com.mojang.blaze3d.systems.RenderSystem;
 import cc.gatopera.dev.api.events.eventbus.EventHandler;
 import cc.gatopera.dev.api.events.eventbus.EventPriority;
@@ -94,7 +95,7 @@ public class HoleSnap extends Module {
         if (!grim.getValue()) {
             return;
         } else if (MoveFix.INSTANCE.isOff() || !MoveFix.INSTANCE.grim.getValue()) {
-            CommandManager.sendChatMessage("§4HoleSnap require MovementFix.");
+            CommandManager.sendChatMessage("§4" + I18n.t("msg.require_module", getDisplayName(), I18n.module("MoveFix")));
             disable();
             return;
         }
@@ -128,7 +129,7 @@ public class HoleSnap extends Module {
             return;
         }
         if (holePos == null) {
-            //CommandManager.sendChatMessageWidthId("§e[!] §fHoles?", hashCode());
+
             disable();
             return;
         }
@@ -187,7 +188,7 @@ public class HoleSnap extends Module {
             return;
         }
         if (holePos == null) {
-            //CommandManager.sendChatMessageWidthId("§e[!] §fHoles?", hashCode());
+
             disable();
             return;
         }

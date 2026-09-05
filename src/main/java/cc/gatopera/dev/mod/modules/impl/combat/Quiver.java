@@ -44,13 +44,12 @@ public class Quiver extends Module {
         if (!timer.passedMs(delay.getValueInt())) return;
         if (Blink.INSTANCE.isOn() && Blink.INSTANCE.pauseModule.getValue()) return;
 
-        // Find bow in hotbar
         int bowSlot = InventoryUtil.findItem(Items.BOW);
         if (bowSlot == -1) return;
 
         for (PlayerEntity target : CombatUtil.getEnemies(targetRange.getValue())) {
             if (autoShoot.getValue()) {
-                // Switch to bow and shoot
+
                 InventoryUtil.switchToSlot(bowSlot);
                 mc.options.useKey.setPressed(true);
                 timer.reset();

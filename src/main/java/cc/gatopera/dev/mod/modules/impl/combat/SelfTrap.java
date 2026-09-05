@@ -1,5 +1,6 @@
 package cc.gatopera.dev.mod.modules.impl.combat;
 
+import cc.gatopera.dev.api.i18n.I18n;
 import cc.gatopera.dev.Gatopera;
 import cc.gatopera.dev.api.events.eventbus.EventHandler;
 import cc.gatopera.dev.api.events.impl.MoveEvent;
@@ -69,7 +70,6 @@ public class SelfTrap extends Module {
         INSTANCE = this;
     }
 
-
     @Override
     public void onEnable() {
         if (nullCheck()) {
@@ -133,7 +133,7 @@ public class SelfTrap extends Module {
         double distanceToStart = MathHelper.sqrt((float) mc.player.squaredDistanceTo(startX, startY, startZ));
 
         if (getBlock() == -1) {
-            CommandManager.sendChatMessageWidthId("§c§oObsidian" + (enderChest.getValue() ? "/EnderChest" : "") + "?", hashCode());
+            CommandManager.sendChatMessageWidthId("§c§o" + (enderChest.getValue() ? I18n.t("msg.missing_obsidian_echest") : I18n.t("msg.missing_obsidian")), hashCode());
             disable();
             return;
         }

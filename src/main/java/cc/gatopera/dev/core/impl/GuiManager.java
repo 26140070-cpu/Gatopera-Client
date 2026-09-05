@@ -5,6 +5,8 @@ import cc.gatopera.dev.Gatopera;
 import cc.gatopera.dev.api.utils.Wrapper;
 import cc.gatopera.dev.api.utils.math.FadeUtils;
 import cc.gatopera.dev.api.utils.render.Snow;
+import cc.gatopera.dev.api.utils.render.Render2DUtil;
+import cc.gatopera.dev.api.utils.render.TextUtil;
 import cc.gatopera.dev.mod.gui.clickgui.ClickGuiScreen;
 import cc.gatopera.dev.mod.gui.clickgui.components.impl.ModuleComponent;
 import cc.gatopera.dev.mod.gui.clickgui.tabs.ClickGuiTab;
@@ -25,6 +27,7 @@ public class GuiManager implements Wrapper {
 	public static final ClickGuiScreen clickGui = new ClickGuiScreen();
 	public final ArmorHUD armorHud;
 	public static Tab currentGrabbed = null;
+	private Module.Category selectedCategory = Module.Category.Combat;
 	private int lastMouseX = 0;
 	private int lastMouseY = 0;
 	private int mouseX;
@@ -34,9 +37,11 @@ public class GuiManager implements Wrapper {
 
 		armorHud = new ArmorHUD();
 
-		int xOffset = 30;
+		int xOffset = 190;
 		for (Module.Category category : Module.Category.values()) {
-			ClickGuiTab tab = new ClickGuiTab(category, xOffset, 50);
+			ClickGuiTab tab = new ClickGuiTab(category, xOffset, 42);
+			tab.setX(xOffset);
+			tab.setY(42);
 			for (Module module : Gatopera.MODULE.modules) {
 				if (module.getCategory() == category) {
 					ModuleComponent button = new ModuleComponent(tab, module);
@@ -44,25 +49,49 @@ public class GuiManager implements Wrapper {
 				}
 			}
 			tabs.add(tab);
-			xOffset += tab.getWidth() + 5;
 		}
 	}
-	
+
 	public Color getColor() {
 		return ClickGui.INSTANCE.color.getValue();
 	}
-	
+
 	public void onUpdate() {
 		if (isClickGuiOpen()) {
 			for (ClickGuiTab tab : tabs) {
-				tab.update(mouseX, mouseY);
+				if (tab.getCategory() == selectedCategory) {
+					tab.update(mouseX, mouseY);
+				}
 			}
 			armorHud.update(mouseX, mouseY);
 		}
 	}
 
-	
-	
+	public void selectCategory(double mouseX, double mouseY) {
+		int left = 20;
+		int top = 62;
+		for (Module.Category category : Module.Category.values()) {
+			if (mouseX >= left && mouseX <= left + 140 && mouseY >= top && mouseY <= top + 30) {
+				selectedCategory = category;
+				return;
+			}
+			top += 36;
+		}
+	}
+
+	public Module.Category getSelectedCategory() {
+		return selectedCategory;
+	}
+
+	private ClickGuiTab getSelectedTab() {
+		for (ClickGuiTab tab : tabs) {
+			if (tab.getCategory() == selectedCategory) {
+				return tab;
+			}
+		}
+		return null;
+	}
+
 	public void draw(int x, int y, DrawContext drawContext, float tickDelta) {
 		MatrixStack matrixStack = drawContext.getMatrices();
 		boolean mouseClicked = ClickGuiScreen.clicked;
@@ -78,7 +107,29 @@ public class GuiManager implements Wrapper {
 		this.lastMouseY = mouseY;
 		RenderSystem.enableCull();
 		matrixStack.push();
-		//matrixStack.scale((float) ClickGui.size, (float) ClickGui.size, 1);
+
+		int panelX = 12;
+		int panelY = 12;
+		int panelWidth = mc.getWindow().getScaledWidth() - 24;
+		int panelHeight = mc.getWindow().getScaledHeight() - 24;
+		Render2DUtil.drawRound(matrixStack, panelX, panelY, panelWidth, panelHeight, 14,
+				new Color(12, 14, 20, 238));
+		Render2DUtil.drawRound(matrixStack, panelX, panelY, 164, panelHeight, 14,
+				new Color(20, 23, 31, 245));
+		TextUtil.drawString(drawContext, "Gatopera", 28, 28, Color.WHITE);
+		TextUtil.drawString(drawContext, "MODULES", 28, 48, new Color(150, 155, 170));
+
+		int categoryY = 62;
+		for (Module.Category category : Module.Category.values()) {
+			boolean selected = category == selectedCategory;
+			if (selected) {
+				Render2DUtil.drawRound(matrixStack, 20, categoryY, 140, 30, 8, getColor());
+			}
+			TextUtil.drawString(drawContext, category.name(), 32, categoryY + 9,
+					selected ? Color.WHITE : new Color(190, 195, 205));
+			categoryY += 36;
+		}
+
 		armorHud.draw(drawContext, tickDelta, getColor());
 		double quad = ClickGui.fade.ease(FadeUtils.Ease.In2);
 		if (quad < 1) {
@@ -90,8 +141,9 @@ public class GuiManager implements Wrapper {
 				case Scale -> matrixStack.scale((float) quad, (float) quad, 1);
 			}
 		}
-		for (ClickGuiTab tab : tabs) {
-			tab.draw(drawContext, tickDelta, getColor());
+		ClickGuiTab selectedTab = getSelectedTab();
+		if (selectedTab != null) {
+			selectedTab.draw(drawContext, tickDelta, getColor());
 		}
 		matrixStack.pop();
 	}

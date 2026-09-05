@@ -207,7 +207,7 @@ public class KillAura extends Module {
         }
         return !checkFov.getValue();
     }
-    
+
     private Entity getTarget() {
         Entity target = null;
         double distance = range.getValue();

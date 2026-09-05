@@ -54,7 +54,7 @@ public class WebCleaner extends Module {
             BlockPos playerPos = player.getBlockPos();
             for (BlockPos pos : BlockUtil.getSphere((float) range.getValue())) {
                 if (mc.world.getBlockState(pos).getBlock() == Blocks.COBWEB) {
-                    // Break the web
+
                     mc.interactionManager.attackBlock(pos, net.minecraft.util.math.Direction.UP);
                     mc.player.swingHand(net.minecraft.util.Hand.MAIN_HAND);
                     timer.reset();

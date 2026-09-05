@@ -19,7 +19,6 @@ public abstract class MixinConnectScreen {
         Gatopera.EVENT_BUS.post(new ServerConnectBeginEvent(address, info));
     }
 
-
     @Inject(method = "connect(Lnet/minecraft/client/gui/screen/Screen;Lnet/minecraft/client/MinecraftClient;Lnet/minecraft/client/network/ServerAddress;Lnet/minecraft/client/network/ServerInfo;Z)V", at = @At("HEAD"))
     private static void tryConnectEvent(Screen screen, MinecraftClient client, ServerAddress address, ServerInfo info, boolean quickPlay, CallbackInfo ci) {
         Gatopera.EVENT_BUS.post(new ServerConnectBeginEvent(address, info));

@@ -7,7 +7,6 @@ public class TravelEvent extends Event {
 
     private final PlayerEntity entity;
 
-
     public TravelEvent(Stage stage, PlayerEntity entity) {
         super(stage);
         this.entity = entity;

@@ -36,7 +36,7 @@ public class TradeManager extends Manager {
                 return;
             }
             List<String> list = IOUtils.readLines(new FileInputStream(friendFile), StandardCharsets.UTF_8);
-            
+
             for (String s : list) {
                 add(s);
             }
@@ -44,7 +44,7 @@ public class TradeManager extends Manager {
             exception.printStackTrace();
         }
     }
-    
+
     public void save() {
         try {
             File friendFile = getFile("trades.txt");

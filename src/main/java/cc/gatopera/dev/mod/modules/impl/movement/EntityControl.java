@@ -42,7 +42,6 @@ public class EntityControl extends Module {
 
         if (yaw.getValue()) boat.setYaw(mc.player.getYaw());
 
-        // Horizontal movement
         Vec3d vel = MovementUtil.getHorizontalVelocity(speed.getValue());
         double velX = vel.getX();
         double velY;
@@ -53,7 +52,7 @@ public class EntityControl extends Module {
         } else {
             boolean sprint = InputUtil.isKeyPressed(mc.getWindow().getHandle(), InputUtil.fromTranslationKey(mc.options.sprintKey.getBoundKeyTranslationKey()).getCode());
             boolean jump = InputUtil.isKeyPressed(mc.getWindow().getHandle(), InputUtil.fromTranslationKey(mc.options.jumpKey.getBoundKeyTranslationKey()).getCode());
-            // Vertical movement
+
             if (jump) {
                 if (sprint) {
                     velY = -fallSpeed.getValue() / 20;
@@ -67,7 +66,6 @@ public class EntityControl extends Module {
             }
         }
 
-        // Apply velocity
         if (speedBoolean.getValue()) ((IVec3d) boat.getVelocity()).setX(velX);
         if (fly.getValue()) ((IVec3d) boat.getVelocity()).setY(velY);
         if (speedBoolean.getValue()) ((IVec3d) boat.getVelocity()).setZ(velZ);
@@ -78,11 +76,9 @@ public class EntityControl extends Module {
         if (nullCheck()) return;
         Entity boat = mc.player.getVehicle();
         if (boat == null) return;
-        //if (boat.getControllingPassenger() != mc.player) return;
 
         if (yaw.getValue()) boat.setYaw(mc.player.getYaw());
 
-        // Horizontal movement
         Vec3d vel = MovementUtil.getHorizontalVelocity(speed.getValue());
         double velX = vel.getX();
         double velY;
@@ -93,7 +89,7 @@ public class EntityControl extends Module {
         } else {
             boolean sprint = InputUtil.isKeyPressed(mc.getWindow().getHandle(), InputUtil.fromTranslationKey(mc.options.sprintKey.getBoundKeyTranslationKey()).getCode());
             boolean jump = InputUtil.isKeyPressed(mc.getWindow().getHandle(), InputUtil.fromTranslationKey(mc.options.jumpKey.getBoundKeyTranslationKey()).getCode());
-            // Vertical movement
+
             if (jump) {
                 if (sprint) {
                     velY = -fallSpeed.getValue() / 20;
@@ -107,7 +103,6 @@ public class EntityControl extends Module {
             }
         }
 
-        // Apply velocity
         if (speedBoolean.getValue()) ((IVec3d) boat.getVelocity()).setX(velX);
         if (fly.getValue()) ((IVec3d) boat.getVelocity()).setY(velY);
         if (speedBoolean.getValue()) ((IVec3d) boat.getVelocity()).setZ(velZ);

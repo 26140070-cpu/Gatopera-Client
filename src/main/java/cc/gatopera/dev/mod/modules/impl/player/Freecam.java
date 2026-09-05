@@ -62,7 +62,6 @@ public class Freecam extends Module {
         prevFakeZ = fakeZ;
     }
 
-
     @Override
     public void onDisable() {
         mc.chunkCullingEnabled = true;

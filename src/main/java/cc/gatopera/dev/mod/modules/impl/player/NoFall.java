@@ -24,7 +24,6 @@ public class NoFall extends Module {
 		return "SpoofGround";
 	}
 
-
 	@EventHandler
 	public void onPacketSend(PacketEvent.Send event) {
 		if (nullCheck()) {

@@ -35,24 +35,13 @@ public class ServerApply extends Module {
     @EventHandler
     public void onPacketReceive(PacketEvent.Receive event) {
         if (!pack.getValue() && event.getPacket() instanceof ResourcePackSendS2CPacket) {
-            //System.out.println("ResourcePackSendS2CPacket");
+
             send = true;
             event.cancel();
         }
         if (!applyTimer.passed(1000)) return;
         if (nullCheck()) return;
-/*        if (!rotate.getValue() && event.getPacket() instanceof PlayerPositionLookS2CPacket packet) {
-            if (packet.getFlags().contains(PositionFlag.Y_ROT)) {
-                ((IPlayerPositionLookS2CPacket) packet).setYaw(0);
-            } else {
-                ((IPlayerPositionLookS2CPacket) packet).setYaw(mc.player.getYaw());
-            }
-            if (packet.getFlags().contains(PositionFlag.X_ROT)) {
-                ((IPlayerPositionLookS2CPacket) packet).setPitch(0);
-            } else {
-                ((IPlayerPositionLookS2CPacket) packet).setPitch(mc.player.getPitch());
-            }
-        }*/
+
         if (!slot.getValue() && event.getPacket() instanceof UpdateSelectedSlotS2CPacket packet) {
             event.setCancelled(true);
             if (packet.getSlot() != mc.player.getInventory().selectedSlot) {
@@ -64,7 +53,7 @@ public class ServerApply extends Module {
     @Override
     public void onUpdate() {
         if (send && mc.player != null) {
-            //System.out.println("send");
+
             mc.getNetworkHandler().sendPacket(new ResourcePackStatusC2SPacket(mc.player.getUuid(), ResourcePackStatusC2SPacket.Status.ACCEPTED));
             mc.getNetworkHandler().sendPacket(new ResourcePackStatusC2SPacket(mc.player.getUuid(), ResourcePackStatusC2SPacket.Status.DOWNLOADED));
             mc.getNetworkHandler().sendPacket(new ResourcePackStatusC2SPacket(mc.player.getUuid(), ResourcePackStatusC2SPacket.Status.SUCCESSFULLY_LOADED));

@@ -34,8 +34,7 @@ public class BooleanComponent extends Component {
     boolean hover = false;
 
     @Override
-    
-    
+
     public void update(int offset, double mouseX, double mouseY) {
         int parentX = parent.getX();
         int parentY = parent.getY();
@@ -60,8 +59,7 @@ public class BooleanComponent extends Component {
     public double currentWidth = 0;
 
     @Override
-    
-    
+
     public boolean draw(int offset, DrawContext drawContext, float partialTicks, Color color, boolean back) {
         int x = parent.getX();
         int y = parent.getY() + offset - 2;
@@ -73,7 +71,7 @@ public class BooleanComponent extends Component {
         currentWidth = animation.get(setting.getValue() ? (width - 2D) : 0D);
         switch (ClickGui.INSTANCE.uiType.getValue()) {
             case New -> {
-                TextUtil.drawString(drawContext, setting.getName(), x + 4, y + getTextOffsetY(), setting.getValue() ? ClickGui.INSTANCE.enableTextS.getValue() : ClickGui.INSTANCE.disableText.getValue());
+                TextUtil.drawString(drawContext, setting.getDisplayName(), x + 4, y + getTextOffsetY(), setting.getValue() ? ClickGui.INSTANCE.enableTextS.getValue() : ClickGui.INSTANCE.disableText.getValue());
             }
             case Old -> {
                 if (ClickGui.INSTANCE.mainEnd.booleanValue) {
@@ -81,7 +79,7 @@ public class BooleanComponent extends Component {
                 } else {
                     Render2DUtil.drawRect(matrixStack, (float) x + 1, (float) y + 1, (float) currentWidth, (float) defaultHeight - (ClickGui.INSTANCE.maxFill.getValue() ? 0 : 1), hover ? ClickGui.INSTANCE.mainHover.getValue() : color);
                 }
-                TextUtil.drawString(drawContext, setting.getName(), x + 4, y + getTextOffsetY(), new Color(-1).getRGB());
+                TextUtil.drawString(drawContext, setting.getDisplayName(), x + 4, y + getTextOffsetY(), new Color(-1).getRGB());
             }
         }
 

@@ -235,7 +235,6 @@ public class AutoWeb extends Module {
         return false;
     }
 
-
     public boolean placeBlock(BlockPos pos, boolean rotate, int slot) {
         Direction side = getPlaceSide(pos);
         if (side == null) {

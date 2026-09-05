@@ -75,7 +75,7 @@ public class Render3DUtil implements Wrapper {
     public static void drawTextIn3D(String text, Vec3d pos, double offX, double offY, double textOffset, Color color) {
         MatrixStack matrices = new MatrixStack();
         Camera camera = mc.gameRenderer.getCamera();
-        //RenderSystem.enableDepthTest();
+
         RenderSystem.disableCull();
         matrices.multiply(RotationAxis.POSITIVE_X.rotationDegrees(camera.getPitch()));
         matrices.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(camera.getYaw() + 180.0F));
@@ -91,7 +91,7 @@ public class Render3DUtil implements Wrapper {
         FontRenderers.ui.drawCenteredString(matrices, text, textOffset, 0f, color.getRGB());
         immediate.draw();
         RenderSystem.enableCull();
-        //RenderSystem.disableDepthTest();
+
         RenderSystem.disableBlend();
     }
 
@@ -125,7 +125,7 @@ public class Render3DUtil implements Wrapper {
         if (outline) {
             RenderSystem.setShaderColor(color.getRed() / 255f, color.getGreen() / 255f, color.getBlue() / 255f, color.getAlpha() / 255f);
             RenderSystem.setShader(GameRenderer::getPositionProgram);
-            //GL11.glLineWidth(lineWidth);
+
             RenderSystem.lineWidth(lineWidth);
             bufferBuilder.begin(VertexFormat.DrawMode.DEBUG_LINES, VertexFormats.POSITION);
 
@@ -217,7 +217,6 @@ public class Render3DUtil implements Wrapper {
 
         RenderSystem.enableBlend();
         RenderSystem.disableDepthTest();
-        //RenderSystem.defaultBlendFunc();
 
         RenderSystem.setShader(GameRenderer::getPositionColorProgram);
         buffer.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_COLOR);

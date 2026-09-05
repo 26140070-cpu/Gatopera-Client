@@ -40,7 +40,6 @@ public class BindsCommand extends Command {
 		}
 	}
 
-
 	@Override
 	public String[] getAutocorrect(int count, List<String> seperated) {
 		return null;

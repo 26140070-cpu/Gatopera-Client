@@ -4,9 +4,7 @@ import cc.gatopera.dev.mod.modules.Module;
 import cc.gatopera.dev.mod.modules.settings.impl.BooleanSetting;
 import cc.gatopera.dev.mod.modules.settings.impl.SliderSetting;
 
-
 public class YawLock extends Module {
-
 
     public static YawLock INSTANCE;
     private final BooleanSetting yawLock =

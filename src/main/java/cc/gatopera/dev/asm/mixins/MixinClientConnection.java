@@ -1,6 +1,7 @@
 package cc.gatopera.dev.asm.mixins;
 
 import cc.gatopera.dev.Gatopera;
+import cc.gatopera.dev.api.i18n.I18n;
 import cc.gatopera.dev.mod.modules.impl.client.ClientSetting;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.timeout.TimeoutException;
@@ -46,7 +47,7 @@ public class MixinClientConnection {
 	@Inject(method = "exceptionCaught", at = @At("HEAD"), cancellable = true)
 	private void exceptionCaught(ChannelHandlerContext context, Throwable throwable, CallbackInfo ci) {
 		if (!(throwable instanceof TimeoutException) && !(throwable instanceof PacketEncoderException) && ClientSetting.INSTANCE.caughtException.getValue()) {
-			if (ClientSetting.INSTANCE.log.getValue()) CommandManager.sendChatMessage("§4Caught exception: §7" + throwable.getMessage());
+			if (ClientSetting.INSTANCE.log.getValue()) CommandManager.sendChatMessage("§4" + I18n.t("msg.caught_exception", "§7" + throwable.getMessage()));
 			ci.cancel();
 		}
 	}

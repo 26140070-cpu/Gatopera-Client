@@ -120,10 +120,8 @@ public class Trajectories extends Module {
         motionX *= pow;
         motionY *= pow;
         motionZ *= pow;
-        //motionX += mc.player.getVelocity().getX();
-        motionY += mc.player.getVelocity().getY();
-        //motionZ += mc.player.getVelocity().getZ();
 
+        motionY += mc.player.getVelocity().getY();
 
         Vec3d lastPos;
         for (int i = 0; i < 300; i++) {
@@ -144,7 +142,6 @@ public class Trajectories extends Module {
             if (item instanceof BowItem) motionY -= 0.05000000074505806;
             else if (mc.player.getMainHandStack().getItem() instanceof CrossbowItem) motionY -= 0.05000000074505806;
             else motionY -= 0.03f;
-
 
             Vec3d pos = new Vec3d(x, y, z);
 

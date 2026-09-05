@@ -26,7 +26,7 @@ public class AntiPiston extends Module {
     @EventHandler
     public void onPacketReceive(PacketEvent.Receive event) {
         if (event.getPacket() instanceof BlockUpdateS2CPacket packet) {
-            // Detect piston extension and break crystals if needed
+
         }
     }
 }

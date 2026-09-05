@@ -86,7 +86,6 @@ public class FadeUtils {
         }
     }
 
-
     public double easeInQuintQuad() {
         return this.getFadeOne() * this.getFadeOne() * this.getFadeOne() * this.getFadeOne();
     }

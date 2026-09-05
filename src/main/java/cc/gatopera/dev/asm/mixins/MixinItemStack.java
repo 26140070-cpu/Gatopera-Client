@@ -20,7 +20,6 @@ public abstract class MixinItemStack {
     @Shadow
     public abstract NbtCompound getOrCreateNbt();
 
-
     @Inject(method = "<init>(Lnet/minecraft/item/ItemConvertible;I)V", at = @At(
             value = "RETURN"))
     private void hookInitItem(ItemConvertible item, int count, CallbackInfo ci) {

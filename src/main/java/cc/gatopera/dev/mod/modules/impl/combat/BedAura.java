@@ -36,11 +36,10 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.UUID;
 
-
 public class BedAura extends Module {
 	public static BedAura INSTANCE;
 	public final EnumSetting<Page> page = add(new EnumSetting<>("Page", Page.General));
-	//General
+
 	private final BooleanSetting legacy = add(new BooleanSetting("Legacy", false, () -> page.getValue() == Page.General));
 	private final BooleanSetting spam = add(new BooleanSetting("Spam", true, () -> page.getValue() == Page.General));
 	private final BooleanSetting onlyGround = add(new BooleanSetting("OnlyGround", true, () -> page.getValue() == Page.General));
@@ -59,7 +58,7 @@ public class BedAura extends Module {
 			add(new SliderSetting("CalcDelay", 200, 0, 1000, () -> page.getValue() == Page.General));
 	private final BooleanSetting inventorySwap =
 			add(new BooleanSetting("InventorySwap", true, () -> page.getValue() == Page.General));
-	//Rotate
+
 	private final BooleanSetting rotate =
 			add(new BooleanSetting("Rotate", true, () -> page.getValue() == Page.Rotate).setParent());
 	private final BooleanSetting yawStep =
@@ -71,7 +70,6 @@ public class BedAura extends Module {
 	private final SliderSetting fov =
 			add(new SliderSetting("Fov", 5f, 0f, 30f, () -> rotate.isOpen() && yawStep.getValue() && checkFov.getValue() && page.getValue() == Page.Rotate));
 
-	//Calc
 	private final BooleanSetting place =
 			add(new BooleanSetting("Place", true, () -> page.getValue() == Page.Calc));
 	private final SliderSetting placeDelay =
@@ -90,7 +88,7 @@ public class BedAura extends Module {
 			add(new BooleanSetting("Smart", true, () -> page.getValue() == Page.Calc));
 	private final BooleanSetting breakOnlyHasCrystal =
 			add(new BooleanSetting("OnlyHasBed", false, () -> page.getValue() == Page.Calc && Break.getValue()));
-	//Render
+
 	private final BooleanSetting render =
 			add(new BooleanSetting("Render", true, () -> page.getValue() == Page.Render));
 	private final BooleanSetting shrink =
@@ -113,7 +111,7 @@ public class BedAura extends Module {
 			add(new SliderSetting("StartFadeTime", 0.3d, 0d, 2d, 0.01, () -> page.getValue() == Page.Render && render.getValue()));
 	private final SliderSetting fadeTime =
 			add(new SliderSetting("FadeTime", 0.3d, 0d, 2d, 0.01, () -> page.getValue() == Page.Render && render.getValue()));
-	//Predict
+
 	private final SliderSetting predictTicks =
 			add(new SliderSetting("PredictTicks", 4, 0, 10, () -> page.getValue() == Page.Predict));
 	private final BooleanSetting terrainIgnore =
@@ -335,7 +333,6 @@ public class BedAura extends Module {
 		return 0f;
 	}
 
-	
 	@Override
 	public void onRender3D(MatrixStack matrixStack) {
 		update();
@@ -397,7 +394,7 @@ public class BedAura extends Module {
 	private void doSwap(int slot) {
 		if (inventorySwap.getValue()) {
 			InventoryUtil.inventorySwap(slot, mc.player.getInventory().selectedSlot);
-			//mc.interactionManager.clickSlot(mc.player.currentScreenHandler.syncId, slot, mc.player.getInventory().selectedSlot, SlotActionType.SWAP, mc.player);
+
 		} else {
 			InventoryUtil.switchToSlot(slot);
 		}
@@ -419,7 +416,7 @@ public class BedAura extends Module {
 		CombatUtil.terrainIgnore = false;
 		return damage;
 	}
-	
+
 	private boolean canPlaceBed(BlockPos pos) {
 		if (BlockUtil.canReplace(pos) && (!checkMine.getValue() || !Gatopera.BREAK.isMining(pos)) && (!legacy.getValue() || BlockUtil.canClick(pos.down()))) {
 			for (Direction i : Direction.values()) {

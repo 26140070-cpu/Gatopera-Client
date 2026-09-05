@@ -8,9 +8,6 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.function.Function;
 
-/**
- * Default implementation of {@link IEventBus}.
- */
 public class EventBus implements IEventBus {
     private static class LambdaFactoryInfo {
         public final LambdaListener.Factory factory;
@@ -139,7 +136,6 @@ public class EventBus implements IEventBus {
 
         if (object == null) return staticListenerCache.computeIfAbsent(klass, func);
 
-        // We need to check if the instances are the same and avoid using .equals() and .hashCode()
         for (Object key : listenerCache.keySet()) {
             if (key == object) return listenerCache.get(object);
         }

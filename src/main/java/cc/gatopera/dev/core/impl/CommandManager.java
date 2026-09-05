@@ -1,6 +1,7 @@
 package cc.gatopera.dev.core.impl;
 
 import cc.gatopera.dev.Gatopera;
+import cc.gatopera.dev.api.i18n.I18n;
 import cc.gatopera.dev.api.interfaces.IChatHudHook;
 import cc.gatopera.dev.api.utils.Wrapper;
 import cc.gatopera.dev.mod.commands.Command;
@@ -52,21 +53,19 @@ public class CommandManager implements Wrapper {
 
     public void command(String[] commandIn) {
 
-        // Get the command from the user's message. (Index 0 is Username)
         Command command = commands.get(commandIn[0].substring(Gatopera.PREFIX.length()).toLowerCase());
 
-        // If the command does not exist, throw an error.
         if (command == null)
-            sendChatMessage("§cInvalid Command");
+            sendChatMessage("§c" + I18n.t("msg.invalid_command"));
         else {
-            // Otherwise, create a new parameter list.
+
             String[] parameterList = new String[commandIn.length - 1];
             System.arraycopy(commandIn, 1, parameterList, 0, commandIn.length - 1);
             if (parameterList.length == 1 && parameterList[0].equals("help")) {
                 command.sendUsage();
                 return;
             }
-            // Runs the command.
+
             command.runCommand(parameterList);
         }
     }

@@ -1,5 +1,6 @@
 package cc.gatopera.dev.mod.gui.clickgui.components.impl;
 
+import cc.gatopera.dev.api.i18n.I18n;
 import cc.gatopera.dev.mod.modules.impl.client.ClickGui;
 import cc.gatopera.dev.mod.modules.settings.impl.BindSetting;
 import cc.gatopera.dev.core.impl.GuiManager;
@@ -25,8 +26,7 @@ public class BindComponent extends Component {
 
 	boolean hover = false;
 
-	
-	
+
 	public void update(int offset, double mouseX, double mouseY) {
 		if (GuiManager.currentGrabbed == null && isVisible()) {
 			int parentX = parent.getX();
@@ -52,7 +52,6 @@ public class BindComponent extends Component {
 	}
 
 	@Override
-	
 
 	public boolean draw(int offset, DrawContext drawContext, float partialTicks, Color color, boolean back) {
 		if (back) {
@@ -65,12 +64,12 @@ public class BindComponent extends Component {
 		MatrixStack matrixStack = drawContext.getMatrices();
 		String text;
 		if (hover && bind.getName().equals("Key") && InputUtil.isKeyPressed(mc.getWindow().getHandle(), GLFW.GLFW_KEY_LEFT_SHIFT)) {
-			text = "Hold " + (bind.isHoldEnable() ? "§aOn" : "§cOff");
+			text = I18n.t("bind.hold") + " " + (bind.isHoldEnable() ? "§a" + I18n.t("state.on") : "§c" + I18n.t("state.off"));
 		} else {
 			if (bind.isListening()) {
-				text = bind.getName() + ": " + "Press Key..";
+				text = bind.getDisplayName() + ": " + I18n.t("bind.press_key");
 			} else {
-				text = bind.getName() + ": " + bind.getBind();
+				text = bind.getDisplayName() + ": " + bind.getBind();
 			}
 		}
 		if (hover) Render2DUtil.drawRect(matrixStack, (float) parentX + 1, (float) y + 1, (float) width - 3, (float) defaultHeight - (ClickGui.INSTANCE.maxFill.getValue() ? 0 : 1), ClickGui.INSTANCE.settingHover.getValue());

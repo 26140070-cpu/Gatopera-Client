@@ -29,7 +29,7 @@ public class StringSetting extends Setting {
     public void loadSetting() {
         setValue(Gatopera.CONFIG.getString(getLine(), defaultValue));
     }
-    
+
     public String getValue() {
         return this.text;
     }

@@ -39,7 +39,6 @@ public abstract class MixinCamera {
     @Shadow
     private boolean thirdPerson;
 
-
     @Inject(method = "update", at = @At("TAIL"))
     private void updateHook(BlockView area, Entity focusedEntity, boolean thirdPerson, boolean inverseView, float tickDelta, CallbackInfo ci) {
         if (Freecam.INSTANCE.isOn()) {

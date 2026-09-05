@@ -6,16 +6,13 @@ import cc.gatopera.dev.mod.modules.Module;
 import cc.gatopera.dev.mod.modules.settings.impl.SliderSetting;
 import net.minecraft.item.Items;
 
-
 public class AutoEat extends Module {
-
 
     public static AutoEat INSTANCE;
     private final SliderSetting hunger =
             add(new SliderSetting("Hunger", 10, 0, 19, 1));
     private final SliderSetting health =
             add(new SliderSetting("Health", 20, 0, 35.9, .1));
-
 
     public AutoEat() {
         super("AutoEat", Category.Misc);

@@ -12,7 +12,6 @@ import net.minecraft.network.packet.s2c.play.WorldTimeUpdateS2CPacket;
 
 import java.awt.*;
 
-
 public class Ambience extends Module {
 
     public static Ambience INSTANCE;

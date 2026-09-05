@@ -61,7 +61,7 @@ public class PlaceRender extends Module {
 			this.timer = new Timer();
 			this.isAir = true;
 		}
-		
+
 		public boolean draw(MatrixStack matrixStack) {
 			if (isAir) {
 				if (!mc.world.isAir(pos)) {

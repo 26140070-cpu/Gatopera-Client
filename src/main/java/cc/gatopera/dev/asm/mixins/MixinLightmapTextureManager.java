@@ -27,7 +27,6 @@ import java.awt.*;
 @Mixin(LightmapTextureManager.class)
 public class MixinLightmapTextureManager {
 
-
 	@Final
 	@Shadow
 	private  NativeImageBackedTexture texture;
@@ -135,7 +134,7 @@ public class MixinLightmapTextureManager {
 	private static void clamp(Vector3f vec) {
 		vec.set(MathHelper.clamp(vec.x, 0.0F, 1.0F), MathHelper.clamp(vec.y, 0.0F, 1.0F), MathHelper.clamp(vec.z, 0.0F, 1.0F));
 	}
-	
+
 	@Inject(method = "getDarknessFactor(F)F", at = @At("HEAD"), cancellable = true)
 	private void getDarknessFactor(float tickDelta, CallbackInfoReturnable<Float> info) {
 		if (NoRender.INSTANCE.isOn() && NoRender.INSTANCE.darkness.getValue()) info.setReturnValue(0.0f);

@@ -75,7 +75,7 @@ public class MathUtil implements Wrapper {
             return direction3;
         }
     }
-    
+
     public static Direction getDirectionFromEntityLiving(BlockPos pos, LivingEntity entity) {
         if (Math.abs(entity.getX() - ((double) pos.getX() + 0.5)) < 2.0 && Math.abs(entity.getZ() - ((double)pos.getZ() + 0.5)) < 2.0) {
             double d0 = entity.getY() + (double)entity.getEyeHeight(entity.getPose());

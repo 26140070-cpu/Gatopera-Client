@@ -25,7 +25,6 @@ import org.spongepowered.asm.mixin.injection.invoke.arg.Args;
 @Mixin(InGameHud.class)
 public class MixinInGameHud {
 
-
 	@Shadow @Final private MinecraftClient client;
 
 	@Inject(method = "renderPortalOverlay", at = @At("HEAD"), cancellable = true)

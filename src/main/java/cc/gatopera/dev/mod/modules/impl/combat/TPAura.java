@@ -50,7 +50,7 @@ public class TPAura extends Module {
             double distance = playerPos.distanceTo(targetPos);
 
             if (distance > tpRange.getValue()) {
-                // Teleport closer to target
+
                 Vec3d tpPos = playerPos.lerp(targetPos, 0.9);
                 mc.player.setPosition(tpPos.x, tpPos.y, tpPos.z);
                 timer.reset();

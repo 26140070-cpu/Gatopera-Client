@@ -29,14 +29,14 @@ public class BooleanSetting extends Setting {
 	public final boolean getValue() {
 		return this.value;
 	}
-	
+
 	public final void setValue(boolean value) {
 		if (injectTask && value != this.value) {
 			task.run();
 		}
 		this.value = value;
 	}
-	
+
 	public final void toggleValue() {
 		setValue(!value);
 	}

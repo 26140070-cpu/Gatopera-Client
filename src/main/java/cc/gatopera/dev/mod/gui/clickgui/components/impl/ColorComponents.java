@@ -84,8 +84,7 @@ public class ColorComponents extends Component {
     }
 
     @Override
-    
-    
+
     public void update(int offset, double mouseX, double mouseY) {
         int x = parent.getX();
         int y = (parent.getY() + offset) - 2;
@@ -197,8 +196,7 @@ public class ColorComponents extends Component {
     public double currentWidth = 0;
 
     @Override
-    
-    
+
     public boolean draw(int offset, DrawContext drawContext, float partialTicks, Color color, boolean back) {
         if (popped) {
             pickerHeight = animation3.get(45);
@@ -225,17 +223,17 @@ public class ColorComponents extends Component {
                         Render2DUtil.drawRect(matrixStack, (float) x + 1, (float) y + 1, (float) currentWidth, (float) defaultHeight - (ClickGui.INSTANCE.maxFill.getValue() ? 0 : 1), hover ? ClickGui.INSTANCE.mainHover.getValue() : color);
                     }
                     if (unShift) {
-                        TextUtil.drawString(drawContext, colorSetting.getName(), x + 4, y + getTextOffsetY(), -1);
+                        TextUtil.drawString(drawContext, colorSetting.getDisplayName(), x + 4, y + getTextOffsetY(), -1);
                     }
                 }
                 case New -> {
                     if (unShift) {
-                        TextUtil.drawString(drawContext, colorSetting.getName(), x + 4, y + getTextOffsetY(), colorSetting.booleanValue ? ClickGui.INSTANCE.enableTextS.getValue() : ClickGui.INSTANCE.disableText.getValue());
+                        TextUtil.drawString(drawContext, colorSetting.getDisplayName(), x + 4, y + getTextOffsetY(), colorSetting.booleanValue ? ClickGui.INSTANCE.enableTextS.getValue() : ClickGui.INSTANCE.disableText.getValue());
                     }
                 }
             }
         } else if (unShift) {
-            TextUtil.drawString(drawContext, colorSetting.getName(), x + 4, y + getTextOffsetY(), -1);
+            TextUtil.drawString(drawContext, colorSetting.getDisplayName(), x + 4, y + getTextOffsetY(), -1);
         }
         if (!unShift) {
             TextUtil.drawString(drawContext, "§aL-Copy §cR-Paste", x + 4, y + getTextOffsetY(), -1);

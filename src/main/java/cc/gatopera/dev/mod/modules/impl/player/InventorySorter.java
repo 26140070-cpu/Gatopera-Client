@@ -24,7 +24,6 @@ public class InventorySorter extends Module {
 
     private final Timer timer = new Timer();
 
-
     @Override
     public void onUpdate() {
         if (!timer.passedS(delay.getValue())) return;
@@ -64,9 +63,9 @@ public class InventorySorter extends Module {
                         ItemStack stack = mc.player.getInventory().getStack(slot2);
                         if (stack.isEmpty()) continue;
                         int itemID = Item.getRawId(stack.getItem());
-//                        System.out.println("searchSlot:" + slot2 + " id:" + itemID);
+
                         if (itemID == minId) {
-//                            System.out.println("targetSlot:" + slot2);
+
                             mc.interactionManager.clickSlot(mc.player.playerScreenHandler.syncId, slot1, 0, SlotActionType.PICKUP, mc.player);
                             mc.interactionManager.clickSlot(mc.player.playerScreenHandler.syncId, slot2, 0, SlotActionType.PICKUP, mc.player);
                             mc.interactionManager.clickSlot(mc.player.playerScreenHandler.syncId, slot1, 0, SlotActionType.PICKUP, mc.player);
@@ -89,7 +88,7 @@ public class InventorySorter extends Module {
                 id = itemID;
             }
         }
-//        System.out.println("inputSlot:" + slot + " currentId:" + currentId + " minId:" + id);
+
         return id;
     }
     private boolean canMerge(ItemStack source, ItemStack stack) {

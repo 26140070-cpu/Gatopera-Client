@@ -49,6 +49,6 @@ public class HoleKick extends Module {
     }
 
     private void kickFromHole(PlayerEntity target) {
-        // Try to place obsidian above the target to force them out
+
     }
 }

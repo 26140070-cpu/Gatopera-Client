@@ -48,16 +48,13 @@ public abstract class MixinChatInputSuggestor {
 
 			int x = textField.getX() - 3;
 			int y = textField.getY() - 3;
-			//Up
+
 			Render2DUtil.drawRect(context.getMatrices(), x, y, textField.getWidth() + 1, 1, ClientSetting.INSTANCE.color.getValue().getRGB());
 
-			//Down
 			Render2DUtil.drawRect(context.getMatrices(), x, y + textField.getHeight() + 1, textField.getWidth() + 1, 1, ClientSetting.INSTANCE.color.getValue().getRGB());
 
-			//Left
 			Render2DUtil.drawRect(context.getMatrices(), x, y, 1, textField.getHeight() + 1, ClientSetting.INSTANCE.color.getValue().getRGB());
 
-			//Right
 			Render2DUtil.drawRect(context.getMatrices(), x + textField.getWidth() + 1, y, 1, textField.getHeight() + 2, ClientSetting.INSTANCE.color.getValue().getRGB());
 		}
 	}

@@ -1,6 +1,4 @@
-/**
- * A class to represent a Command
- */
+
 package cc.gatopera.dev.mod.commands;
 
 import cc.gatopera.dev.core.impl.CommandManager;
@@ -12,7 +10,7 @@ import java.util.Objects;
 public abstract class Command implements Wrapper {
 	protected final String name;
 	protected final String syntax;
-	
+
 	public Command(String name, String syntax) {
 		this.name = Objects.requireNonNull(name);
 		this.syntax = Objects.requireNonNull(syntax);

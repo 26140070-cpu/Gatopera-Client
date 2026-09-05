@@ -1,6 +1,5 @@
 package cc.gatopera.dev.asm.mixins;
 
-
 import cc.gatopera.dev.mod.modules.impl.player.InteractTweaks;
 import cc.gatopera.dev.api.utils.combat.CombatUtil;
 import net.minecraft.block.BlockState;

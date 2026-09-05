@@ -23,7 +23,7 @@ public class MovementUtil implements Wrapper {
         double defaultSpeed = 0.0;
 
         if (mc.player.hasStatusEffect(StatusEffects.JUMP_BOOST)) {
-            //noinspection ConstantConditions
+
             int amplifier = mc.player.getActiveStatusEffects().get(StatusEffects.JUMP_BOOST).getAmplifier();
             defaultSpeed += (amplifier + 1) * 0.1;
         }

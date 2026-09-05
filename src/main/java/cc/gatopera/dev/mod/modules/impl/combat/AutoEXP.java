@@ -21,9 +21,7 @@ import net.minecraft.util.collection.DefaultedList;
 
 import java.util.Map;
 
-
 public class AutoEXP extends Module {
-
 
     public static AutoEXP INSTANCE;
     private final SliderSetting delay =
@@ -112,7 +110,7 @@ public class AutoEXP extends Module {
 
     public boolean checkThrow() {
         if (isOff()) return false;
-/*        if (mc.currentScreen instanceof ChatScreen) return false;*/
+
         if (mc.currentScreen != null) return false;
         if (usingPause.getValue() && mc.player.isUsingItem()) {
             return false;

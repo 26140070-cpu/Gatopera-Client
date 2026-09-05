@@ -4,7 +4,6 @@ import cc.gatopera.dev.Gatopera;
 import cc.gatopera.dev.api.i18n.I18n;
 import cc.gatopera.dev.api.i18n.Language;
 import cc.gatopera.dev.mod.gui.misc.DialogScreen;
-import cc.gatopera.dev.mod.modules.impl.client.ClientSetting;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.TitleScreen;
 import net.minecraft.client.gui.tooltip.Tooltip;
@@ -67,32 +66,12 @@ public abstract class MixinTitleScreen extends Screen {
                                 "dialog.language.no"
                         ),
                         () -> {
-                            I18n.setLanguage(
-                                    Language.EN_US
-                            );
-
-                            if (ClientSetting.INSTANCE != null) {
-                                ClientSetting.INSTANCE.language
-                                        .setEnumValue("EN_US");
-                            }
-
-                            client.setScreen(
-                                    buildWelcome()
-                            );
+                            I18n.setLanguage(Language.EN_US);
+                            client.setScreen(buildWelcome());
                         },
                         () -> {
-                            I18n.setLanguage(
-                                    Language.ES_MX
-                            );
-
-                            if (ClientSetting.INSTANCE != null) {
-                                ClientSetting.INSTANCE.language
-                                        .setEnumValue("ES_MX");
-                            }
-
-                            client.setScreen(
-                                    buildWelcome()
-                            );
+                            I18n.setLanguage(Language.ES_MX);
+                            client.setScreen(buildWelcome());
                         }
                 )
         );

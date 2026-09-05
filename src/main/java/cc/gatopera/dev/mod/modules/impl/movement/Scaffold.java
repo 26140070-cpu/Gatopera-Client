@@ -110,7 +110,7 @@ public class Scaffold extends Module {
             }
         }
     }
-    
+
     private final Timer towerTimer = new Timer();
 
     @Override

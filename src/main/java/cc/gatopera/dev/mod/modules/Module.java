@@ -1,6 +1,7 @@
 package cc.gatopera.dev.mod.modules;
 
 import cc.gatopera.dev.Gatopera;
+import cc.gatopera.dev.api.i18n.I18n;
 import cc.gatopera.dev.core.impl.CommandManager;
 import cc.gatopera.dev.core.impl.ModuleManager;
 import cc.gatopera.dev.mod.Mod;
@@ -60,9 +61,8 @@ public abstract class Module extends Mod {
 	}
 
 	public String getDisplayName() {
-		return getName();
+		return I18n.module(getName());
 	}
-
 
 	private final List<Setting> settings = new ArrayList<>();
 
@@ -101,16 +101,17 @@ public abstract class Module extends Mod {
 		if (this.state) return;
 		if (!nullCheck() && drawnSetting.getValue() && ClientSetting.INSTANCE.toggle.getValue()) {
 			int id = ClientSetting.INSTANCE.onlyOne.getValue() ? -1 : hashCode();
+			String name = getDisplayName();
 			switch (ClientSetting.INSTANCE.messageStyle.getValue()) {
-				case Mio -> CommandManager.sendChatMessageWidthId("§2[+] §f" + getDisplayName(), id);
-				case Debug -> CommandManager.sendChatMessageWidthId(getCategory().name().toLowerCase() + "." + getDisplayName().toLowerCase() + ".§aenable", id);
-				case Lowercase -> CommandManager.sendChatMessageWidthId(getDisplayName().toLowerCase() + " §aenabled", id);
-				case Melon -> CommandManager.sendChatMessageWidthId("§b" + getDisplayName() + " §aEnabled.", id);
-				case Normal -> CommandManager.sendChatMessageWidthId("§f" + getDisplayName() + " §aEnabled", id);
-				case Future -> CommandManager.sendChatMessageWidthId("§7" + getDisplayName() + " toggled §aon", id);
-				case Chinese -> CommandManager.sendChatMessageWidthId(getDisplayName() + " §a开启", id);
-				case Moon -> CommandManager.sendChatMessageWidthIdNoSync("§f[§b" + ClientSetting.INSTANCE.hackName.getValue() + "§f] [" + "§3" + getDisplayName() + "§f]" + " §7toggled §aon", id);
-				case Earth -> CommandManager.sendChatMessageWidthIdNoSync("§l" + getDisplayName() + " §aenabled.", id);
+				case Mio -> CommandManager.sendChatMessageWidthId("§2[+] §f" + name, id);
+				case Debug -> CommandManager.sendChatMessageWidthId(getCategory().name().toLowerCase() + "." + getName().toLowerCase() + ".§aenable", id);
+				case Lowercase -> CommandManager.sendChatMessageWidthId(I18n.t("msg.enabled", name.toLowerCase()), id);
+				case Melon -> CommandManager.sendChatMessageWidthId("§b" + name + " §a" + I18n.t("state.on") + ".", id);
+				case Normal -> CommandManager.sendChatMessageWidthId("§f" + name + " §a" + I18n.t("state.on"), id);
+				case Future -> CommandManager.sendChatMessageWidthId("§7" + I18n.t("msg.toggled_on", name), id);
+				case Chinese -> CommandManager.sendChatMessageWidthId(name + " §a开启", id);
+				case Moon -> CommandManager.sendChatMessageWidthIdNoSync("§f[§b" + ClientSetting.INSTANCE.hackName.getValue() + "§f] [§3" + name + "§f] §7" + I18n.t("state.on").toLowerCase(), id);
+				case Earth -> CommandManager.sendChatMessageWidthIdNoSync("§l" + I18n.t("msg.enabled", name) + ".", id);
 			}
 		}
 		this.state = true;
@@ -127,16 +128,17 @@ public abstract class Module extends Mod {
 		if (!this.state) return;
 		if (!nullCheck() && drawnSetting.getValue() && ClientSetting.INSTANCE.toggle.getValue()) {
 			int id = ClientSetting.INSTANCE.onlyOne.getValue() ? -1 : hashCode();
+			String name = getDisplayName();
 			switch (ClientSetting.INSTANCE.messageStyle.getValue()) {
-				case Mio -> CommandManager.sendChatMessageWidthId("§4[-] §f" + getDisplayName(), id);
-				case Debug -> CommandManager.sendChatMessageWidthId(getCategory().name().toLowerCase() + "." + getDisplayName().toLowerCase() + ".§cdisable", id);
-				case Lowercase -> CommandManager.sendChatMessageWidthId(getDisplayName().toLowerCase() + " §cdisabled", id);
-				case Normal -> CommandManager.sendChatMessageWidthId("§f" + getDisplayName() + " §cDisabled", id);
-				case Melon -> CommandManager.sendChatMessageWidthId("§b" + getDisplayName() + " §cDisabled.", id);
-				case Future -> CommandManager.sendChatMessageWidthId("§7" + getDisplayName() + " toggled §coff", id);
-				case Earth -> CommandManager.sendChatMessageWidthIdNoSync("§l" + getDisplayName() + " §cdisabled.", id);
-				case Chinese -> CommandManager.sendChatMessageWidthId(getDisplayName().toLowerCase() + " §c关闭", id);
-				case Moon -> CommandManager.sendChatMessageWidthIdNoSync("§f[§b" + ClientSetting.INSTANCE.hackName.getValue() + "§f] [" + "§3" + getDisplayName() + "§f]" + " §7toggled §coff", id);
+				case Mio -> CommandManager.sendChatMessageWidthId("§4[-] §f" + name, id);
+				case Debug -> CommandManager.sendChatMessageWidthId(getCategory().name().toLowerCase() + "." + getName().toLowerCase() + ".§cdisable", id);
+				case Lowercase -> CommandManager.sendChatMessageWidthId(I18n.t("msg.disabled", name.toLowerCase()), id);
+				case Normal -> CommandManager.sendChatMessageWidthId("§f" + name + " §c" + I18n.t("state.off"), id);
+				case Melon -> CommandManager.sendChatMessageWidthId("§b" + name + " §c" + I18n.t("state.off") + ".", id);
+				case Future -> CommandManager.sendChatMessageWidthId("§7" + I18n.t("msg.toggled_off", name), id);
+				case Earth -> CommandManager.sendChatMessageWidthIdNoSync("§l" + I18n.t("msg.disabled", name) + ".", id);
+				case Chinese -> CommandManager.sendChatMessageWidthId(name.toLowerCase() + " §c关闭", id);
+				case Moon -> CommandManager.sendChatMessageWidthIdNoSync("§f[§b" + ClientSetting.INSTANCE.hackName.getValue() + "§f] [§3" + name + "§f] §7" + I18n.t("state.off").toLowerCase(), id);
 			}
 		}
 		this.state = false;
@@ -162,7 +164,7 @@ public abstract class Module extends Mod {
 		try {
 			key = InputUtil.fromTranslationKey("key.keyboard." + rkey.toLowerCase()).getCode();
 		} catch (NumberFormatException e) {
-			if (!nullCheck()) CommandManager.sendChatMessage("§cBad key!");
+			if (!nullCheck()) CommandManager.sendChatMessage("§c" + I18n.t("msg.bad_key"));
 			return false;
 		}
 		if (rkey.equalsIgnoreCase("none")) {

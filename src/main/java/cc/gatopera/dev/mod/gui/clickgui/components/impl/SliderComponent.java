@@ -39,7 +39,7 @@ public class SliderComponent extends Component {
 	private boolean firstUpdate = true;
 
 	@Override
-	
+
 	public void update(int offset, double mouseX, double mouseY) {
 		if (firstUpdate || setting.update) {
 			this.currentSliderPosition = (float) ((setting.getValue() - setting.getMinimum()) / setting.getRange());
@@ -85,7 +85,7 @@ public class SliderComponent extends Component {
 	boolean b;
 
 	@Override
-	
+
 	public boolean draw(int offset, DrawContext drawContext, float partialTicks, Color color, boolean back) {
 		if (back) {
 			setting.setListening(false);
@@ -118,7 +118,7 @@ public class SliderComponent extends Component {
 				value = String.valueOf(this.setting.getValueFloat());
 			}
 			value = value + setting.getSuffix();
-			TextUtil.drawString(drawContext, setting.getName(), (float) (parentX + 4),
+			TextUtil.drawString(drawContext, setting.getDisplayName(), (float) (parentX + 4),
 					(float) (parentY + getTextOffsetY() + offset - 2), 0xFFFFFF);
 			TextUtil.drawString(drawContext, value, parentX + parentWidth - TextUtil.getWidth(value) - 5,
 					(float) (parentY + getTextOffsetY() + offset - 2), 0xFFFFFF);

@@ -24,7 +24,6 @@ public class PingCommand extends Command {
 		Gatopera.EVENT_BUS.subscribe(this);
 	}
 
-
 	@Override
 	public String[] getAutocorrect(int count, List<String> seperated) {
 		return null;

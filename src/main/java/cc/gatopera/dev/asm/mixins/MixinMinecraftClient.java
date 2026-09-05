@@ -1,6 +1,7 @@
 package cc.gatopera.dev.asm.mixins;
 
 import cc.gatopera.dev.Gatopera;
+import cc.gatopera.dev.api.i18n.I18n;
 import cc.gatopera.dev.api.events.Event;
 import cc.gatopera.dev.api.events.impl.GameLeftEvent;
 import cc.gatopera.dev.api.events.impl.OpenScreenEvent;
@@ -18,7 +19,6 @@ import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.network.ClientPlayerInteractionManager;
 import net.minecraft.client.network.ServerInfo;
 import net.minecraft.client.particle.ParticleManager;
-import net.minecraft.client.resource.language.I18n;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.server.integrated.IntegratedServer;
 import net.minecraft.util.Hand;
@@ -127,7 +127,6 @@ public abstract class MixinMinecraftClient extends ReentrantThreadExecutor<Runna
 		Gatopera.EVENT_BUS.post(new TickEvent(Event.Stage.Post));
 	}
 
-
 	/**
 	 * @author me
 	 * @reason title
@@ -135,7 +134,7 @@ public abstract class MixinMinecraftClient extends ReentrantThreadExecutor<Runna
 	@Overwrite
 	private String getWindowTitle() {
 		if (ClientSetting.INSTANCE == null) {
-			return Gatopera.NAME + ": Loading..";
+			return Gatopera.NAME + ": " + I18n.t("title.loading");
 		}
 		if (ClientSetting.INSTANCE.titleOverride.getValue()) {
 			return ClientSetting.INSTANCE.windowTitle.getValue();
@@ -150,13 +149,13 @@ public abstract class MixinMinecraftClient extends ReentrantThreadExecutor<Runna
 			stringBuilder.append(" - ");
 			ServerInfo serverInfo = this.getCurrentServerEntry();
 			if (this.server != null && !this.server.isRemote()) {
-				stringBuilder.append(I18n.translate("title.singleplayer"));
+				stringBuilder.append(I18n.t("title.singleplayer"));
 			} else if (serverInfo != null && serverInfo.isRealm()) {
-				stringBuilder.append(I18n.translate("title.multiplayer.realms"));
+				stringBuilder.append(I18n.t("title.multiplayer.realms"));
 			} else if (this.server == null && (serverInfo == null || !serverInfo.isLocal())) {
-				stringBuilder.append(I18n.translate("title.multiplayer.other"));
+				stringBuilder.append(I18n.t("title.multiplayer.other"));
 			} else {
-				stringBuilder.append(I18n.translate("title.multiplayer.lan"));
+				stringBuilder.append(I18n.t("title.multiplayer.lan"));
 			}
 		}
 

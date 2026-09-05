@@ -1,5 +1,7 @@
 package cc.gatopera.dev.mod.modules.settings;
 
+import cc.gatopera.dev.api.i18n.I18n;
+
 import java.util.function.BooleanSupplier;
 
 public abstract class Setting {
@@ -8,7 +10,7 @@ public abstract class Setting {
 	private final String name;
 	private final String line;
 	public final BooleanSupplier visibility;
-	
+
 	public Setting(String name, String line) {
 		this.name = name;
 		this.line = line;
@@ -23,6 +25,10 @@ public abstract class Setting {
 
 	public final String getName() {
 		return this.name;
+	}
+
+	public final String getDisplayName() {
+		return I18n.setting(this.name);
 	}
 
 	public final String getLine() {

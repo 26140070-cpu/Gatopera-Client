@@ -125,7 +125,7 @@ public class HUD extends Module {
         }
         if (speed.getValue()) {
             double x = mc.player.getX() - mc.player.prevX;
-            // double y = mc.player.getY() - mc.player.prevY;
+
             double z = mc.player.getZ() - mc.player.prevZ;
             double dist = Math.sqrt(x * x + z * z) / 1000.0;
             double div = 0.05 / 3600.0;

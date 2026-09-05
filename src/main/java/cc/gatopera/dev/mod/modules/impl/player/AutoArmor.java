@@ -106,10 +106,7 @@ public class AutoArmor extends Module {
 		for (Map.Entry<EquipmentSlot, int[]> equipmentSlotEntry : armorMap.entrySet()) {
 			if (equipmentSlotEntry.getValue()[2] != -1) {
 				if (equipmentSlotEntry.getValue()[1] == -1 && equipmentSlotEntry.getValue()[2] < 9) {
-/*					if (equipmentSlotEntry.getValue()[2] != mc.player.getInventory().selectedSlot) {
-						mc.player.getInventory().selectedSlot = equipmentSlotEntry.getValue()[2];
-						mc.getNetworkHandler().sendPacket(new UpdateSelectedSlotC2SPacket(equipmentSlotEntry.getValue()[2]));
-					}*/
+
 					mc.interactionManager.clickSlot(mc.player.currentScreenHandler.syncId, 36 + equipmentSlotEntry.getValue()[2], 1, SlotActionType.QUICK_MOVE, mc.player);
 					EntityUtil.syncInventory();
 				} else if (mc.player.playerScreenHandler == mc.player.currentScreenHandler) {

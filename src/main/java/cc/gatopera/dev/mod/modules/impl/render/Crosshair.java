@@ -29,16 +29,12 @@ public class Crosshair extends Module {
 		float centerX = mc.getWindow().getScaledWidth() / 2f;
 		float centerY = mc.getWindow().getScaledHeight() / 2f;
 
-		//Up
 		Render2DUtil.drawRect(matrixStack, centerX - thickness.getValueFloat() / 2f, centerY - length.getValueFloat() - interval.getValueFloat(), thickness.getValueFloat(), length.getValueFloat(), color.getValue());
 
-		//Down
 		Render2DUtil.drawRect(matrixStack, centerX - thickness.getValueFloat() / 2f, centerY + interval.getValueFloat(), thickness.getValueFloat(), length.getValueFloat(), color.getValue());
 
-		//Right
 		Render2DUtil.drawRect(matrixStack, centerX + interval.getValueFloat(), centerY - thickness.getValueFloat() / 2f, length.getValueFloat(), thickness.getValueFloat(), color.getValue());
 
-		//Left
 		Render2DUtil.drawRect(matrixStack, centerX - interval.getValueFloat() - length.getValueFloat(), centerY - thickness.getValueFloat() / 2f, length.getValueFloat(), thickness.getValueFloat(), color.getValue());
 	}
 }

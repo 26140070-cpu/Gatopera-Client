@@ -76,8 +76,7 @@ public class PearlPredict extends Module {
         double z = vec3d.z;
         y = y + mc.player.getEyeHeight(mc.player.getPose()) - 0.1000000014901161;
 
-        //x = x - MathHelper.cos(yaw / 180.0f * 3.1415927f) * 0.16f;
-        //z = z - MathHelper.sin(yaw / 180.0f * 3.1415927f) * 0.16f;
+
 
         final float maxDist = .4f;
         double motionX = -MathHelper.sin(yaw / 180.0f * 3.1415927f) * MathHelper.cos(pitch / 180.0f * 3.1415927f) * maxDist;
@@ -94,10 +93,7 @@ public class PearlPredict extends Module {
         motionY *= pow;
         motionZ *= pow;
 
-        //motionX += velocity.x;
         motionY += velocity.y;
-        //motionZ += velocity.z;
-
 
         Vec3d lastPos;
         for (int i = 0; i < 300; i++) {
@@ -115,7 +111,6 @@ public class PearlPredict extends Module {
                 motionZ *= 0.99;
             }
             motionY -= 0.03f;
-
 
             Vec3d pos = new Vec3d(x, y, z);
 
@@ -139,8 +134,8 @@ public class PearlPredict extends Module {
             Render3DUtil.drawLine(lastPos, pos, color.getValue());
         }
     }
-    
+
     private record FakeEntity(Vec3d pos, float yaw, float pitch, Vec3d velocity) {
-        
+
     }
 }

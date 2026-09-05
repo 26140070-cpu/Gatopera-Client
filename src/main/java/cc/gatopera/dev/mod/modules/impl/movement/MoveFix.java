@@ -13,7 +13,6 @@ import cc.gatopera.dev.mod.modules.settings.impl.EnumSetting;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 
-
 public class MoveFix extends Module {
     public static MoveFix INSTANCE;
     public MoveFix() {

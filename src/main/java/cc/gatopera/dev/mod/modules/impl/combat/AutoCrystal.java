@@ -57,8 +57,6 @@ import java.util.UUID;
 import static cc.gatopera.dev.api.utils.world.BlockUtil.getBlock;
 import static cc.gatopera.dev.api.utils.world.BlockUtil.hasCrystal;
 
-
-
 public class AutoCrystal extends Module {
     public static AutoCrystal INSTANCE;
     public static BlockPos crystalPos;
@@ -66,7 +64,7 @@ public class AutoCrystal extends Module {
     private final Timer placeTimer = new Timer(), noPosTimer = new Timer(), switchTimer = new Timer(), calcDelay = new Timer();
 
     private final EnumSetting<Page> page = add(new EnumSetting<>("Page", Page.General));
-    //General
+
     private final BooleanSetting preferAnchor = add(new BooleanSetting("PreferAnchor", true, () -> page.getValue() == Page.General));
     private final BooleanSetting breakOnlyHasCrystal = add(new BooleanSetting("OnlyHold", true, () -> page.getValue() == Page.General));
     private final EnumSetting<SwingSide> swingMode = add(new EnumSetting<>("Swing", SwingSide.All, () -> page.getValue() == Page.General));
@@ -75,7 +73,7 @@ public class AutoCrystal extends Module {
     private final SliderSetting targetRange = add(new SliderSetting("TargetRange", 12.0, 0.0, 20.0, () -> page.getValue() == Page.General).setSuffix("m"));
     private final SliderSetting updateDelay = add(new SliderSetting("UpdateDelay", 50, 0, 1000, () -> page.getValue() == Page.General).setSuffix("ms"));
     private final SliderSetting wallRange = add(new SliderSetting("WallRange", 6.0, 0.0, 6.0, () -> page.getValue() == Page.General).setSuffix("m"));
-    //Rotate
+
     private final BooleanSetting rotate = add(new BooleanSetting("Rotate", true, () -> page.getValue() == Page.Rotation).setParent());
     private final BooleanSetting onBreak = add(new BooleanSetting("OnBreak", false, () -> rotate.isOpen() && page.getValue() == Page.Rotation));
     private final SliderSetting yOffset = add(new SliderSetting("YOffset", 0.05, 0, 1, 0.01, () -> rotate.isOpen() && onBreak.getValue() && page.getValue() == Page.Rotation));
@@ -84,7 +82,7 @@ public class AutoCrystal extends Module {
     private final BooleanSetting checkFov = add(new BooleanSetting("OnlyLooking", true, () -> rotate.isOpen() && yawStep.getValue() && page.getValue() == Page.Rotation));
     private final SliderSetting fov = add(new SliderSetting("Fov", 30, 0, 50, () -> rotate.isOpen() && yawStep.getValue() && checkFov.getValue() && page.getValue() == Page.Rotation));
     private final SliderSetting priority = add(new SliderSetting("Priority", 10,0 ,100, () -> rotate.isOpen() && yawStep.getValue() && page.getValue() == Page.Rotation));
-    //Place
+
     private final SliderSetting autoMinDamage = add(new SliderSetting("PistonMin", 5.0, 0.0, 36.0, () -> page.getValue() == Page.Interact).setSuffix("dmg"));
     private final SliderSetting minDamage = add(new SliderSetting("Min", 5.0, 0.0, 36.0, () -> page.getValue() == Page.Interact).setSuffix("dmg"));
     private final SliderSetting maxSelf = add(new SliderSetting("Self", 12.0, 0.0, 36.0, () -> page.getValue() == Page.Interact).setSuffix("dmg"));
@@ -100,7 +98,7 @@ public class AutoCrystal extends Module {
     private final SliderSetting minAge = add(new SliderSetting("MinAge", 0, 0, 20, () -> page.getValue() == Page.Interact && breakSetting.isOpen()).setSuffix("tick"));
     private final BooleanSetting breakRemove = add(new BooleanSetting("Remove", false, () -> page.getValue() == Page.Interact && breakSetting.isOpen()));
     private final BooleanSetting onlyTick = add(new BooleanSetting("OnlyTick", true, () -> page.getValue() == Page.Interact));
-    //Render
+
     private final ColorSetting text = add(new ColorSetting("Text", new Color(-1), () -> page.getValue() == Page.Render).injectBoolean(true));
     private final BooleanSetting render = add(new BooleanSetting("Render", true, () -> page.getValue() == Page.Render));
     private final BooleanSetting sync = add(new BooleanSetting("Sync", true, () -> page.getValue() == Page.Render && render.getValue()));
@@ -117,13 +115,13 @@ public class AutoCrystal extends Module {
     private final ColorSetting hitColor = add(new ColorSetting("HitColor", new Color(255, 255, 255, 150), () -> page.getValue() == Page.Render));
     public final SliderSetting animationTime = add(new SliderSetting("AnimationTime", 200, 0, 2000, 1, () -> page.getValue() == Page.Render && mode.is(TargetESP.Box)));
     public final EnumSetting<Easing> ease = add(new EnumSetting<>("Ease", Easing.CubicInOut, () -> page.getValue() == Page.Render && mode.is(TargetESP.Box)));
-    //Calc
+
     private final BooleanSetting thread = add(new BooleanSetting("Thread", true, () -> page.getValue() == Page.Calc));
     private final BooleanSetting doCrystal = add(new BooleanSetting("ThreadInteract", false, () -> page.getValue() == Page.Calc));
     private final BooleanSetting lite = add(new BooleanSetting("LessCPU", false, () -> page.getValue() == Page.Calc));
     private final SliderSetting predictTicks = add(new SliderSetting("Predict", 4, 0, 10, () -> page.getValue() == Page.Calc).setSuffix("ticks"));
     private final BooleanSetting terrainIgnore = add(new BooleanSetting("TerrainIgnore", true, () -> page.getValue() == Page.Calc));
-    //Misc
+
     private final BooleanSetting ignoreMine = add(new BooleanSetting("IgnoreMine", true, () -> page.getValue() == Page.Misc).setParent());
     private final SliderSetting constantProgress = add(new SliderSetting("Progress", 90.0, 0.0, 100.0, () -> page.getValue() == Page.Misc && ignoreMine.isOpen()).setSuffix("%"));
     private final BooleanSetting antiSurround = add(new BooleanSetting("AntiSurround", false, () -> page.getValue() == Page.Misc).setParent());
@@ -173,7 +171,7 @@ public class AutoCrystal extends Module {
     @Override
     public String getInfo() {
         if (displayTarget != null && lastDamage > 0) {
-            //return displayTarget.getName().getString() + ", " + new DecimalFormat("0.0").format(lastDamage);
+
             return df.format(lastDamage);
         }
         return null;
@@ -480,11 +478,7 @@ public class AutoCrystal extends Module {
 
     public boolean behindWall(BlockPos pos) {
         Vec3d testVec;
-        /*if (CombatSetting.INSTANCE.lowVersion.getValue()) {
-            testVec = new Vec3d(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5);
-        } else {
-            testVec = new Vec3d(pos.getX() + 0.5, pos.getY() + 2 * 0.85, pos.getZ() + 0.5);
-        }*/
+
         testVec = new Vec3d(pos.getX() + 0.5, pos.getY() + 2 * 0.85, pos.getZ() + 0.5);
         HitResult result = mc.world.raycast(new RaycastContext(EntityUtil.getEyesPos(), testVec, RaycastContext.ShapeType.COLLIDER, RaycastContext.FluidHandling.NONE, mc.player));
         if (result == null || result.getType() == HitResult.Type.MISS) return false;
@@ -655,7 +649,7 @@ public class AutoCrystal extends Module {
 
     private void placeCrystal(BlockPos pos) {
         ExplosionSpawn.INSTANCE.add(pos);
-        //PlaceRender.PlaceMap.put(pos, new PlaceRender.placePosition(pos));
+
         boolean offhand = mc.player.getOffHandStack().getItem() == Items.END_CRYSTAL;
         BlockPos obsPos = pos.down();
         Direction facing = BlockUtil.getClickSide(obsPos);

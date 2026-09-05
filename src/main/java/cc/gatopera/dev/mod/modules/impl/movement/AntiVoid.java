@@ -6,7 +6,6 @@ import cc.gatopera.dev.api.utils.world.BlockPosX;
 import cc.gatopera.dev.mod.modules.Module;
 import net.minecraft.block.Blocks;
 
-
 public class AntiVoid extends Module {
 
     private final SliderSetting voidHeight =

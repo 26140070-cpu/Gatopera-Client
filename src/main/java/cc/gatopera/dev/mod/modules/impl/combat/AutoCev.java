@@ -182,7 +182,6 @@ public class AutoCev extends Module {
         return null;
     }
 
-
     private Block getBlock(BlockPos pos) {
         return mc.world.getBlockState(pos).getBlock();
     }

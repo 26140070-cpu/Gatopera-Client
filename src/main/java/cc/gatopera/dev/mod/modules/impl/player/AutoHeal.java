@@ -22,9 +22,7 @@ import net.minecraft.util.Hand;
 import java.util.List;
 import java.util.Map;
 
-
 public class AutoHeal extends Module {
-
 
     public static AutoHeal INSTANCE;
     private final SliderSetting delay =

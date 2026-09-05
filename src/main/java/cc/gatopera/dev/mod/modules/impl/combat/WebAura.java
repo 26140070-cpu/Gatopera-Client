@@ -50,7 +50,7 @@ public class WebAura extends Module {
 
         for (PlayerEntity target : CombatUtil.getEnemies(targetRange.getValue())) {
             BlockPos targetPos = target.getBlockPos();
-            // Place webs around target
+
             for (float x : new float[]{0, 0.5f, -0.5f}) {
                 for (float z : new float[]{0, 0.5f, -0.5f}) {
                     BlockPos placePos = new BlockPos(
@@ -63,7 +63,7 @@ public class WebAura extends Module {
                             InventoryUtil.findBlockInventorySlot(Blocks.COBWEB) :
                             InventoryUtil.findBlock(Blocks.COBWEB);
                         if (slot != -1) {
-                            // Place web
+
                             timer.reset();
                             return;
                         }

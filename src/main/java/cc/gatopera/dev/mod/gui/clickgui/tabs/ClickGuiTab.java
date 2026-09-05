@@ -18,7 +18,6 @@ import net.minecraft.client.util.math.MatrixStack;
 import java.awt.*;
 import java.util.ArrayList;
 
-
 public class ClickGuiTab extends Tab {
 	protected String title;
 	protected final boolean drawBorder = true;
@@ -29,7 +28,7 @@ public class ClickGuiTab extends Tab {
 		this.title = title;
 		this.x = Gatopera.CONFIG.getInt(title + "_x", x);
 		this.y = Gatopera.CONFIG.getInt(title + "_y", y);
-		this.width = 98;
+		this.width = 420;
 		this.mc = MinecraftClient.getInstance();
 	}
 
@@ -43,6 +42,10 @@ public class ClickGuiTab extends Tab {
 
 	public final String getTitle() {
 		return title;
+	}
+
+	public Module.Category getCategory() {
+		return category;
 	}
 
 	public final void setTitle(String title) {
@@ -92,8 +95,7 @@ public class ClickGuiTab extends Tab {
 	boolean popped = true;
 
 	@Override
-	
-	
+
 	public void update(double mouseX, double mouseY) {
 		onMouseClick(mouseX, mouseY);
 		if (popped) {
@@ -131,8 +133,7 @@ public class ClickGuiTab extends Tab {
 	Animation animation = new Animation();
 
 	@Override
-	
-	
+
 	public void draw(DrawContext drawContext, float partialTicks, Color color) {
 		int tempHeight = 1;
 		for (ModuleComponent child : children) {
@@ -148,7 +149,7 @@ public class ClickGuiTab extends Tab {
 			} else {
 				Render2DUtil.drawRect(matrixStack, x, y - 1, width, 15, ClickGui.INSTANCE.bar.getValue());
 			}
-/*			Render2DUtil.drawRect(matrixStack, x, y - 1 + 15, width, 1, new Color(38, 38, 38));*/
+
 			if (popped) Render2DUtil.drawRect(matrixStack, x, y + 14, width, (int) currentHeight, ClickGui.INSTANCE.background.getValue());
 		}
 		if (popped) {
@@ -158,7 +159,7 @@ public class ClickGuiTab extends Tab {
 				i += child.getHeight();
 			}
 		}
-		//TextUtil.drawString(drawContext, this.title, x + width / 2d - TextUtil.getWidth(title) / 2, y + 3, new Color(255, 255, 255));
+
 		TextUtil.drawString(
 				drawContext,
 				I18n.category(this.title),

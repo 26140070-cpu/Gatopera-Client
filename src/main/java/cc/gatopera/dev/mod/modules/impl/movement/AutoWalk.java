@@ -64,7 +64,6 @@ public class AutoWalk extends Module {
         BaritoneModule.cancelEverything();
     }
 
-
     public boolean forward() {
         return isOn() && mode.is(Mode.Forward);
     }

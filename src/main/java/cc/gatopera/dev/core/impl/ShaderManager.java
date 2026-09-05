@@ -41,7 +41,7 @@ public class ShaderManager implements Wrapper {
     }
     public void renderShaders() {
         tasks.forEach(t -> applyShader(t.task(), t.shader()));
-        tasks.clear();  
+        tasks.clear();
     }
 
     public void applyShader(Runnable runnable, Shader mode) {

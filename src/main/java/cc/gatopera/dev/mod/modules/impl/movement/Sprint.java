@@ -82,7 +82,7 @@ public class Sprint extends Module {
 			} else if (mc.options.rightKey.isPressed() && !mc.options.leftKey.isPressed()) {
 				yaw += 45f;
 			}
-			// Forward movement - no change to yaw
+
 		} else if (mc.options.backKey.isPressed() && !mc.options.forwardKey.isPressed()) {
 			yaw += 180f;
 			if (mc.options.leftKey.isPressed() && !mc.options.rightKey.isPressed()) {

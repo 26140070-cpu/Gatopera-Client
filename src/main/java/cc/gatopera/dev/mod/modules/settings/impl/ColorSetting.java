@@ -51,7 +51,7 @@ public class ColorSetting extends Setting {
 		}
 		return this.value;
 	}
-	
+
 	public final void setValue(Color value) {
 		this.value = value;
 	}

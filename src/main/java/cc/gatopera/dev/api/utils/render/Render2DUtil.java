@@ -83,10 +83,9 @@ public class Render2DUtil implements Wrapper {
         endRender();
     }
 
-
     public static void drawRect(DrawContext drawContext, float x, float y, float width, float height, Color c) {
         drawRect(drawContext.getMatrices(), x, y, width, height, c);
-        //drawContext.fill((int) x, (int) y, (int) (x + width), (int) (y + height), c.getRGB());
+
     }
     public static boolean isHovered(double mouseX, double mouseY, double x, double y, double width, double height) {
         return mouseX >= x && mouseX - width <= x && mouseY >= y && mouseY - height <= y;
@@ -102,7 +101,6 @@ public class Render2DUtil implements Wrapper {
         renderRoundedQuadInternal(matrices.peek().getPositionMatrix(), c.getRed() / 255f, c.getGreen() / 255f, c.getBlue() / 255f, c.getAlpha() / 255f, fromX, fromY, toX, toY, radius, samples);
         endRender();
     }
-
 
     public static void renderRoundedQuadInternal(Matrix4f matrix, float cr, float cg, float cb, float ca, double fromX, double fromY, double toX, double toY, double radius, double samples) {
         BufferBuilder bufferBuilder = Tessellator.getInstance().getBuffer();

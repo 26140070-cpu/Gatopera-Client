@@ -27,7 +27,6 @@ public class AutoTool extends Module {
         }
     }
 
-
     public static int getTool(final BlockPos pos) {
         int index = -1;
         float CurrentFastest = 1.0f;

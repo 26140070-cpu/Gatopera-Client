@@ -506,7 +506,6 @@ public class PacketMine extends Module {
 		}
 	}
 
-
 	private boolean placeCrystal() {
 		int crystal = findCrystal();
 		if (crystal != -1) {
@@ -749,13 +748,13 @@ public class PacketMine extends Module {
 		}
 		if (((PlayerActionC2SPacket) event.getPacket()).getAction() == PlayerActionC2SPacket.Action.START_DESTROY_BLOCK) {
 			if (breakPos == null || !((PlayerActionC2SPacket) event.getPacket()).getPos().equals(breakPos)) {
-				//if (cancelPacket.getValue()) event.cancel();
+
 				return;
 			}
 			startPacket = true;
 		} else if (((PlayerActionC2SPacket) event.getPacket()).getAction() == PlayerActionC2SPacket.Action.STOP_DESTROY_BLOCK) {
 			if (breakPos == null || !((PlayerActionC2SPacket) event.getPacket()).getPos().equals(breakPos)) {
-				//if (cancelPacket.getValue()) event.cancel();
+
 				return;
 			}
 			if (!instant.getValue()) {

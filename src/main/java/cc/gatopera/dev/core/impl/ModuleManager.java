@@ -2,6 +2,7 @@ package cc.gatopera.dev.core.impl;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import cc.gatopera.dev.Gatopera;
+import cc.gatopera.dev.api.i18n.I18n;
 import cc.gatopera.dev.api.events.impl.Render3DEvent;
 import cc.gatopera.dev.api.utils.Wrapper;
 import cc.gatopera.dev.mod.Mod;
@@ -152,7 +153,7 @@ public class ModuleManager implements Wrapper {
         addModule(new PacketControl());
         addModule(new XRay());
         addModule(new AutoCrystalBase());
-        //addModule(new RaytraceBypass());
+
         addModule(new PacketEat());
         addModule(new PacketFly());
         addModule(new PacketMine());
@@ -251,7 +252,7 @@ public class ModuleManager implements Wrapper {
             } catch (Exception e) {
                 e.printStackTrace();
                 if (ClientSetting.INSTANCE.debug.getValue())
-                    CommandManager.sendChatMessage("§4[" + module.getName() + "] An error has occurred:" + e.getMessage());
+                    CommandManager.sendChatMessage("§4" + I18n.t("msg.error_occurred", module.getDisplayName(), String.valueOf(e.getMessage())));
             }
         });
     }
@@ -264,7 +265,7 @@ public class ModuleManager implements Wrapper {
             } catch (Exception e) {
                 e.printStackTrace();
                 if (ClientSetting.INSTANCE.debug.getValue())
-                    CommandManager.sendChatMessage("§4[" + module.getName() + "] An error has occurred:" + e.getMessage());
+                    CommandManager.sendChatMessage("§4" + I18n.t("msg.error_occurred", module.getDisplayName(), String.valueOf(e.getMessage())));
             }
         });
     }
@@ -300,7 +301,7 @@ public class ModuleManager implements Wrapper {
     public void addModule(Module module) {
         module.add(module.getBind());
         modules.add(module);
-        //categoryModules.put(module.getCategory(), categoryModules.getOrDefault(module.getCategory(), 0) + 1);
+
     }
 
     public void disableAll() {

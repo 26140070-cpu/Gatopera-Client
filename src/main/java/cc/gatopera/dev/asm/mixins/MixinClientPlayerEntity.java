@@ -1,5 +1,6 @@
 package cc.gatopera.dev.asm.mixins;
 
+import cc.gatopera.dev.api.i18n.I18n;
 import com.mojang.authlib.GameProfile;
 import cc.gatopera.dev.Gatopera;
 import cc.gatopera.dev.api.events.Event;
@@ -187,8 +188,8 @@ public abstract class MixinClientPlayerEntity extends AbstractClientPlayerEntity
 				Gatopera.ROTATION.rotationYaw = yaw;
 				Gatopera.ROTATION.rotationPitch = pitch;
 
-				double g = yaw - Gatopera.ROTATION.lastYaw;//this.lastYaw;
-				double h = pitch - Gatopera.ROTATION.lastPitch;//this.lastPitch;
+				double g = yaw - Gatopera.ROTATION.lastYaw;
+				double h = pitch - Gatopera.ROTATION.lastPitch;
 				++this.ticksSinceLastPositionPacketSent;
 				boolean bl2 = MathHelper.squaredMagnitude(d, e, f) > MathHelper.square(2.0E-4) || this.ticksSinceLastPositionPacketSent >= 20 || (PacketControl.INSTANCE.isOn() && PacketControl.INSTANCE.position.getValue() && PacketControl.INSTANCE.positionT.passed(PacketControl.INSTANCE.positionDelay.getValueInt()));
 				boolean bl3 = (g != 0.0 || h != 0.0 || (PacketControl.INSTANCE.isOn() && PacketControl.INSTANCE.rotate.getValue() && PacketControl.INSTANCE.rotationT.passed(PacketControl.INSTANCE.rotationDelay.getValueInt())));
@@ -228,7 +229,7 @@ public abstract class MixinClientPlayerEntity extends AbstractClientPlayerEntity
 		} catch (Exception e) {
 			e.printStackTrace();
 			if (ClientSetting.INSTANCE.debug.getValue())
-				CommandManager.sendChatMessage("§4[!] [SendMovePackets] An error has occurred:\n" + e);
+				CommandManager.sendChatMessage("§4[!] " + I18n.t("msg.send_move_error", e));
 		}
 	}
 
@@ -271,7 +272,7 @@ public abstract class MixinClientPlayerEntity extends AbstractClientPlayerEntity
 		} catch (Exception e) {
 			e.printStackTrace();
 			if (ClientSetting.INSTANCE.debug.getValue())
-				CommandManager.sendChatMessage("§4[!] [UpdateWalkingPlayer] An error has occurred:\n" + e);
+				CommandManager.sendChatMessage("§4[!] " + I18n.t("msg.update_walking_error", e));
 		}
 		ci.cancel();
 	}

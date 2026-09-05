@@ -45,7 +45,7 @@ public class FriendManager extends Manager {
             if (!friendFile.exists())
                 return;
             List<String> list = IOUtils.readLines(new FileInputStream(friendFile), StandardCharsets.UTF_8);
-            
+
             for (String s : list) {
                 addFriend(s);
             }
@@ -53,7 +53,7 @@ public class FriendManager extends Manager {
             exception.printStackTrace();
         }
     }
-    
+
     public void save() {
         try {
             File friendFile = getFile("friends.txt");
@@ -66,7 +66,6 @@ public class FriendManager extends Manager {
             System.out.println("[" + Gatopera.NAME + "] Failed to save friends");
         }
     }
-    
 
     public boolean isFriend(PlayerEntity entity) {
         return isFriend(entity.getGameProfile().getName());

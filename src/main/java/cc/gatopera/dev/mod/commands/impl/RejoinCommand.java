@@ -27,7 +27,6 @@ public class RejoinCommand extends Command {
 		});
 	}
 
-
 	@Override
 	public String[] getAutocorrect(int count, List<String> seperated) {
 		return null;

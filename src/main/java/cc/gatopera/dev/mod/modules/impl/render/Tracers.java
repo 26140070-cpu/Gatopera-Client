@@ -57,7 +57,6 @@ public class Tracers extends Module {
 		mc.options.getBobView().setValue(prev_bob);
 	}
 
-
 	private void drawLine(Vec3d pos, Color color) {
 		Render3DUtil.drawLine(pos, mc.player.getCameraPosVec(mc.getTickDelta()).add(Vec3d.fromPolar(mc.player.getPitch(mc.getTickDelta()), mc.player.getYaw(mc.getTickDelta())).multiply(0.2)), color);
 	}

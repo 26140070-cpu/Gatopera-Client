@@ -63,7 +63,6 @@ public class PacketFly extends Module {
         setChinese("发包飞行");
     }
 
-
     @Override
     public void onLogin() {
         disable();
@@ -202,7 +201,6 @@ public class PacketFly extends Module {
             this.disable();
         }
 
-        // teleportID.set(Managers.POSITION.getTeleportID());
     }
 
     @Override

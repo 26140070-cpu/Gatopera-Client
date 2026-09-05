@@ -52,7 +52,7 @@ public class AutoBurrow extends Module {
 
         for (PlayerEntity target : CombatUtil.getEnemies(targetRange.getValue())) {
             BlockPos targetPos = target.getBlockPos();
-            // Try to place blocks around/above the target to trap them
+
             for (Direction dir : Direction.HORIZONTAL) {
                 BlockPos placePos = targetPos.offset(dir);
                 if (BlockUtil.canPlace(placePos, range.getValue())) {
@@ -60,7 +60,7 @@ public class AutoBurrow extends Module {
                         InventoryUtil.findBlockInventorySlot(net.minecraft.block.Blocks.OBSIDIAN) :
                         InventoryUtil.findBlock(net.minecraft.block.Blocks.OBSIDIAN);
                     if (slot != -1) {
-                        // Place block
+
                         timer.reset();
                         return;
                     }

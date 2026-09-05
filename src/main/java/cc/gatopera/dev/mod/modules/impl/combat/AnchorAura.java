@@ -55,14 +55,14 @@ public class AnchorAura extends Module {
 
         for (PlayerEntity target : CombatUtil.getEnemies(targetRange.getValue())) {
             BlockPos targetPos = target.getBlockPos();
-            // Find anchor placement position
+
             for (BlockPos pos : BlockUtil.getSphere((float) range.getValue())) {
                 if (BlockUtil.canPlace(pos, range.getValue())) {
                     int slot = inventorySwap.getValue() ?
                         InventoryUtil.findBlockInventorySlot(Blocks.RESPAWN_ANCHOR) :
                         InventoryUtil.findBlock(Blocks.RESPAWN_ANCHOR);
                     if (slot != -1) {
-                        // Place anchor
+
                         timer.reset();
                         return;
                     }

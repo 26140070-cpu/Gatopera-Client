@@ -1,6 +1,7 @@
 package cc.gatopera.dev.mod.gui.clickgui.components.impl;
 
 import cc.gatopera.dev.Gatopera;
+import cc.gatopera.dev.api.i18n.I18n;
 import cc.gatopera.dev.api.utils.math.Animation;
 import cc.gatopera.dev.mod.modules.impl.client.ClickGui;
 import cc.gatopera.dev.mod.modules.settings.impl.EnumSetting;
@@ -31,8 +32,7 @@ public class EnumComponent extends Component {
 
 	private boolean hover = false;
 
-	
-	
+
 	public void update(int offset, double mouseX, double mouseY) {
 		int parentX = parent.getX();
 		int parentY = parent.getY();
@@ -88,8 +88,7 @@ public class EnumComponent extends Component {
 	public double currentY = 0;
 	public Animation popHeightAnimation = new Animation();
 	@Override
-	
-	
+
 	public boolean draw(int offset, DrawContext drawContext, float partialTicks, Color color, boolean back) {
 		y = 0;
 		if (setting.popped) {
@@ -110,9 +109,8 @@ public class EnumComponent extends Component {
 		} else {
 			Render2DUtil.drawRect(matrixStack, (float) x + 1, (float) y + 1, (float) width - 2, (float) defaultHeight - (ClickGui.INSTANCE.maxFill.getValue() ? 0 : 1), hover ? ClickGui.INSTANCE.mainHover.getValue() : Gatopera.GUI.getColor());
 		}
-		TextUtil.drawString(drawContext, setting.getName() + ": " + setting.getValue().name(), x + 4, y + getTextOffsetY(), -1);
+		TextUtil.drawString(drawContext, setting.getDisplayName() + ": " + I18n.value(setting.getValue().name()), x + 4, y + getTextOffsetY(), -1);
 		TextUtil.drawString(drawContext, setting.popped ? "-" : "+", x + width - 11, y + getTextOffsetY(), new Color(255, 255, 255).getRGB());
-
 
 		if (setting.popped) {
 			currentY = animation.get(1);
@@ -123,9 +121,10 @@ public class EnumComponent extends Component {
 		if (currentY > 0.04) {
 			for (Object o : setting.getValue().getDeclaringClass().getEnumConstants()) {
 
-				String s = o.toString();
+				String raw = o.toString();
+				String s = I18n.value(raw);
 
-				TextUtil.drawString(drawContext, s, width / 2d - TextUtil.getWidth(s) / 2d + 2.0f + x, TextUtil.getHeight() / 2d + (cy), setting.getValue().name().equals(s) ? new Color(255, 255, 255, (int) (currentY * 255)).getRGB() : new Color(120, 120, 120, (int) (currentY * 255)).getRGB());
+				TextUtil.drawString(drawContext, s, width / 2d - TextUtil.getWidth(s) / 2d + 2.0f + x, TextUtil.getHeight() / 2d + (cy), setting.getValue().name().equals(raw) ? new Color(255, 255, 255, (int) (currentY * 255)).getRGB() : new Color(120, 120, 120, (int) (currentY * 255)).getRGB());
 				cy += TextUtil.getHeight() * currentY;
 			}
 		}

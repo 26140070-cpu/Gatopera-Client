@@ -57,7 +57,6 @@ public class LavaFiller extends Module {
         }
     }
 
-
     private void tryPlaceBlock(BlockPos pos) {
         if (pos == null) return;
         if (detectMining.getValue() && Gatopera.BREAK.isMining(pos)) return;

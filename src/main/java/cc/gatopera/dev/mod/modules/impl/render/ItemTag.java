@@ -35,12 +35,5 @@ public class ItemTag extends Module {
             }
         }
     }
-    /*    @EventHandler
-    public void onReceivePacket(EntitySpawnEvent event) {
-        if (nullCheck()) return;
-        if (event.getEntity() instanceof ItemEntity itemEntity) {
-            itemEntity.setCustomName(itemEntity.getStack().getName());
-            itemEntity.setCustomNameVisible(true);
-        }
-    }*/
+
 }

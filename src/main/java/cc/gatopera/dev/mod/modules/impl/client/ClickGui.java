@@ -70,6 +70,14 @@ public class ClickGui extends Module {
 			add(new SliderSetting("AnimationTime", 200, 0, 1000, 1,
 					() -> page.getValue() == Pages.General));
 
+	public final SliderSetting guiScale =
+			add(new SliderSetting("GuiScale", 100, 70, 130, 1,
+					() -> page.getValue() == Pages.General));
+
+	public final EnumSetting<Theme> theme =
+			add(new EnumSetting<>("Theme", Theme.Midnight,
+					() -> page.getValue() == Pages.General));
+
 	public final EnumSetting<Easing> ease =
 			add(new EnumSetting<>("Ease", Easing.QuadInOut,
 					() -> page.getValue() == Pages.General));
@@ -197,5 +205,16 @@ public class ClickGui extends Module {
 	public enum Type {
 		Old,
 		New
+	}
+
+	public enum Theme {
+		Midnight,
+		Dark,
+		Light,
+		Catppuccin,
+		Pink,
+		Purple,
+		Blue,
+		Green
 	}
 }

@@ -20,6 +20,6 @@ public class SilentDouble extends Module {
     @EventHandler
     public void onUpdateWalking(UpdateWalkingPlayerEvent event) {
         if (nullCheck()) return;
-        // Silent double hand logic
+
     }
 }

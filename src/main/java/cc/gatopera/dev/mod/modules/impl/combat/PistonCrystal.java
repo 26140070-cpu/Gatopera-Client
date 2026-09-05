@@ -92,7 +92,6 @@ public class PistonCrystal extends Module {
     private boolean isPiston = false;
     public int stage = 1;
 
-
     public void onTick() {
         if (pistonStage.getValue() > stageSetting.getValue()) {
             pistonStage.setValue(stageSetting.getValue());

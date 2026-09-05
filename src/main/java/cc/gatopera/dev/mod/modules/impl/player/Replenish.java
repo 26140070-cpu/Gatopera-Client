@@ -18,10 +18,9 @@ public class Replenish extends Module {
     private final SliderSetting forceMin = add(new SliderSetting("ForceMin", 16, 1, 64));
     private final Timer timer = new Timer();
 
-
     @Override
     public void onUpdate() {
-/*        if (mc.currentScreen != null && !(mc.currentScreen instanceof ClickGuiScreen)) return;*/
+
         for (int i = 0; i < 9; ++i) {
             if (replenish(i)) {
                 timer.reset();

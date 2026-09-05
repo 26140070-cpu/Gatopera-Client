@@ -2,9 +2,6 @@ package cc.gatopera.dev.api.events.eventbus;
 
 import java.util.function.Consumer;
 
-/**
- * Listener that takes in a {@link java.util.function.Consumer}.
- */
 public class ConsumerListener<T> implements IListener {
     private final Class<?> target;
     private final int priority;
@@ -15,12 +12,11 @@ public class ConsumerListener<T> implements IListener {
         this.priority = priority;
         this.executor = executor;
     }
-    
+
     public ConsumerListener(Class<?> target, Consumer<T> executor) {
         this(target, EventPriority.MEDIUM, executor);
     }
 
-    //@SuppressWarnings("unchecked")
     @Override
     public void call(Object event) {
         executor.accept((T) event);

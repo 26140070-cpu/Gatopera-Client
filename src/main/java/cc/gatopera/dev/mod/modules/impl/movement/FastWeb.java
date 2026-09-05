@@ -18,7 +18,6 @@ import net.minecraft.util.math.Direction;
 import java.util.ArrayList;
 import java.util.List;
 
-
 public class FastWeb extends Module {
     public static FastWeb INSTANCE;
     public final EnumSetting<Mode> mode =

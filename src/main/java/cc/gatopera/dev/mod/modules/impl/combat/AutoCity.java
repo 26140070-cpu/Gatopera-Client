@@ -117,7 +117,7 @@ public class AutoCity extends Module {
 					}
 				}
 				if (!list.isEmpty()) {
-					//System.out.println("found");
+
 					PacketMine.INSTANCE.mine(list.stream().min(Comparator.comparingDouble((E) -> E.getSquaredDistance(mc.player.getEyePos()))).get());
 				} else {
 					for (Direction i : Direction.values()) {
@@ -130,7 +130,7 @@ public class AutoCity extends Module {
 						}
 					}
 					if (!list.isEmpty()) {
-						//System.out.println("found");
+
 						PacketMine.INSTANCE.mine(list.stream().min(Comparator.comparingDouble((E) -> E.getSquaredDistance(mc.player.getEyePos()))).get());
 					}
 				}

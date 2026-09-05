@@ -24,7 +24,7 @@ public abstract class Component implements Wrapper {
 	public boolean isVisible() {
 		return true;
 	}
-	
+
 	public int getHeight()
 	{
 		if (!isVisible()) {
@@ -35,17 +35,17 @@ public abstract class Component implements Wrapper {
 	public int getCurrentHeight() {
 		return getHeight();
 	}
-	
+
 	public void setHeight(int height)
 	{
 		this.height = height;
 	}
-	
+
 	public ClickGuiTab getParent()
 	{
 		return parent;
 	}
-	
+
 	public void setParent(ClickGuiTab parent)
 	{
 		this.parent = parent;

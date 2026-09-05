@@ -66,10 +66,7 @@ public class ExplosionUtil implements Wrapper {
             int k = getProtectionAmount(player.getArmorItems());
             float f = MathHelper.clamp((float) k, 0.0f, 20.0f);
             damage *= 1.0f - f / 25.0f;
-/*            if (player.hasStatusEffect(StatusEffects.RESISTANCE)) {
-                int lvl = (player.getStatusEffect(StatusEffects.RESISTANCE).getAmplifier() + 1);
-                damage *= (float) (1 - (lvl * 0.2));
-            }*/
+
             if (player.hasStatusEffect(StatusEffects.RESISTANCE)) {
                 damage -= damage / 4.0f;
             }

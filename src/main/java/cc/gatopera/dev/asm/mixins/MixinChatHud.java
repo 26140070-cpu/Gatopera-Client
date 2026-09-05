@@ -56,7 +56,7 @@ public abstract class MixinChatHud implements IChatHudHook {
         addMessage(message);
         nextMessageId = 0;
     }
-    
+
     @Inject(method = "addMessage(Lnet/minecraft/text/Text;Lnet/minecraft/network/message/MessageSignatureData;ILnet/minecraft/client/gui/hud/MessageIndicator;Z)V", at = @At(value = "INVOKE", target = "Ljava/util/List;add(ILjava/lang/Object;)V", ordinal = 0, shift = At.Shift.AFTER))
     private void onAddMessageAfterNewChatHudLineVisible(Text message, MessageSignatureData signature, int ticks, MessageIndicator indicator, boolean refresh, CallbackInfo info) {
         ((IChatHudLine) (Object) visibleMessages.get(0)).setMessageId(nextMessageId);
@@ -66,7 +66,7 @@ public abstract class MixinChatHud implements IChatHudHook {
     private void onAddMessageAfterNewChatHudLine(Text message, MessageSignatureData signature, int ticks, MessageIndicator indicator, boolean refresh, CallbackInfo info) {
         ((IChatHudLine) (Object) messages.get(0)).setMessageId(nextMessageId);
     }
-    
+
     @Inject(at = @At("HEAD"), method = "addMessage(Lnet/minecraft/text/Text;Lnet/minecraft/network/message/MessageSignatureData;ILnet/minecraft/client/gui/hud/MessageIndicator;Z)V")
     private void onAddMessage(Text message, @Nullable MessageSignatureData signature, int ticks, @Nullable MessageIndicator indicator, boolean refresh, CallbackInfo info) {
        if (nextMessageId != 0) {
@@ -127,16 +127,16 @@ public abstract class MixinChatHud implements IChatHudHook {
             target = "Lnet/minecraft/client/gui/hud/ChatHudLine$Visible;addedTime()I"
     ))
     public void getChatLineIndex(CallbackInfo ci, @Local(ordinal = 13) int chatLineIndex) {
-        // Capture which chat line is currently being rendered
+
         this.chatLineIndex = chatLineIndex;
     }
 
     @Unique
     private void calculateYOffset() {
-        // Calculate current required offset to achieve slide in from bottom effect
+
         try {
             int lineHeight = this.getLineHeight();
-            float maxDisplacement = (float)lineHeight;// * fadeOffsetYScale;
+            float maxDisplacement = (float)lineHeight;
             double quad = messageTimestamps.get(chatLineIndex).ease(FadeUtils.Ease.In2);
             if (chatLineIndex == 0 && quad < 1 && this.scrolledLines == 0) {
                 chatDisplacementY = (int)(maxDisplacement - quad *maxDisplacement);

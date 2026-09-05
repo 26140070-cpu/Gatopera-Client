@@ -71,7 +71,7 @@ public class TextUtil implements Wrapper {
 
 	public static void drawString(DrawContext drawContext, String text, double x, double y, int color, boolean customFont) {
 		if (customFont) {
-			//FontRenderers.Arial.drawString(drawContext.getMatrices(), text, (float) x + 1, (float) y + 3, new Color(0, 0, 0).getRGB());
+
 			FontRenderers.ui.drawString(drawContext.getMatrices(), text, (int) x, (int) (y + FontSetting.INSTANCE.yOffset.getValueFloat() + 2), color);
 		} else {
 			drawContext.drawText(mc.textRenderer, text, (int) x, (int) y, color, true);

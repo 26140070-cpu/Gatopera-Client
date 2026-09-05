@@ -101,7 +101,7 @@ public class ConfigManager extends Manager {
 					System.out.println("Skipping bad option: " + s);
 				}
 			}
-			//KeyBinding.updateKeysByCode();
+
 		} catch (Exception exception) {
 			System.out.println("[" + Gatopera.NAME + "] Failed to load settings");
 		}

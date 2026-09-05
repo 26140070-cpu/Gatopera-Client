@@ -53,7 +53,7 @@ public class AutoPush extends Module {
     @Override
     public void onEnable() {
         AutoCrystal.INSTANCE.lastBreakTimer.reset();
-        //CrystalAura.INSTANCE.faceTimer.reset();
+
     }
 
     public static void pistonFacing(Direction i) {
@@ -269,9 +269,6 @@ public class AutoPush extends Module {
                         } else {
                             doSwap(oldSlot);
                         }
-/*                        if (mine.getValue()) {
-                            PacketMine.INSTANCE.mine(piston.offset(powerFacing));
-                        }*/
 
                         CombatUtil.modifyPos = piston.offset(powerFacing);
                         CombatUtil.modifyBlockState = getBlockType().getDefaultState();
