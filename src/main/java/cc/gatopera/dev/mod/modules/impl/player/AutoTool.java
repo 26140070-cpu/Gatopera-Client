@@ -12,7 +12,6 @@ public class AutoTool extends Module {
 
     public AutoTool() {
         super("AutoTool", Category.Player);
-        setChinese("自动工具");
     }
 
     @Override

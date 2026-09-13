@@ -19,7 +19,6 @@ public class ServerApply extends Module {
     public final BooleanSetting pack = add(new BooleanSetting("ResourcePack", true));
     public ServerApply() {
         super("ServerApply", Category.Client);
-        setChinese("服务器应用");
         Gatopera.EVENT_BUS.subscribe(this);
         INSTANCE = this;
     }

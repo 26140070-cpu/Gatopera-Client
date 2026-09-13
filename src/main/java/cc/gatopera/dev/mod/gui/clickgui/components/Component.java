@@ -14,7 +14,9 @@ import net.minecraft.sound.SoundEvents;
 import java.awt.Color;
 
 public abstract class Component implements Wrapper {
-	public int defaultHeight = 16;
+	public static final float ROW_RADIUS = 8f;
+	public static final float PANEL_RADIUS = 16f;
+	public int defaultHeight = 22;
 	protected ClickGuiTab parent;
 	private int height = defaultHeight;
 

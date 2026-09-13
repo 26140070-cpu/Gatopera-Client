@@ -21,4 +21,10 @@ public class Animation {
         fadeUtils.setLength(length);
         return from + (to - from) * fadeUtils.ease(ease);
     }
+
+    public void snap(double value) {
+        from = value;
+        to = value;
+        fadeUtils.reset();
+    }
 }

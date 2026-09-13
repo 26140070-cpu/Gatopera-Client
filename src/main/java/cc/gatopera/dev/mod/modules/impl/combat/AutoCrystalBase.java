@@ -105,7 +105,6 @@ public class AutoCrystalBase extends Module {
 
     public AutoCrystalBase() {
         super("AutoCrystalBase", Category.Combat);
-        setChinese("自动水晶底座");
         INSTANCE = this;
     }
 

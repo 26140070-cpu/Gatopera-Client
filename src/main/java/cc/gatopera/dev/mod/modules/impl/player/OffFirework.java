@@ -14,7 +14,6 @@ public class OffFirework extends Module {
 
 	public OffFirework() {
 		super("OffFirework", Category.Player);
-		setChinese("放烟花");
 		INSTANCE = this;
 	}
 

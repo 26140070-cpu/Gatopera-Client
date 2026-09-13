@@ -42,7 +42,6 @@ public class AntiCheat extends Module {
     }
     public AntiCheat() {
         super("AntiCheat", Category.Client);
-        setChinese("反作弊选项");
         INSTANCE = this;
     }
 

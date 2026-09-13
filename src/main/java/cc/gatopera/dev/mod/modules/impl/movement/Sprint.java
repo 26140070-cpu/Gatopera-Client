@@ -19,7 +19,6 @@ public class Sprint extends Module {
 			add(new EnumSetting<>("Mode", Mode.Rage));
 	public Sprint() {
 		super("Sprint", Category.Movement);
-		setChinese("强制疾跑");
 		this.setDescription("Permanently keeps player in sprinting mode.");
 		INSTANCE = this;
 	}

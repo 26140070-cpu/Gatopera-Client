@@ -15,7 +15,6 @@ public class AntiVoid extends Module {
 
     public AntiVoid() {
         super("AntiVoid", "Allows you to fly over void blocks", Category.Movement);
-        setChinese("反虚空");
     }
 
     @Override

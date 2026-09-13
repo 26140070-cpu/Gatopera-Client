@@ -84,7 +84,6 @@ public class Surround extends Module {
     int progress = 0;
     public Surround() {
         super("Surround", "Surrounds you with Obsidian", Category.Combat);
-        setChinese("围脚");
         INSTANCE = this;
     }
     public Vec3d directionVec = null;

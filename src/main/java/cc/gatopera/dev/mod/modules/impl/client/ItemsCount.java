@@ -31,7 +31,6 @@ public class ItemsCount extends Module {
 
     public ItemsCount() {
         super("Items", Category.Client);
-        setChinese("物品数量");
         INSTANCE = this;
     }
     int x, y;

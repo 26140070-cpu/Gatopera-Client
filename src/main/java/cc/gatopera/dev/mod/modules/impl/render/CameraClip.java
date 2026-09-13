@@ -11,7 +11,6 @@ public class CameraClip extends Module {
     public static CameraClip INSTANCE;
     public CameraClip() {
         super("CameraClip", Category.Render);
-        setChinese("摄像机穿墙");
         INSTANCE = this;
     }
 

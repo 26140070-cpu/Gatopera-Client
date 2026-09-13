@@ -40,7 +40,6 @@ public class Flatten extends Module {
 			add(new SliderSetting("Delay", 100, 0, 1000));
 	public Flatten() {
 		super("Flatten", Category.Movement);
-		setChinese("填平脚下");
 		INSTANCE = this;
 	}
 

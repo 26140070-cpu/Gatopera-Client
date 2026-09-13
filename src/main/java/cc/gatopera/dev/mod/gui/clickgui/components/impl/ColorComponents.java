@@ -206,7 +206,7 @@ public class ColorComponents extends Component {
         int y = parent.getY() + offset - 2;
         int width = parent.getWidth();
 
-        SkiaRender2DUtil.drawRect(canvas, (float) x + 1, (float) y + 1, (float) width - 2, (float) defaultHeight - (ClickGui.INSTANCE.maxFill.getValue() ? 0 : 1), hover ? ClickGui.INSTANCE.settingHover.getValue() : ClickGui.INSTANCE.setting.getValue());
+        SkiaRender2DUtil.drawRound(canvas, (float) x + 1, (float) y + 1, (float) width - 2, (float) defaultHeight - (ClickGui.INSTANCE.maxFill.getValue() ? 0 : 1), ROW_RADIUS, hover ? ClickGui.INSTANCE.settingHover.getValue() : ClickGui.INSTANCE.setting.getValue());
 
         boolean unShift = !hover || !InputUtil.isKeyPressed(mc.getWindow().getHandle(), GLFW.GLFW_KEY_LEFT_SHIFT);
         if (colorSetting.injectBoolean) {
@@ -216,7 +216,7 @@ public class ColorComponents extends Component {
                     if (ClickGui.INSTANCE.mainEnd.booleanValue) {
                         SkiaRender2DUtil.drawRectHorizontal(canvas, (float) x + 1, (float) y + 1, (float) currentWidth, (float) defaultHeight - (ClickGui.INSTANCE.maxFill.getValue() ? 0 : 1), hover ? ClickGui.INSTANCE.mainHover.getValue() : color, ClickGui.INSTANCE.mainEnd.getValue());
                     } else {
-                        SkiaRender2DUtil.drawRect(canvas, (float) x + 1, (float) y + 1, (float) currentWidth, (float) defaultHeight - (ClickGui.INSTANCE.maxFill.getValue() ? 0 : 1), hover ? ClickGui.INSTANCE.mainHover.getValue() : color);
+                        SkiaRender2DUtil.drawRound(canvas, (float) x + 1, (float) y + 1, (float) currentWidth, (float) defaultHeight - (ClickGui.INSTANCE.maxFill.getValue() ? 0 : 1), ROW_RADIUS, hover ? ClickGui.INSTANCE.mainHover.getValue() : color);
                     }
                     if (unShift) {
                         SkiaTextUtil.drawString(canvas, colorSetting.getName(), x + 4, y + getTextOffsetY(), -1);
@@ -234,7 +234,7 @@ public class ColorComponents extends Component {
         if (!unShift) {
             SkiaTextUtil.drawString(canvas, "§aL-Copy §cR-Paste", x + 4, y + getTextOffsetY(), -1);
         }
-        SkiaRender2DUtil.drawRound(canvas, (float) (x + width - 16), (float) (y + getTextOffsetY()), 12, 8, 1, ColorUtil.injectAlpha(getColorSetting().getValue(), 255));
+        SkiaRender2DUtil.drawRound(canvas, (float) (x + width - 16), (float) (y + getTextOffsetY()), 12, 8, 3, ColorUtil.injectAlpha(getColorSetting().getValue(), 255));
 
         if (pickerHeight <= 1) {
             return true;

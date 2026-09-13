@@ -52,7 +52,6 @@ public class AutoHoleFill extends Module {
     int progress = 0;
     public AutoHoleFill() {
         super("AutoHoleFill", Category.Combat);
-        setChinese("自动填坑");
         INSTANCE = this;
     }
 

@@ -47,7 +47,6 @@ public class AutoDupe extends Module {
 
     public AutoDupe() {
         super("AutoDupe", Category.Misc);
-        setChinese("自动刷物资");
         INSTANCE = this;
     }
     public final EnumSetting<Mode> mode = add(new EnumSetting<>("Mode", Mode.Xin));

@@ -60,7 +60,6 @@ public class PacketFly extends Module {
 
     public PacketFly() {
         super("PacketFly", Category.Movement);
-        setChinese("发包飞行");
     }
 
     @Override

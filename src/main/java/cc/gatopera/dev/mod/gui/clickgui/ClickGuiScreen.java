@@ -4,7 +4,6 @@ import cc.gatopera.dev.Gatopera;
 import cc.gatopera.dev.api.utils.Wrapper;
 import cc.gatopera.dev.api.utils.render.skia.SkiaContext;
 import cc.gatopera.dev.api.utils.render.skia.SkiaTextUtil;
-import cc.gatopera.dev.mod.gui.clickgui.tabs.Tab;
 import cc.gatopera.dev.mod.modules.settings.impl.SliderSetting;
 import cc.gatopera.dev.mod.modules.settings.impl.StringSetting;
 import net.minecraft.client.gui.DrawContext;
@@ -16,7 +15,7 @@ public class ClickGuiScreen extends Screen implements Wrapper {
     public ClickGuiScreen() {
         super(Text.of("ClickGui"));
         if (!SkiaTextUtil.isReady()) {
-            SkiaTextUtil.init(9f);
+            SkiaTextUtil.init(SkiaTextUtil.UI_SIZE);
         }
     }
     public static boolean clicked = false;
@@ -55,7 +54,14 @@ public class ClickGuiScreen extends Screen implements Wrapper {
         Gatopera.GUI.onUpdate();
         Gatopera.GUI.armorHud.draw(drawContext, partialTicks, Gatopera.GUI.getColor());
 
+        drawContext.draw();
+
+        if (!SkiaTextUtil.isReady()) {
+            SkiaTextUtil.init(SkiaTextUtil.UI_SIZE);
+        }
+
         SkiaContext.draw(canvas -> Gatopera.GUI.drawSkia(canvas, mouseX, mouseY, partialTicks));
+        Gatopera.GUI.drawNativeText(drawContext);
     }
 
     @Override
@@ -78,7 +84,7 @@ public class ClickGuiScreen extends Screen implements Wrapper {
         if (button == 0) {
             hoverClicked = false;
             clicked = true;
-            Gatopera.GUI.selectCategory(mouseX, mouseY);
+            Gatopera.GUI.selectCategory(Gatopera.GUI.toGuiX(mouseX), Gatopera.GUI.toGuiY(mouseY));
         } else if (button == 1) {
             rightClicked = true;
         }
@@ -99,6 +105,7 @@ public class ClickGuiScreen extends Screen implements Wrapper {
     @Override
     public void close() {
         super.close();
+        Gatopera.GUI.resetInteraction();
         rightClicked = false;
         hoverClicked = false;
         clicked = false;
@@ -106,9 +113,7 @@ public class ClickGuiScreen extends Screen implements Wrapper {
 
     @Override
     public boolean mouseScrolled(double mouseX, double mouseY, double horizontalAmount, double verticalAmount) {
-        for (Tab tab : Gatopera.GUI.tabs) {
-            tab.setY((int) (tab.getY() + (verticalAmount * 30)));
-        }
+        Gatopera.GUI.scrollContent(mouseX, mouseY, verticalAmount);
         return super.mouseScrolled(mouseX, mouseY, horizontalAmount, verticalAmount);
     }
 }

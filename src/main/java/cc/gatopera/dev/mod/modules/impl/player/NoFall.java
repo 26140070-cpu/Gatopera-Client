@@ -15,7 +15,6 @@ public class NoFall extends Module {
 			add(new SliderSetting("Distance", 3.0f, 0.0f, 8.0f, 0.1));
 	public NoFall() {
 		super("NoFall", Category.Player);
-		setChinese("没有摔落伤害");
 		this.setDescription("Prevents fall damage.");
 	}
 

@@ -43,7 +43,6 @@ public class ExplosionSpawn extends Module {
     private final SliderSetting fadeTime = add(new SliderSetting("FadeTime", 200, 0, 5000));
     public ExplosionSpawn() {
         super("ExplosionSpawn", Category.Render);
-        setChinese("水晶生成指示");
         INSTANCE = this;
     }
     private final EnumSetting<Easing> ease = add(new EnumSetting<>("Ease", Easing.CubicInOut));

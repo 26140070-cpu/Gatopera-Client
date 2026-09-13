@@ -22,7 +22,6 @@ public class Shader extends Module {
 
     public Shader() {
         super("Shader", Category.Render);
-        setChinese("着色器");
         INSTANCE = this;
     }
     private enum Page {

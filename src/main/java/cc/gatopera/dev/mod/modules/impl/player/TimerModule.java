@@ -33,7 +33,6 @@ public class TimerModule extends Module {
 	public static TimerModule INSTANCE;
 	public TimerModule() {
 		super("Timer", Category.Player);
-		setChinese("时间加速");
 		INSTANCE = this;
 	}
 

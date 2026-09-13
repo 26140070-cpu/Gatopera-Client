@@ -15,7 +15,6 @@ public class Glide extends Module {
 
     public Glide() {
         super("Glide", Category.Movement);
-        setChinese("滑行");
         INSTANCE = this;
     }
     public final BooleanSetting onlyFall = add(new BooleanSetting("OnlyFall", false));

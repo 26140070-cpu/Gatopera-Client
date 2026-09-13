@@ -32,7 +32,6 @@ public class FastWeb extends Module {
     public final BooleanSetting grim = add(new BooleanSetting("Grim", false));
     public FastWeb() {
         super("FastWeb", "So you don't need to keep timer on keybind", Category.Movement);
-        setChinese("蜘蛛网加速");
         INSTANCE = this;
     }
 

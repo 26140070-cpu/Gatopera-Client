@@ -23,7 +23,6 @@ public class HoleESP extends Module {
 
 	public HoleESP() {
 		super("HoleESP", Category.Render);
-		setChinese("坑透视");
 	}
 
 	public final SliderSetting startFade = add(new SliderSetting("AlphaFade", 5f, 1f, 20f));

@@ -35,7 +35,6 @@ public class AutoCity extends Module {
 			add(new SliderSetting("Range", 6.0, 0.0, 8.0, 0.1).setSuffix("m"));
 	public AutoCity() {
 		super("AutoCity", Category.Combat);
-		setChinese("自动挖掘");
 		INSTANCE = this;
 	}
 

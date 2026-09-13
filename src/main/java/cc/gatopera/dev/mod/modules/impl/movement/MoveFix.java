@@ -18,7 +18,6 @@ public class MoveFix extends Module {
     public MoveFix() {
         super("MoveFix", Category.Movement);
         INSTANCE = this;
-        setChinese("移动修复");
     }
 
     public EnumSetting<UpdateMode> updateMode = add(new EnumSetting<>("UpdateMode", UpdateMode.UpdateMouse));

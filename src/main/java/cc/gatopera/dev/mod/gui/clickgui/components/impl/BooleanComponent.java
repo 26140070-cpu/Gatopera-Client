@@ -34,7 +34,6 @@ public class BooleanComponent extends Component {
 
     @Override
     public void update(int offset, double mouseX, double mouseY) {
-        // Sin cambios: la lógica de input no depende del backend de render.
         int parentX = parent.getX();
         int parentY = parent.getY();
         int parentWidth = parent.getWidth();
@@ -63,7 +62,7 @@ public class BooleanComponent extends Component {
         int y = parent.getY() + offset - 2;
         int width = parent.getWidth();
 
-        SkiaRender2DUtil.drawRect(canvas, x + 1, y + 1, width - 2, defaultHeight - (ClickGui.INSTANCE.maxFill.getValue() ? 0 : 1),
+        SkiaRender2DUtil.drawRound(canvas, x + 1, y + 1, width - 2, defaultHeight - (ClickGui.INSTANCE.maxFill.getValue() ? 0 : 1), ROW_RADIUS,
                 hover ? ClickGui.INSTANCE.settingHover.getValue() : ClickGui.INSTANCE.setting.getValue());
 
         currentWidth = animation.get(setting.getValue() ? (width - 2D) : 0D);

@@ -20,7 +20,6 @@ public class YawLock extends Module {
 
     public YawLock() {
         super("YawLock", Category.Player);
-        setChinese("视角锁定");
         INSTANCE = this;
     }
 

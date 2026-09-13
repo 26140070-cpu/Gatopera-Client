@@ -140,7 +140,6 @@ public class AutoAnchor extends Module {
 
 	public AutoAnchor() {
 		super("AutoAnchor", Category.Combat);
-		setChinese("自动重生锚");
 		INSTANCE = this;
 		Gatopera.EVENT_BUS.subscribe(new AnchorRender());
 	}

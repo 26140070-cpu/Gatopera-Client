@@ -13,7 +13,6 @@ public class AntiCrawl extends Module {
 
 	public AntiCrawl() {
 		super("AntiCrawl", Category.Combat);
-		setChinese("反趴下");
 		INSTANCE = this;
 	}
 	private final BooleanSetting pre = add(new BooleanSetting("Pre", true));

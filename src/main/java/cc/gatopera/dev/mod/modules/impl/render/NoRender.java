@@ -44,7 +44,6 @@ public class NoRender extends Module {
 	public final BooleanSetting fireworks = add(new BooleanSetting("Fireworks", false));
 	public NoRender() {
 		super("NoRender", Category.Render);
-		setChinese("禁用渲染");
 		this.setDescription("Disables all overlays and potion effects.");
 		INSTANCE = this;
 	}

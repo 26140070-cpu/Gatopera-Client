@@ -157,7 +157,6 @@ public class AutoCrystal extends Module {
 
     public AutoCrystal() {
         super("AutoCrystal", Category.Combat);
-        setChinese("自动水晶");
         INSTANCE = this;
         Gatopera.EVENT_BUS.subscribe(new CrystalRender());
     }

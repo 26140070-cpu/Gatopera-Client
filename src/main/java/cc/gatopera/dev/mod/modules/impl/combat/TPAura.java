@@ -28,7 +28,6 @@ public class TPAura extends Module {
 
     public TPAura() {
         super("TPAura", Category.Combat);
-        setChinese("传送光环");
         INSTANCE = this;
     }
 

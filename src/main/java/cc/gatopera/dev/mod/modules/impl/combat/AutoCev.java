@@ -20,7 +20,6 @@ public class AutoCev extends Module {
     public static AutoCev INSTANCE;
     public AutoCev() {
         super("AutoCev", Category.Combat);
-        setChinese("自动炸头");
         INSTANCE = this;
     }
     private final SliderSetting targetRange =

@@ -37,7 +37,6 @@ public class AnchorAura extends Module {
 
     public AnchorAura() {
         super("AnchorAura", Category.Combat);
-        setChinese("锚点光环");
         INSTANCE = this;
     }
 

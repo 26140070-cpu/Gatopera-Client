@@ -139,7 +139,6 @@ public class PacketMine extends Module {
 	public static boolean sendGroundPacket = false;
 	public PacketMine() {
 		super("PacketMine", Category.Player);
-		setChinese("发包挖掘");
 		INSTANCE = this;
 	}
 

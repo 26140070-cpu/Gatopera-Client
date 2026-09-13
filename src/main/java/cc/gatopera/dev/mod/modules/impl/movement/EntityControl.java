@@ -21,7 +21,6 @@ public class EntityControl extends Module {
 
     public EntityControl() {
         super("EntityControl", Category.Movement);
-        setChinese("骑行控制");
         INSTANCE = this;
     }
     public final BooleanSetting yaw = add(new BooleanSetting("Yaw", true));

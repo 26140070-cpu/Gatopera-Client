@@ -34,7 +34,6 @@ public class Velocity extends Module {
 
 	public Velocity() {
 		super("Velocity", Category.Movement);
-		setChinese("反击退");
 		INSTANCE = this;
 	}
 

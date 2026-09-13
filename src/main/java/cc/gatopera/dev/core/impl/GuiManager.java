@@ -36,6 +36,18 @@ public class GuiManager implements Wrapper {
 	private int mouseX;
 	private int mouseY;
 
+	private static final int PANEL_WIDTH = 520;
+	private static final int PANEL_HEIGHT = 340;
+	private static final int SIDEBAR_WIDTH = 130;
+	private static final int CONTENT_PADDING = 10;
+	private static final int CONTENT_TOP_PADDING = 34;
+
+	private int panelX;
+	private int panelY;
+	private int panelWidth;
+	private int panelHeight;
+	private int categoryScroll;
+
 	public GuiManager() {
 
 		armorHud = new ArmorHUD();
@@ -59,7 +71,15 @@ public class GuiManager implements Wrapper {
 		return ClickGui.INSTANCE.color.getValue();
 	}
 
+	private void computePanelBounds() {
+		panelWidth = Math.min(PANEL_WIDTH, mc.getWindow().getScaledWidth() - 40);
+		panelHeight = Math.min(PANEL_HEIGHT, mc.getWindow().getScaledHeight() - 40);
+		panelX = (mc.getWindow().getScaledWidth() - panelWidth) / 2;
+		panelY = (mc.getWindow().getScaledHeight() - panelHeight) / 2;
+	}
+
 	public void onUpdate() {
+		computePanelBounds();
 		if (isClickGuiOpen()) {
 			ClickGuiTab selectedTab = getSelectedTab();
 			if (selectedTab != null) {
@@ -70,15 +90,60 @@ public class GuiManager implements Wrapper {
 		}
 	}
 
+	public void resetInteraction() {
+		currentGrabbed = null;
+		ClickGuiScreen.clicked = false;
+		ClickGuiScreen.rightClicked = false;
+		ClickGuiScreen.hoverClicked = false;
+	}
+
+	public double toGuiX(double x) {
+		return (x - getGuiCenterX()) / getGuiScale() + getGuiCenterX();
+	}
+
+	public double toGuiY(double y) {
+		return (y - getGuiCenterY()) / getGuiScale() + getGuiCenterY();
+	}
+
+	public void scrollContent(double mouseX, double mouseY, double amount) {
+		computePanelBounds();
+		double guiMouseX = toGuiX(mouseX);
+		double guiMouseY = toGuiY(mouseY);
+		int categoryTop = panelY + 50;
+		int categoryBottom = panelY + panelHeight - 10;
+		if (guiMouseX >= panelX + 8 && guiMouseX <= panelX + SIDEBAR_WIDTH - 8
+				&& guiMouseY >= categoryTop && guiMouseY <= categoryBottom) {
+			int contentHeight = Module.Category.values().length * 32;
+			int viewportHeight = Math.max(0, categoryBottom - categoryTop);
+			int maxScroll = Math.max(0, contentHeight - viewportHeight);
+			categoryScroll -= (int) Math.round(amount * 24);
+			categoryScroll = Math.max(-maxScroll, Math.min(0, categoryScroll));
+			return;
+		}
+		ClickGuiTab selectedTab = getSelectedTab();
+		if (selectedTab == null) {
+			return;
+		}
+		layoutContentTab(selectedTab);
+		if (guiMouseX >= selectedTab.getX() && guiMouseX <= selectedTab.getX() + selectedTab.getWidth()
+				&& guiMouseY >= selectedTab.getY() + ClickGuiTab.HEADER_HEIGHT
+				&& guiMouseY <= selectedTab.getY() + ClickGuiTab.HEADER_HEIGHT
+				+ Math.max(0, panelHeight - CONTENT_TOP_PADDING - CONTENT_PADDING - ClickGuiTab.HEADER_HEIGHT)) {
+			selectedTab.scrollBy(amount);
+		}
+	}
+
 	public void selectCategory(double mouseX, double mouseY) {
-		int left = 20;
-		int top = 62;
-		for (Module.Category category : Module.Category.values()) {
-			if (mouseX >= left && mouseX <= left + 140 && mouseY >= top && mouseY <= top + 30) {
+		computePanelBounds();
+		int left = panelX + 8;
+		int width = SIDEBAR_WIDTH - 16;
+		for (int index = 0; index < Module.Category.values().length; index++) {
+			Module.Category category = Module.Category.values()[index];
+			int top = panelY + 50 + categoryScroll + index * 32;
+			if (mouseX >= left && mouseX <= left + width && mouseY >= top && mouseY <= top + 28) {
 				selectedCategory = category;
 				return;
 			}
-			top += 36;
 		}
 	}
 
@@ -95,24 +160,17 @@ public class GuiManager implements Wrapper {
 		return null;
 	}
 
-	private static final int PANEL_MARGIN = 12;
-	private static final int SIDEBAR_WIDTH = 164;
-	private static final int CONTENT_PADDING = 12;
-	private static final int CONTENT_TOP_PADDING = 40;
-
 	private void layoutContentTab(ClickGuiTab tab) {
-		int panelX = PANEL_MARGIN;
-		int panelY = PANEL_MARGIN;
-		int panelWidth = mc.getWindow().getScaledWidth() - PANEL_MARGIN * 2;
 		tab.setX(panelX + SIDEBAR_WIDTH + CONTENT_PADDING);
 		tab.setY(panelY + CONTENT_TOP_PADDING);
 		tab.setWidth(panelWidth - SIDEBAR_WIDTH - CONTENT_PADDING * 2);
+		tab.setMaxViewportHeight(panelHeight - CONTENT_TOP_PADDING - CONTENT_PADDING - ClickGuiTab.HEADER_HEIGHT);
 	}
 
 	private void trackMouseAndDrag(int x, int y) {
 		boolean mouseClicked = ClickGuiScreen.clicked;
-		mouseX = x;
-		mouseY = y;
+		mouseX = (int) toGuiX(x);
+		mouseY = (int) toGuiY(y);
 		if (!mouseClicked) {
 			currentGrabbed = null;
 		}
@@ -123,33 +181,52 @@ public class GuiManager implements Wrapper {
 		this.lastMouseY = mouseY;
 	}
 
+	private float getGuiScale() {
+		if (ClickGui.INSTANCE == null) {
+			return 0.82f;
+		}
+		float scale = ClickGui.INSTANCE.guiScale.getValueInt() / 100f;
+		return Math.max(scale, 0.1f);
+	}
+
+	private float getGuiCenterX() {
+		return mc.getWindow().getScaledWidth() / 2f;
+	}
+
+	private float getGuiCenterY() {
+		return mc.getWindow().getScaledHeight() / 2f;
+	}
+
 	public void draw(int x, int y, DrawContext drawContext, float tickDelta) {
 		MatrixStack matrixStack = drawContext.getMatrices();
 		trackMouseAndDrag(x, y);
+		computePanelBounds();
 		RenderSystem.enableCull();
 		matrixStack.push();
 
-		int panelX = 12;
-		int panelY = 12;
-		int panelWidth = mc.getWindow().getScaledWidth() - 24;
-		int panelHeight = mc.getWindow().getScaledHeight() - 24;
 		Render2DUtil.drawRound(matrixStack, panelX, panelY, panelWidth, panelHeight, 14,
 				new Color(12, 14, 20, 238));
-		Render2DUtil.drawRound(matrixStack, panelX, panelY, 164, panelHeight, 14,
+		Render2DUtil.drawRound(matrixStack, panelX, panelY, SIDEBAR_WIDTH, panelHeight, 14,
 				new Color(20, 23, 31, 245));
-		TextUtil.drawString(drawContext, "Gatopera", 28, 28, Color.WHITE);
-		TextUtil.drawString(drawContext, "MODULES", 28, 48, new Color(150, 155, 170));
+		TextUtil.drawString(drawContext, "Gatopera", panelX + 16, panelY + 16, Color.WHITE);
+		TextUtil.drawString(drawContext, "MODULES", panelX + 16, panelY + 34, new Color(150, 155, 170));
 
-		int categoryY = 62;
+		int categoryY = panelY + 50 + categoryScroll;
+		matrixStack.push();
+		drawContext.enableScissor(panelX, panelY + 50, panelX + SIDEBAR_WIDTH, panelY + panelHeight - 10);
 		for (Module.Category category : Module.Category.values()) {
-			boolean selected = category == selectedCategory;
-			if (selected) {
-				Render2DUtil.drawRound(matrixStack, 20, categoryY, 140, 30, 8, getColor());
+			if (categoryY + 28 >= panelY + 50 && categoryY <= panelY + panelHeight - 10) {
+				boolean selected = category == selectedCategory;
+				if (selected) {
+					Render2DUtil.drawRound(matrixStack, panelX + 8, categoryY, SIDEBAR_WIDTH - 16, 28, 8, getColor());
+				}
+				TextUtil.drawString(drawContext, category.name(), panelX + 20, categoryY + 8,
+						selected ? Color.WHITE : new Color(190, 195, 205));
 			}
-			TextUtil.drawString(drawContext, category.name(), 32, categoryY + 9,
-					selected ? Color.WHITE : new Color(190, 195, 205));
-			categoryY += 36;
+			categoryY += 32;
 		}
+		drawContext.disableScissor();
+		matrixStack.pop();
 
 		armorHud.draw(drawContext, tickDelta, getColor());
 		double quad = ClickGui.fade.ease(FadeUtils.Ease.In2);
@@ -171,28 +248,42 @@ public class GuiManager implements Wrapper {
 
 	public void drawSkia(Canvas canvas, int x, int y, float tickDelta) {
 		trackMouseAndDrag(x, y);
+		computePanelBounds();
 		canvas.save();
+		float scale = getGuiScale();
+		canvas.translate(getGuiCenterX(), getGuiCenterY());
+		canvas.scale(scale, scale);
+		canvas.translate(-getGuiCenterX(), -getGuiCenterY());
 
-		int panelX = PANEL_MARGIN;
-		int panelY = PANEL_MARGIN;
-		int panelWidth = mc.getWindow().getScaledWidth() - PANEL_MARGIN * 2;
-		int panelHeight = mc.getWindow().getScaledHeight() - PANEL_MARGIN * 2;
 		SkiaRender2DUtil.drawRound(canvas, panelX, panelY, panelWidth, panelHeight, 14,
 				new Color(12, 14, 20, 238));
 		SkiaRender2DUtil.drawRound(canvas, panelX, panelY, SIDEBAR_WIDTH, panelHeight, 14,
 				new Color(20, 23, 31, 245));
-		SkiaTextUtil.drawString(canvas, "Gatopera", 28, 28, Color.WHITE);
-		SkiaTextUtil.drawString(canvas, "MODULES", 28, 48, new Color(150, 155, 170));
+		SkiaTextUtil.drawString(canvas, "Gatopera", panelX + 16, panelY + 16, Color.WHITE);
+		SkiaTextUtil.drawString(canvas, "MODULES", panelX + 16, panelY + 34, new Color(150, 155, 170));
 
-		int categoryY = 62;
+		int categoryY = panelY + 50 + categoryScroll;
+		canvas.save();
+		canvas.clipRect(io.github.humbleui.types.Rect.makeXYWH(panelX, panelY + 50, SIDEBAR_WIDTH, panelHeight - 60));
 		for (Module.Category category : Module.Category.values()) {
-			boolean selected = category == selectedCategory;
-			if (selected) {
-				SkiaRender2DUtil.drawRound(canvas, 20, categoryY, 140, 30, 8, getColor());
+			if (categoryY + 28 >= panelY + 50 && categoryY <= panelY + panelHeight - 10) {
+				boolean selected = category == selectedCategory;
+				if (selected) {
+					SkiaRender2DUtil.drawRound(canvas, panelX + 8, categoryY, SIDEBAR_WIDTH - 16, 28, 8, getColor());
+				}
+				SkiaTextUtil.drawString(canvas, category.name(), panelX + 20, categoryY + 8,
+						selected ? Color.WHITE : new Color(190, 195, 205));
 			}
-			SkiaTextUtil.drawString(canvas, category.name(), 32, categoryY + 9,
-					selected ? Color.WHITE : new Color(190, 195, 205));
-			categoryY += 36;
+			categoryY += 32;
+		}
+		canvas.restore();
+		int categoryMaxScroll = Math.max(0, Module.Category.values().length * 32 - (panelHeight - 60));
+		if (categoryMaxScroll > 0) {
+			float trackHeight = panelHeight - 60;
+			float thumbHeight = Math.max(24f, trackHeight * trackHeight / (Module.Category.values().length * 32f));
+			float thumbY = panelY + 50 + (-categoryScroll / (float) categoryMaxScroll) * (trackHeight - thumbHeight);
+			SkiaRender2DUtil.drawRound(canvas, panelX + SIDEBAR_WIDTH - 5, thumbY, 3, thumbHeight, 1.5f,
+					new Color(255, 255, 255, 110));
 		}
 
 		double quad = ClickGui.fade.ease(FadeUtils.Ease.In2);
@@ -209,8 +300,40 @@ public class GuiManager implements Wrapper {
 		if (selectedTab != null) {
 			layoutContentTab(selectedTab);
 			selectedTab.drawSkia(canvas, tickDelta, getColor());
+			int maxScroll = selectedTab.getMaxScroll();
+			if (maxScroll > 0) {
+				float trackHeight = selectedTab.getViewportHeightForRender();
+				float thumbHeight = Math.max(22f, trackHeight * trackHeight / selectedTab.getContentHeightForRender());
+				float thumbY = selectedTab.getY() + ClickGuiTab.HEADER_HEIGHT
+						+ (-selectedTab.getScrollOffset() / (float) maxScroll) * (trackHeight - thumbHeight);
+				SkiaRender2DUtil.drawRound(canvas, selectedTab.getX() + selectedTab.getWidth() - 5,
+						thumbY, 3, thumbHeight, 1.5f, new Color(255, 255, 255, 110));
+			}
 		}
 		canvas.restore();
+	}
+
+	public void drawNativeText(DrawContext drawContext) {
+		computePanelBounds();
+		MatrixStack matrices = drawContext.getMatrices();
+		matrices.push();
+		float scale = getGuiScale();
+		matrices.translate(getGuiCenterX(), getGuiCenterY(), 0);
+		matrices.scale(scale, scale, 1);
+		matrices.translate(-getGuiCenterX(), -getGuiCenterY(), 0);
+
+		double quad = ClickGui.fade.ease(FadeUtils.Ease.In2);
+		if (quad < 1) {
+			switch (ClickGui.INSTANCE.mode.getValue()) {
+				case Pull -> {
+					quad = 1 - quad;
+					matrices.translate(0, -100 * quad, 0);
+				}
+				case Scale -> matrices.scale((float) quad, (float) quad, 1);
+			}
+		}
+		SkiaTextUtil.flush(drawContext);
+		matrices.pop();
 	}
 
 	public boolean isClickGuiOpen() {

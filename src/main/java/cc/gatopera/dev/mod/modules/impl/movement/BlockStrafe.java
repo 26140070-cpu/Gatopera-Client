@@ -16,7 +16,6 @@ public class BlockStrafe extends Module {
 
     public BlockStrafe() {
         super("BlockStrafe", Category.Movement);
-        setChinese("方块灵活移动");
         INSTANCE = this;
     }
 

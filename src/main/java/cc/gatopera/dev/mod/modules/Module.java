@@ -46,18 +46,12 @@ public abstract class Module extends Mod {
 	public final BooleanSetting drawnSetting;
 	public boolean state;
 
-	public String chinese;
-
 	public static void sendSequencedPacket(SequencedPacketCreator packetCreator) {
 		if (mc.getNetworkHandler() == null || mc.world == null) return;
 		try (PendingUpdateManager pendingUpdateManager = mc.world.getPendingUpdateManager().incrementSequence()) {
 			int i = pendingUpdateManager.getSequence();
 			mc.getNetworkHandler().sendPacket(packetCreator.predict(i));
 		}
-	}
-
-	public void setChinese(String chinese) {
-		this.chinese = chinese;
 	}
 
 	public String getDisplayName() {
@@ -109,7 +103,7 @@ public abstract class Module extends Mod {
 				case Melon -> CommandManager.sendChatMessageWidthId("§b" + name + " §a" + I18n.t("state.on") + ".", id);
 				case Normal -> CommandManager.sendChatMessageWidthId("§f" + name + " §a" + I18n.t("state.on"), id);
 				case Future -> CommandManager.sendChatMessageWidthId("§7" + I18n.t("msg.toggled_on", name), id);
-				case Chinese -> CommandManager.sendChatMessageWidthId(name + " §a开启", id);
+
 				case Moon -> CommandManager.sendChatMessageWidthIdNoSync("§f[§b" + ClientSetting.INSTANCE.hackName.getValue() + "§f] [§3" + name + "§f] §7" + I18n.t("state.on").toLowerCase(), id);
 				case Earth -> CommandManager.sendChatMessageWidthIdNoSync("§l" + I18n.t("msg.enabled", name) + ".", id);
 			}
@@ -137,7 +131,7 @@ public abstract class Module extends Mod {
 				case Melon -> CommandManager.sendChatMessageWidthId("§b" + name + " §c" + I18n.t("state.off") + ".", id);
 				case Future -> CommandManager.sendChatMessageWidthId("§7" + I18n.t("msg.toggled_off", name), id);
 				case Earth -> CommandManager.sendChatMessageWidthIdNoSync("§l" + I18n.t("msg.disabled", name) + ".", id);
-				case Chinese -> CommandManager.sendChatMessageWidthId(name.toLowerCase() + " §c关闭", id);
+
 				case Moon -> CommandManager.sendChatMessageWidthIdNoSync("§f[§b" + ClientSetting.INSTANCE.hackName.getValue() + "§f] [§3" + name + "§f] §7" + I18n.t("state.off").toLowerCase(), id);
 			}
 		}

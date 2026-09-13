@@ -12,7 +12,6 @@ public class TrueAttackCooldown extends Module {
 
     public TrueAttackCooldown() {
         super("TrueAttackCD", Category.Misc);
-        setChinese("攻击冷却修正");
     }
 
     @EventHandler

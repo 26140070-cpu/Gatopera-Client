@@ -19,7 +19,6 @@ public class HighLight extends Module {
 	public HighLight() {
 		super("HighLight", Category.Render);
 		INSTANCE = this;
-		setChinese("方块高亮");
 	}
 	private final BooleanSetting depth = add(new BooleanSetting("Depth", true));
 	private final ColorSetting fill = add(new ColorSetting("Fill", new Color(255, 0, 0, 50)).injectBoolean(true));

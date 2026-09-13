@@ -20,7 +20,6 @@ public class TotemParticle extends Module {
 			add(new SliderSetting("VelocityY", 100, 0, 500, 1).setSuffix("%"));
 	public TotemParticle() {
 		super("TotemParticle", Category.Render);
-		setChinese("自定义图腾粒子");
 		INSTANCE = this;
 	}
 	Random random = new Random();

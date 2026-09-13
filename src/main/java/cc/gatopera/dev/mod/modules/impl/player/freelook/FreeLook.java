@@ -9,7 +9,6 @@ public class FreeLook extends Module {
     public static FreeLook INSTANCE;
     public FreeLook() {
         super("FreeLook", Category.Player);
-        setChinese("自由视角");
         camera = new CameraState();
         INSTANCE = this;
         Gatopera.EVENT_BUS.subscribe(new FreeLookUpdate());

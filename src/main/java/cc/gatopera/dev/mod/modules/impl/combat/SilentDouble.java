@@ -13,7 +13,6 @@ public class SilentDouble extends Module {
 
     public SilentDouble() {
         super("SilentDouble", Category.Combat);
-        setChinese("静默双持");
         INSTANCE = this;
     }
 

@@ -13,7 +13,6 @@ public class NoSoundLag extends Module {
 	public static NoSoundLag INSTANCE;
 	public NoSoundLag() {
 		super("NoSoundLag", Category.Misc);
-		setChinese("去除声音");
 		INSTANCE = this;
 	}
 	private final BooleanSetting equip =

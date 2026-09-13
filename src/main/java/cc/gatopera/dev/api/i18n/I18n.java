@@ -1048,7 +1048,7 @@ public final class I18n {
         put(en, es, "value.Calc", "Calc", "Calc");
         put(en, es, "value.ChatHud", "Chat Hud", "Chat Hud");
         put(en, es, "value.Check", "Check", "Check");
-        put(en, es, "value.Chinese", "Chinese", "Chino");
+
         put(en, es, "value.Chunk", "Chunk", "Chunk");
         put(en, es, "value.Client", "Client", "Cliente");
         put(en, es, "value.Combat", "Combat", "Combat");

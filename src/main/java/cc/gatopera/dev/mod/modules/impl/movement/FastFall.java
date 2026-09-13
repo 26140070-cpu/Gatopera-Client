@@ -44,7 +44,6 @@ public class FastFall extends Module {
 
     public FastFall() {
         super("FastFall", "Miyagi son simulator", Category.Movement);
-        setChinese("快速坠落");
     }
 
     @Override

@@ -11,7 +11,6 @@ public class Reach extends Module {
 
     public Reach() {
         super("Reach", Category.Combat);
-        setChinese("攻击距离");
         INSTANCE = this;
     }
 }

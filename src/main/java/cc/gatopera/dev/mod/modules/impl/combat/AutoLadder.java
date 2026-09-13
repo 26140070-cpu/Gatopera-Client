@@ -37,7 +37,6 @@ public class AutoLadder extends Module {
 
     public AutoLadder() {
         super("AutoLadder", Category.Combat);
-        setChinese("自动梯子");
         INSTANCE = this;
     }
 

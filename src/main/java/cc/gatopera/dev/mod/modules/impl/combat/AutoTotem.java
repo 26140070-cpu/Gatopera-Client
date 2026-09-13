@@ -29,7 +29,6 @@ public class AutoTotem extends Module {
 			add(new SliderSetting("Health", 16.0f, 0.0f, 36.0f, 0.1));
 	public AutoTotem() {
 		super("AutoTotem", Category.Combat);
-		setChinese("自动图腾");
 	}
 	int totems = 0;
 	private final Timer timer = new Timer();

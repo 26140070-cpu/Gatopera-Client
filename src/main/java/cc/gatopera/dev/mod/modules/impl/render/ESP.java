@@ -28,7 +28,6 @@ public class ESP extends Module {
 	private final ColorSetting shulkerBox = add(new ColorSetting("ShulkerBox", new Color(15, 255, 255, 100)).injectBoolean(false));
 	public ESP() {
 		super("ESP", Category.Render);
-		setChinese("透视");
 	}
 
     @Override

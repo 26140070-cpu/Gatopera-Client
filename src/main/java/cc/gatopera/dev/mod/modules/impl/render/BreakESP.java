@@ -26,7 +26,6 @@ public class BreakESP extends Module {
 
 	public BreakESP() {
 		super("BreakESP", Category.Render);
-		setChinese("挖掘显示");
 		INSTANCE = this;
 	}
 

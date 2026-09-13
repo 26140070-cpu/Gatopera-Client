@@ -13,7 +13,6 @@ public class Fly extends Module {
 
     public Fly() {
         super("Fly", Category.Movement);
-        setChinese("飞行");
         INSTANCE = this;
     }
     @EventHandler

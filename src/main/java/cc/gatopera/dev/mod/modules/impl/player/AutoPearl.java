@@ -18,7 +18,6 @@ public class AutoPearl extends Module {
 
 	public AutoPearl() {
 		super("AutoPearl", Category.Player);
-		setChinese("扔珍珠");
 		INSTANCE = this;
 	}
 

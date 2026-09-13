@@ -16,7 +16,6 @@ public class AutoEat extends Module {
 
     public AutoEat() {
         super("AutoEat", Category.Misc);
-        setChinese("自动进食");
         INSTANCE = this;
     }
 

@@ -36,7 +36,6 @@ public class AutoWeb extends Module {
     public static AutoWeb INSTANCE;
     public AutoWeb() {
         super("AutoWeb", Category.Combat);
-        setChinese("蜘蛛网光环");
         INSTANCE = this;
     }
 

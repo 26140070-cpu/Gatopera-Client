@@ -10,7 +10,6 @@ public class FontSetting extends Module {
     public final SliderSetting yOffset = add(new SliderSetting("Offset", 0, -5, 15, 0.1));
     public FontSetting() {
         super("Font", Category.Client);
-        setChinese("字体设置");
         INSTANCE = this;
     }
 

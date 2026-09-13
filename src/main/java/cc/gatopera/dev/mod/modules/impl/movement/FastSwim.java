@@ -13,7 +13,6 @@ public class FastSwim extends Module {
 
     public FastSwim() {
         super("FastSwim", Category.Movement);
-        setChinese("快速游泳");
         INSTANCE = this;
     }
     @EventHandler

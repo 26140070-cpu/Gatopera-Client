@@ -49,7 +49,6 @@ public class HUD extends Module {
     private final SliderSetting pulseCounter = add(new SliderSetting("Counter", 10, 1, 50));
     public HUD() {
         super("HUD", Category.Client);
-        setChinese("界面");
         INSTANCE = this;
     }
 

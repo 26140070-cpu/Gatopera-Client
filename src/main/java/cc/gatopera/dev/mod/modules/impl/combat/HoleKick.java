@@ -23,7 +23,6 @@ public class HoleKick extends Module {
 
     public HoleKick() {
         super("HoleKick", Category.Combat);
-        setChinese("踢人出坑");
         INSTANCE = this;
     }
 

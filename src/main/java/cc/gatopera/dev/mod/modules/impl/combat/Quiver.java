@@ -29,7 +29,6 @@ public class Quiver extends Module {
 
     public Quiver() {
         super("Quiver", Category.Combat);
-        setChinese("弓箭");
         INSTANCE = this;
     }
 

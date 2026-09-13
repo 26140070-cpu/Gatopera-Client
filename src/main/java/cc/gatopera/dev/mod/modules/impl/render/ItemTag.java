@@ -10,7 +10,6 @@ public class ItemTag extends Module {
 
     public ItemTag() {
         super("ItemTag", Category.Render);
-        setChinese("物品标签");
     }
     public final BooleanSetting customName = add(new BooleanSetting("CustomName", false));
     public final BooleanSetting count = add(new BooleanSetting("Count", true));

@@ -69,7 +69,6 @@ public class ClientSetting extends Module {
 
     public ClientSetting() {
         super("ClientSetting", Category.Client);
-        setChinese("客户端设置");
         INSTANCE = this;
     }
 
@@ -104,7 +103,7 @@ public class ClientSetting extends Module {
         Earth,
         Moon,
         Melon,
-        Chinese,
+
         None
     }
 

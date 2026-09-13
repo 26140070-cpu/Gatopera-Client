@@ -29,7 +29,6 @@ import java.util.concurrent.ConcurrentHashMap;
 public class PearlPredict extends Module {
     public PearlPredict() {
         super("PearlPredict", Category.Render);
-        setChinese("珍珠预测");
     }
 
     public Map<EnderPearlEntity, FakeEntity> map = new ConcurrentHashMap<>();

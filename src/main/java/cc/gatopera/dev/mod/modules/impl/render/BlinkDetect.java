@@ -32,7 +32,6 @@ public class BlinkDetect extends Module {
 
     public BlinkDetect() {
         super("BlinkDetect", Category.Render);
-        setChinese("瞬移检测");
     }
 
     @Override

@@ -32,7 +32,6 @@ public class FakePlayer extends Module {
 
 	public FakePlayer() {
 		super("FakePlayer", Category.Misc);
-		setChinese("假人");
 		INSTANCE = this;
 	}
 

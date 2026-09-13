@@ -44,7 +44,6 @@ public class NoSlow extends Module {
     }
     public NoSlow() {
         super("NoSlow", Category.Movement);
-        setChinese("无减速");
         INSTANCE = this;
     }
 

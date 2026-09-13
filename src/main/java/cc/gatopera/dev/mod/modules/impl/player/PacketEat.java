@@ -14,7 +14,6 @@ public class PacketEat extends Module {
 			add(new BooleanSetting("DeSync", false));
 	public PacketEat() {
 		super("PacketEat", Category.Player);
-		setChinese("发包进食");
 		INSTANCE = this;
 	}
 

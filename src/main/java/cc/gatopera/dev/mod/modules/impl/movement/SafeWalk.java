@@ -9,7 +9,6 @@ public class SafeWalk extends Module {
     public static SafeWalk INSTANCE;
     public SafeWalk() {
         super("SafeWalk", Category.Movement);
-        setChinese("边缘行走");
         INSTANCE = this;
     }
 

@@ -17,20 +17,17 @@ public class FontRenderers {
             ByteBuffer buffer = loadResource("/assets/minecraft/font/font.ttf");
             if (buffer == null) buffer = loadResource("/assets/gatopera/font/font.ttf");
             if (buffer == null) {
-                System.err.println("[Gatopera] font.ttf not found");
                 customFontsAvailable = false;
                 ui = null;
                 Calibri = null;
                 return;
             }
-            StbFont stb = new StbFont(buffer, Math.max(18, (int) (size * 2)));
+            int genSize = (int) (size * 2);
+            StbFont stb = new StbFont(buffer, genSize);
             ui = new StbFontAdapter(stb, size);
             Calibri = ui;
             customFontsAvailable = true;
-            System.out.println("[Gatopera] STB custom fonts loaded");
         } catch (Throwable t) {
-            System.err.println("[Gatopera] STB fonts failed: " + t.getMessage());
-            t.printStackTrace();
             customFontsAvailable = false;
             ui = null;
             Calibri = null;

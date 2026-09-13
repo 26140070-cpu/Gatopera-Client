@@ -45,7 +45,6 @@ public class AutoPot extends Module {
 
     public AutoPot() {
         super("AutoPot", Category.Player);
-        setChinese("自动药水");
         INSTANCE = this;
     }
 

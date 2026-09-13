@@ -20,7 +20,6 @@ import java.util.stream.Collectors;
 public class ModuleList extends Module {
     public ModuleList() {
         super("ModuleList", Category.Client);
-        setChinese("功能列表");
         INSTANCE = this;
     }
 

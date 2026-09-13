@@ -11,7 +11,6 @@ public class AddFriend extends Module {
 
 	public AddFriend() {
 		super("AddFriend", Category.Misc);
-		setChinese("加好友");
 		INSTANCE = this;
 	}
 

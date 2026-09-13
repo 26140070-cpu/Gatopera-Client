@@ -66,7 +66,6 @@ public class SelfTrap extends Module {
     int progress = 0;
     public SelfTrap() {
         super("SelfTrap", Category.Combat);
-        setChinese("自我困住");
         INSTANCE = this;
     }
 

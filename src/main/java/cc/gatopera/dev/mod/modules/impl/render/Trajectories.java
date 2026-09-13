@@ -27,7 +27,6 @@ import java.awt.*;
 public class Trajectories extends Module {
     public Trajectories() {
         super("Trajectories", Category.Render);
-        setChinese("抛物线预测");
     }
 
     private final ColorSetting color = add(new ColorSetting("Color", new Color(255, 255, 255, 255)));

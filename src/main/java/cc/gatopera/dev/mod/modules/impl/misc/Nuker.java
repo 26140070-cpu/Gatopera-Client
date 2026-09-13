@@ -14,7 +14,6 @@ public class Nuker extends Module {
             add(new BooleanSetting("Down",false));
     public Nuker() {
         super("Nuker", Category.Misc);
-        setChinese("范围挖掘");
     }
 
     @Override

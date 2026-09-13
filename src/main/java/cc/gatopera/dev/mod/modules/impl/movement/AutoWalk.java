@@ -12,7 +12,6 @@ import net.minecraft.util.math.Direction;
 public class AutoWalk extends Module {
     public AutoWalk() {
         super("AutoWalk", Category.Movement);
-        setChinese("自动前进");
         INSTANCE = this;
     }
     public enum Mode {

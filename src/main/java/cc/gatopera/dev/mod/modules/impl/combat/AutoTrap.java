@@ -83,7 +83,6 @@ public class AutoTrap
 
     public AutoTrap() {
         super("AutoTrap", Category.Combat);
-        setChinese("自动困住");
         INSTANCE = this;
     }
 

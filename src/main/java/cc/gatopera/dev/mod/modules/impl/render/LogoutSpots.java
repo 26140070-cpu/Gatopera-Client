@@ -32,7 +32,6 @@ public class LogoutSpots extends Module {
 
     public LogoutSpots() {
         super("LogoutSpots", Category.Render);
-        setChinese("退出记录");
     }
 
     @EventHandler

@@ -61,7 +61,6 @@ public class ChestStealer extends Module {
 
     public ChestStealer() {
         super("ChestStealer", Category.Misc);
-        setChinese("自动补给");
     }
 
     public int findShulker() {

@@ -35,7 +35,6 @@ public class AutoArmor extends Module {
 
 	public AutoArmor() {
 		super("AutoArmor", Category.Player);
-		setChinese("自动穿甲");
 		INSTANCE = this;
 	}
 

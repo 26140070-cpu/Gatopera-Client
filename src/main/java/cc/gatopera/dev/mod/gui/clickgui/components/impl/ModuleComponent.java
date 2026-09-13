@@ -122,21 +122,11 @@ public class ModuleComponent extends Component {
 		currentPopHeight = popHeightAnimation.get(popped ? (expandedHeight - defaultHeight) : 0);
 		if (currentPopHeight > 0) {
 			int i = (int) (currentOffset + defaultHeight + 1);
-			if (scissor) {
-				canvas.save();
-				canvas.clipRect(Rect.makeXYWH(parentX, (float) (parentY + currentOffset + defaultHeight), parentWidth, mc.getWindow().getScaledHeight() - (float) (parentY + currentOffset + defaultHeight)), ClipMode.INTERSECT);
-				canvas.save();
-				canvas.clipRect(Rect.makeXYWH(parentX, parentY + i - 1, parentWidth, (float) ((parentY + currentOffset + defaultHeight + currentPopHeight) - (parentY + i - 1))), ClipMode.INTERSECT);
-			}
 			for (Component children : this.settingsList) {
 				if (children.isVisible()) {
 					children.draw(i, canvas, partialTicks, color, !popped);
 					i += children.getCurrentHeight();
 				}
-			}
-			if (scissor) {
-				canvas.restore();
-				canvas.restore();
 			}
 		}
 		currentWidth = animation.get(module.isOn() ? (parentWidth - 2D) : 0D);
@@ -144,11 +134,11 @@ public class ModuleComponent extends Component {
 			if (ClickGui.INSTANCE.mainEnd.booleanValue) {
 				SkiaRender2DUtil.drawRectHorizontal(canvas, parentX + 1, (int) (parentY + currentOffset), (float) currentWidth, defaultHeight - (ClickGui.INSTANCE.maxFill.getValue() ? 0 : 1), hovered ? ClickGui.INSTANCE.mainHover.getValue() : ClickGui.INSTANCE.color.getValue(), ClickGui.INSTANCE.mainEnd.getValue());
 			} else {
-				SkiaRender2DUtil.drawRect(canvas, parentX + 1, (int) (parentY + currentOffset), (float) currentWidth, defaultHeight - (ClickGui.INSTANCE.maxFill.getValue() ? 0 : 1), hovered ? ClickGui.INSTANCE.mainHover.getValue() : ClickGui.INSTANCE.color.getValue());
+				SkiaRender2DUtil.drawRound(canvas, parentX + 1, (int) (parentY + currentOffset), (float) currentWidth, defaultHeight - (ClickGui.INSTANCE.maxFill.getValue() ? 0 : 1), ROW_RADIUS, hovered ? ClickGui.INSTANCE.mainHover.getValue() : ClickGui.INSTANCE.color.getValue());
 			}
 		}
 		if (module.isOff() || !ClickGui.INSTANCE.activeBox.getValue())
-			SkiaRender2DUtil.drawRect(canvas, parentX + 1, (int) (parentY + currentOffset), parentWidth - 2, defaultHeight - (ClickGui.INSTANCE.maxFill.getValue() ? 0 : 1), hovered ? ClickGui.INSTANCE.moduleHover.getValue() : ClickGui.INSTANCE.module.getValue());
+			SkiaRender2DUtil.drawRound(canvas, parentX + 1, (int) (parentY + currentOffset), parentWidth - 2, defaultHeight - (ClickGui.INSTANCE.maxFill.getValue() ? 0 : 1), ROW_RADIUS, hovered ? ClickGui.INSTANCE.moduleHover.getValue() : ClickGui.INSTANCE.module.getValue());
 		if (hovered && InputUtil.isKeyPressed(mc.getWindow().getHandle(), GLFW.GLFW_KEY_LEFT_SHIFT)) {
 			SkiaTextUtil.drawString(canvas, "Drawn " + (module.drawnSetting.getValue() ? "§aOn" : "§cOff"), (float) (parentX + 4), (float) (parentY + getTextOffsetY() + currentOffset) - 1, -1);
 		} else {

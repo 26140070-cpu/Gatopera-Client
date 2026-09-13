@@ -10,6 +10,7 @@ import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.Identifier;
 import org.joml.Matrix4f;
 import org.lwjgl.BufferUtils;
+import org.lwjgl.opengl.GL11;
 import org.lwjgl.stb.*;
 import org.lwjgl.system.MemoryStack;
 
@@ -31,7 +32,7 @@ public class StbFont {
 
         STBTTFontinfo info = STBTTFontinfo.create();
         if (!STBTruetype.stbtt_InitFont(info, ttf)) {
-            throw new IllegalStateException("Failed to init STB font");
+            throw new IllegalStateException();
         }
 
         ByteBuffer bitmap = BufferUtils.createByteBuffer(ATLAS_SIZE * ATLAS_SIZE);
@@ -41,7 +42,8 @@ public class StbFont {
         STBTTPackedchar.Buffer latinExt = STBTTPackedchar.create(128);
 
         STBTTPackContext pc = STBTTPackContext.create();
-        STBTruetype.stbtt_PackBegin(pc, bitmap, ATLAS_SIZE, ATLAS_SIZE, 0, 1);
+        STBTruetype.stbtt_PackBegin(pc, bitmap, ATLAS_SIZE, ATLAS_SIZE, 0, 2);
+        STBTruetype.stbtt_PackSetOversampling(pc, 2, 2);
 
         STBTTPackRange.Buffer ranges = STBTTPackRange.create(3);
         ranges.put(STBTTPackRange.create().set(pixelHeight, 32, null, 95, basic, (byte) 1, (byte) 1));
@@ -75,6 +77,10 @@ public class StbFont {
         textureId = new Identifier("gatopera", "fonts/" + UUID.randomUUID());
         NativeImageBackedTexture tex = new NativeImageBackedTexture(image);
         MinecraftClient.getInstance().getTextureManager().registerTexture(textureId, tex);
+        
+        tex.bindTexture();
+        RenderSystem.texParameter(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER, GL11.GL_LINEAR);
+        RenderSystem.texParameter(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_LINEAR);
     }
 
     private void putRange(STBTTPackedchar.Buffer buf, int firstCodepoint) {

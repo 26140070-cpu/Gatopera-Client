@@ -11,7 +11,6 @@ public class CrystalChams extends Module {
     public static CrystalChams INSTANCE;
     public CrystalChams() {
         super("CrystalChams", Category.Render);
-        setChinese("末影水晶模型");
         INSTANCE = this;
     }
 

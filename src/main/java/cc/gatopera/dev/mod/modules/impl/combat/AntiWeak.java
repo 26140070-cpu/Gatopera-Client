@@ -18,7 +18,6 @@ import net.minecraft.network.packet.c2s.play.PlayerInteractEntityC2SPacket;
 public class AntiWeak extends Module {
     public AntiWeak() {
         super("AntiWeak", Category.Combat);
-        setChinese("反虚弱");
     }
     private final SliderSetting delay = add(new SliderSetting("Delay", 100, 0, 500).setSuffix("ms"));
     private final EnumSetting<SwapMode> swapMode =

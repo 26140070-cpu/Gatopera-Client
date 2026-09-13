@@ -40,7 +40,6 @@ public class AutoEXP extends Module {
 
     public AutoEXP() {
         super("AutoEXP", Category.Combat);
-        setChinese("自动经验瓶");
         INSTANCE = this;
     }
 

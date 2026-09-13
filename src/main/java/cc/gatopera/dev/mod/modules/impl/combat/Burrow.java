@@ -72,7 +72,6 @@ public class Burrow extends Module {
 
     public Burrow() {
         super("Burrow", Category.Combat);
-        setChinese("卡黑曜石");
         INSTANCE = this;
     }
 

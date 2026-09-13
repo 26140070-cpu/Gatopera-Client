@@ -19,7 +19,6 @@ public class AntiPiston extends Module {
 
     public AntiPiston() {
         super("AntiPiston", Category.Combat);
-        setChinese("防活塞");
         INSTANCE = this;
     }
 

@@ -38,7 +38,6 @@ public class InteractTweaks extends Module {
     private final SliderSetting delay = add(new SliderSetting("UseDelay", 4, 0, 4, 1));
     public InteractTweaks() {
         super("InteractTweaks", Category.Player);
-        setChinese("交互调整");
         INSTANCE = this;
     }
 

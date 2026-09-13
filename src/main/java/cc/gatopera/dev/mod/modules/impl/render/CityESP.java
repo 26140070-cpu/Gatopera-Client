@@ -25,7 +25,6 @@ public class CityESP extends Module {
 
 	public CityESP() {
 		super("CityESP", Category.Render);
-		setChinese("水晶阻挡显示");
 	}
 
 	private final ColorSetting color = add(new ColorSetting("Color", new Color(255, 255, 255, 100)));

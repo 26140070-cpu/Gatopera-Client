@@ -99,7 +99,6 @@ public class KillAura extends Module {
 
     public KillAura() {
         super("KillAura", Category.Combat);
-        setChinese("杀戮光环");
         INSTANCE = this;
     }
 

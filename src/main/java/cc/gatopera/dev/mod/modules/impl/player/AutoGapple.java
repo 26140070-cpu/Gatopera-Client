@@ -22,7 +22,6 @@ public class AutoGapple extends Module {
 
     public AutoGapple() {
         super("AutoGapple", Category.Player);
-        setChinese("自动金苹果");
         INSTANCE = this;
     }
 

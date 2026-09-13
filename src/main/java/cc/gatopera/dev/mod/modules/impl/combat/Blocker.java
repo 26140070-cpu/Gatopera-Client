@@ -58,7 +58,6 @@ public class Blocker extends Module {
 
     public Blocker() {
         super("Blocker", Category.Combat);
-        setChinese("水晶阻挡");
         INSTANCE = this;
     }
 

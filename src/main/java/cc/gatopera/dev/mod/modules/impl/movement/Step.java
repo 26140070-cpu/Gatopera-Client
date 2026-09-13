@@ -34,7 +34,6 @@ public class Step extends Module {
 			add(new BooleanSetting("PathingPause", true));
 	public Step() {
 		super("Step", "Steps up blocks.", Category.Movement);
-		setChinese("步行辅助");
 	}
 
 	@Override

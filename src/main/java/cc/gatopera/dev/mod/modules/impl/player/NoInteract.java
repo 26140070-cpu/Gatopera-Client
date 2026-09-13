@@ -13,7 +13,6 @@ public class NoInteract
 
     public NoInteract() {
         super("NoChestInteract", Category.Player);
-        setChinese("没有箱子交互");
     }
 
     @EventHandler

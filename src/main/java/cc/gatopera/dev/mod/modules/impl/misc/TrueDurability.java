@@ -8,7 +8,6 @@ public class TrueDurability extends Module {
 
     public TrueDurability() {
         super("TrueDurability", Category.Misc);
-        setChinese("耐久度修正");
     }
 
     @EventHandler

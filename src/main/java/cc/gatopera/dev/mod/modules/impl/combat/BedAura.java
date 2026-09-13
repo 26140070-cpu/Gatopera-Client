@@ -118,7 +118,6 @@ public class BedAura extends Module {
 			add(new BooleanSetting("TerrainIgnore", true, () -> page.getValue() == Page.Predict));
 	public BedAura() {
 		super("BedAura", Category.Combat);
-		setChinese("床光环");
 		INSTANCE = this;
 	}
 	public static BlockPos placePos;

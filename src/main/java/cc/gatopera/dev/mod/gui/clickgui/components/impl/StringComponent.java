@@ -80,7 +80,7 @@ public class StringComponent extends Component {
 		}
 		String name = setting.isListening() ? "[E]" : setting.getName();
 		if (hover)
-			SkiaRender2DUtil.drawRect(canvas, (float) parentX + 1, (float) y + 1, (float) width - 3, (float) defaultHeight - (ClickGui.INSTANCE.maxFill.getValue() ? 0 : 1), ClickGui.INSTANCE.settingHover.getValue());
+			SkiaRender2DUtil.drawRound(canvas, (float) parentX + 1, (float) y + 1, (float) width - 3, (float) defaultHeight - (ClickGui.INSTANCE.maxFill.getValue() ? 0 : 1), ROW_RADIUS, ClickGui.INSTANCE.settingHover.getValue());
 		SkiaTextUtil.drawString(canvas, text, parentX + 4 + SkiaTextUtil.getWidth(name) / 2,
 				(float) (parentY + getTextOffsetY() + offset) - 2, 0xFFFFFF);
 		SkiaTextUtil.drawStringWithScale(canvas, name, (float) (parentX + 4),

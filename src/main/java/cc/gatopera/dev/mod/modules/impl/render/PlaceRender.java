@@ -34,7 +34,6 @@ public class PlaceRender extends Module {
 	}
 	public PlaceRender() {
 		super("PlaceRender", Category.Render);
-		setChinese("放置显示");
 		enable();
 		INSTANCE = this;
 	}

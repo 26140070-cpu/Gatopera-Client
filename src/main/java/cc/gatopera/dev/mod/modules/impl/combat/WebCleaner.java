@@ -34,7 +34,6 @@ public class WebCleaner extends Module {
 
     public WebCleaner() {
         super("WebCleaner", Category.Combat);
-        setChinese("清蛛网");
         INSTANCE = this;
     }
 

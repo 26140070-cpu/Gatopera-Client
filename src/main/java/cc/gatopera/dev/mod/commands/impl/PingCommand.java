@@ -32,7 +32,8 @@ public class PingCommand extends Command {
 	@EventHandler
 	public void onPacketReceive(PacketEvent.Receive e) {
 		if (e.getPacket() instanceof GameMessageS2CPacket packet) {
-			if (packet.content().getString().contains("chat.use") || packet.content().getString().contains("命令") || packet.content().getString().contains("Bad command")|| packet.content().getString().contains("No such command") || packet.content().getString().contains("<--[HERE]") || packet.content().getString().contains("Unknown") || packet.content().getString().contains("帮助") || packet.content().getString().contains("执行错误")) {
+			String msg = packet.content().getString();
+			if (msg.contains("chat.use") || msg.contains("Bad command") || msg.contains("No such command") || msg.contains("<--[HERE]") || msg.contains("Unknown")) {
 				CommandManager.sendChatMessage("ping: " + (System.currentTimeMillis() - sendTime) + "ms");
 				Gatopera.EVENT_BUS.unsubscribe(this);
 			}

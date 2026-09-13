@@ -34,7 +34,6 @@ public class LavaFiller extends Module {
     int progress = 0;
     public LavaFiller() {
         super("LavaFiller", Category.Misc);
-        setChinese("自动填岩浆");
     }
 
     @Override

@@ -12,7 +12,6 @@ public class PearlMark extends Module {
 
     public PearlMark() {
         super("PearlMark", Category.Misc);
-        setChinese("珍珠标记");
     }
 
     @EventHandler

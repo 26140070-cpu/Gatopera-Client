@@ -32,7 +32,6 @@ public class Freecam extends Module {
 
     public Freecam() {
         super("Freecam", Category.Player);
-        setChinese("自由相机");
         INSTANCE = this;
     }
 

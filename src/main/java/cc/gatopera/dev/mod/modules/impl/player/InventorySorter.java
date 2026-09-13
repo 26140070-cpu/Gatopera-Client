@@ -15,7 +15,6 @@ import net.minecraft.screen.slot.SlotActionType;
 public class InventorySorter extends Module {
     public InventorySorter() {
         super("InventorySorter", Category.Player);
-        setChinese("背包整理");
     }
 
     private final BooleanSetting stack = add(new BooleanSetting("Stack", true));

@@ -17,7 +17,6 @@ public class Zoom extends Module {
     final SliderSetting fov = add(new SliderSetting("ZoomFov", 60, 0, 130, 1));
     public Zoom() {
         super("Zoom", Category.Render);
-        setChinese("放大");
         INSTANCE = this;
         Gatopera.EVENT_BUS.subscribe(new ZoomAnim());
     }

@@ -28,7 +28,6 @@ public class SelfFill extends Module {
 
     public SelfFill() {
         super("SelfFill", Category.Combat);
-        setChinese("自我填坑");
         INSTANCE = this;
     }
 

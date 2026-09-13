@@ -7,7 +7,6 @@ import net.minecraft.network.packet.c2s.play.PlayerMoveC2SPacket;
 public class VClip extends Module {
     public VClip() {
         super("VClip", Category.Movement);
-        setChinese("纵向穿墙");
     }
 
     final EnumSetting<Mode> mode = add(new EnumSetting<>("Mode", Mode.Jump));

@@ -33,7 +33,6 @@ public class AutoReconnect extends Module {
     public static AutoReconnect INSTANCE;
     public AutoReconnect() {
         super("AutoReconnect", Category.Misc);
-        setChinese("自动重连");
         INSTANCE = this;
         Gatopera.EVENT_BUS.subscribe(new StaticListener());
     }

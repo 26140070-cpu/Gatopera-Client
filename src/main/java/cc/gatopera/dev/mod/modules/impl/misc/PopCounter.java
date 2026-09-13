@@ -19,7 +19,6 @@ public class PopCounter
             add(new BooleanSetting("Dead", true));
     public PopCounter() {
         super("PopCounter", Category.Misc);
-        setChinese("图腾计数器");
         INSTANCE = this;
     }
 

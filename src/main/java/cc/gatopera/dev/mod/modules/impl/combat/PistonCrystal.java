@@ -78,7 +78,6 @@ public class PistonCrystal extends Module {
 
     public PistonCrystal() {
         super("PistonCrystal", Category.Combat);
-        setChinese("活塞水晶");
         INSTANCE = this;
     }
 

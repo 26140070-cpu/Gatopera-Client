@@ -14,7 +14,6 @@ public class ViewModel extends Module {
     public static ViewModel INSTANCE;
     public ViewModel() {
         super("ViewModel", Category.Render);
-        setChinese("手持模型");
         INSTANCE = this;
     }
 

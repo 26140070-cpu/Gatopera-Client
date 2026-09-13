@@ -9,7 +9,6 @@ import net.minecraft.client.gui.screen.DownloadingTerrainScreen;
 public class NoTerrainScreen extends Module {
     public NoTerrainScreen() {
         super("NoTerrainScreen", Category.Player);
-        setChinese("没有加载界面");
     }
 
     @EventHandler

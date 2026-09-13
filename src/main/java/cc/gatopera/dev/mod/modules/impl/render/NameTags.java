@@ -57,7 +57,6 @@ public class NameTags extends Module {
 
     public NameTags() {
         super("NameTags", Category.Render);
-        setChinese("名字标签");
         INSTANCE = this;
     }
 

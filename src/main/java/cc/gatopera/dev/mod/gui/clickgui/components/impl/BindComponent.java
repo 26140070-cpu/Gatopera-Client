@@ -67,7 +67,7 @@ public class BindComponent extends Component {
 				text = bind.getName() + ": " + bind.getBind();
 			}
 		}
-		if (hover) SkiaRender2DUtil.drawRect(canvas, (float) parentX + 1, (float) y + 1, (float) width - 3, (float) defaultHeight - (ClickGui.INSTANCE.maxFill.getValue() ? 0 : 1), ClickGui.INSTANCE.settingHover.getValue());
+		if (hover) SkiaRender2DUtil.drawRound(canvas, (float) parentX + 1, (float) y + 1, (float) width - 3, (float) defaultHeight - (ClickGui.INSTANCE.maxFill.getValue() ? 0 : 1), ROW_RADIUS, ClickGui.INSTANCE.settingHover.getValue());
 		SkiaTextUtil.drawString(canvas, text, (float) (parentX + 4),
 				(float) (parentY + getTextOffsetY() + offset) - 2, 0xFFFFFF);
 		return true;

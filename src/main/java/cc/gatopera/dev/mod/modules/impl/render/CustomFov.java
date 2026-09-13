@@ -10,7 +10,6 @@ public class CustomFov extends Module {
     public final SliderSetting itemFov = add(new SliderSetting("ItemFov", 70, 30, 170, 1));
     public CustomFov() {
         super("Fov", Category.Render);
-        setChinese("自定义视角");
         INSTANCE = this;
     }
 }

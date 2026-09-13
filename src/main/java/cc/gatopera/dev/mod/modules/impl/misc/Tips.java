@@ -21,7 +21,6 @@ public class Tips extends Module {
     public static Tips INSTANCE;
     public Tips() {
         super("Tips", Category.Misc);
-        setChinese("提示");
         INSTANCE = this;
     }
     public final BooleanSetting deathCoords =

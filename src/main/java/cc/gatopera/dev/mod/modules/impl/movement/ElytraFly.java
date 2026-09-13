@@ -54,7 +54,6 @@ public class ElytraFly extends Module {
 
     public ElytraFly() {
         super("ElytraFly", Category.Movement);
-        setChinese("鞘翅飞行");
         INSTANCE = this;
     }
 

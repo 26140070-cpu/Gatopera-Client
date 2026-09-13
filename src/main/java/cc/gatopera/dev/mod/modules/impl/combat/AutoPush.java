@@ -46,7 +46,6 @@ public class AutoPush extends Module {
 
     public AutoPush() {
         super("AutoPush", Category.Combat);
-        setChinese("活塞推人");
         INSTANCE = this;
     }
 

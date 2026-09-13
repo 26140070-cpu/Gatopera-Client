@@ -103,7 +103,7 @@ public class EnumComponent extends Component {
 		if (ClickGui.INSTANCE.mainEnd.booleanValue) {
 			SkiaRender2DUtil.drawRectHorizontal(canvas, (float) x + 1, (float) y + 1, (float) width - 2, (float) defaultHeight - (ClickGui.INSTANCE.maxFill.getValue() ? 0 : 1), hover ? ClickGui.INSTANCE.mainHover.getValue() : Gatopera.GUI.getColor(), ClickGui.INSTANCE.mainEnd.getValue());
 		} else {
-			SkiaRender2DUtil.drawRect(canvas, (float) x + 1, (float) y + 1, (float) width - 2, (float) defaultHeight - (ClickGui.INSTANCE.maxFill.getValue() ? 0 : 1), hover ? ClickGui.INSTANCE.mainHover.getValue() : Gatopera.GUI.getColor());
+			SkiaRender2DUtil.drawRound(canvas, (float) x + 1, (float) y + 1, (float) width - 2, (float) defaultHeight - (ClickGui.INSTANCE.maxFill.getValue() ? 0 : 1), ROW_RADIUS, hover ? ClickGui.INSTANCE.mainHover.getValue() : Gatopera.GUI.getColor());
 		}
 		SkiaTextUtil.drawString(canvas, setting.getName() + ": " + setting.getValue().name(), x + 4, y + getTextOffsetY(), -1);
 		SkiaTextUtil.drawString(canvas, setting.popped ? "-" : "+", x + width - 11, y + getTextOffsetY(), new Color(255, 255, 255).getRGB());

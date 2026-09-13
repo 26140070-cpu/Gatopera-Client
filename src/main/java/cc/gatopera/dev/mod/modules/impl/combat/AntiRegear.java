@@ -16,7 +16,6 @@ public class AntiRegear extends Module {
             add(new SliderSetting("Range", 5, 0, 8,.1));
     public AntiRegear() {
         super("AntiRegear", Category.Combat);
-        setChinese("反补给");
     }
 
     @Override

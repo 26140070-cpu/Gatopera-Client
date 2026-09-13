@@ -71,7 +71,7 @@ public class ClickGui extends Module {
 					() -> page.getValue() == Pages.General));
 
 	public final SliderSetting guiScale =
-			add(new SliderSetting("GuiScale", 100, 70, 130, 1,
+			add(new SliderSetting("GuiScale", 82, 70, 130, 1,
 					() -> page.getValue() == Pages.General));
 
 	public final EnumSetting<Theme> theme =

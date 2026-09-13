@@ -9,7 +9,6 @@ public class Colors extends Module {
     public static Colors INSTANCE;
     public Colors() {
         super("Colors", Category.Client);
-        setChinese("颜色");
         INSTANCE = this;
     }
 

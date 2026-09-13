@@ -70,7 +70,6 @@ public class Speed extends Module {
     public static Speed INSTANCE;
     public Speed() {
         super("Speed", Category.Movement);
-        setChinese("加速");
         INSTANCE = this;
     }
 

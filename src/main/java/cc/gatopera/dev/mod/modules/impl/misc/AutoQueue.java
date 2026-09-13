@@ -11,28 +11,10 @@ import net.minecraft.network.packet.s2c.play.GameMessageS2CPacket;
 import java.util.HashMap;
 
 public class AutoQueue extends Module {
-    public static HashMap<String, String> asks = new HashMap<>(){
-        {
-            put("红石火把", "15");
-            put("猪被闪电", "僵尸猪人");
-            put("小箱子能", "27");
-            put("开服年份", "2020");
-            put("定位末地遗迹", "0");
-            put("爬行者被闪电", "高压爬行者");
-            put("大箱子能", "54");
-            put("羊驼会主动", "不会");
-            put("无限水", "3");
-            put("挖掘速度最快", "金镐");
-            put("凋灵死后", "下界之星");
-            put("苦力怕的官方", "爬行者");
-            put("南瓜的生长", "不需要");
-            put("定位末地", "0");
-        }
-    };
+    public static HashMap<String, String> asks = new HashMap<>();
 
     public AutoQueue() {
         super("AutoQueue", Category.Misc);
-        setChinese("自动答题");
     }
     private final BooleanSetting queueCheck = add(new BooleanSetting("QueueCheck", true));
 

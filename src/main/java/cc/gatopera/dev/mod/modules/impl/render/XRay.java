@@ -8,7 +8,6 @@ public class XRay extends Module {
     public static XRay INSTANCE;
     public XRay() {
         super("XRay", Category.Render);
-        setChinese("矿物透视");
         INSTANCE = this;
     }
 

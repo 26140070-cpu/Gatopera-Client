@@ -20,7 +20,6 @@ public class Crosshair extends Module {
 			add(new SliderSetting("Interval", 2, 0.0, 20.0, 0.1));
 	public Crosshair() {
 		super("Crosshair", Category.Render);
-		setChinese("准星");
 		INSTANCE = this;
 	}
 

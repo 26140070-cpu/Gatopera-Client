@@ -23,7 +23,6 @@ public class Strafe
 
     public Strafe() {
         super("Strafe", "Modifies sprinting", Category.Movement);
-        setChinese("灵活移动");
         INSTANCE = this;
     }
 

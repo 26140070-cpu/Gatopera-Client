@@ -9,7 +9,6 @@ import net.minecraft.screen.slot.SlotActionType;
 public class Replenish extends Module {
     public Replenish() {
         super("Replenish", Category.Player);
-        setChinese("物品栏补充");
     }
 
     private final SliderSetting delay = add(new SliderSetting("Delay", 2, 0, 5, 0.01).setSuffix("s"));

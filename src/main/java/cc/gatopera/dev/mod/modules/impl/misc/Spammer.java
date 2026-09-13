@@ -15,7 +15,7 @@ public class Spammer extends Module {
         Custom,
         AutoSex
     }
-    private final StringSetting message = add(new StringSetting("Message", "最强外挂Gatopera社区版免费试用 群\uD835\uDFF1\uD835\uDFF4\uD835\uDFF5\uD835\uDFED\uD835\uDFF5\uD835\uDFED\uD835\uDFF1\uD835\uDFF2\uD835\uDFED"));
+    private final StringSetting message = add(new StringSetting("Message", "Gatopera Free Version"));
     private final SliderSetting randoms =
             add(new SliderSetting("Random", 3, 0, 20,1));
     private final SliderSetting delay =
@@ -27,7 +27,6 @@ public class Spammer extends Module {
 
     public Spammer() {
         super("Spammer", Category.Misc);
-        setChinese("自动刷屏");
     }
 
     @Override

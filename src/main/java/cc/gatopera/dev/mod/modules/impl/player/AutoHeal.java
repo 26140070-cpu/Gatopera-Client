@@ -41,7 +41,6 @@ public class AutoHeal extends Module {
 
     public AutoHeal() {
         super("AutoHeal", Category.Player);
-        setChinese("自动治疗");
         INSTANCE = this;
     }
 

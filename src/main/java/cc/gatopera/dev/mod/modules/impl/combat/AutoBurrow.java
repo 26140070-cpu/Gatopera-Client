@@ -34,7 +34,6 @@ public class AutoBurrow extends Module {
 
     public AutoBurrow() {
         super("AutoBurrow", Category.Combat);
-        setChinese("自动困人");
         INSTANCE = this;
     }
 

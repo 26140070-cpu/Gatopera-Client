@@ -47,7 +47,6 @@ public class HoleSnap extends Module {
 
     public HoleSnap() {
         super("HoleSnap", "HoleSnap", Category.Movement);
-        setChinese("拉坑");
         INSTANCE = this;
     }
 

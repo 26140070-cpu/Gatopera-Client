@@ -28,7 +28,6 @@ public class Tracers extends Module {
 	private final ColorSetting shulkerBox = add(new ColorSetting("ShulkerBox", new Color(15, 255, 255, 100)).injectBoolean(false));
 	public Tracers() {
 		super("Tracers", Category.Render);
-		setChinese("追踪者");
 	}
 
     @Override

@@ -52,7 +52,6 @@ public class Ambience extends Module {
             }));
     public Ambience() {
         super("Ambience", "Custom ambience", Category.Render);
-        setChinese("自定义环境");
         INSTANCE = this;
     }
 

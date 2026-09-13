@@ -11,7 +11,6 @@ public class ChatAppend extends Module {
 	private final StringSetting message = add(new StringSetting("append", Gatopera.NAME));
 	public ChatAppend() {
 		super("ChatAppend", Category.Misc);
-		setChinese("消息后缀");
 		INSTANCE = this;
 	}
 

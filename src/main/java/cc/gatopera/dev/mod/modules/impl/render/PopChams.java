@@ -36,7 +36,6 @@ public final class PopChams extends Module {
 
     public PopChams() {
         super("PopChams", Category.Render);
-        setChinese("爆图腾上色");
         INSTANCE = this;
     }
 

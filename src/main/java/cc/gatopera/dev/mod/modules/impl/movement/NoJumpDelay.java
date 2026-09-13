@@ -7,7 +7,6 @@ public final class NoJumpDelay
     public static NoJumpDelay INSTANCE;
     public NoJumpDelay() {
         super("NoJumpDelay", Category.Movement);
-        setChinese("无跳跃冷却");
         INSTANCE = this;
     }
 
